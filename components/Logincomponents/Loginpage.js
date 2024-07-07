@@ -36,7 +36,7 @@ const Loginpage = () => {
   return (
     <main className="h-screen w-full backgroundlayer flex justify-center items-center flex-col">
       {/* <Image src={Wave1} className='object-contain w-full'/> */}
-      <div className="w-96 h-auto rounded-lg overflow-hidden ">
+      <div className="md:w-96 lg:w-96 w-11/12 h-auto rounded-lg overflow-hidden mx-auto">
         <div className="flex gap-3 bg-[#172953] justify-center items-center py-2  ">
           <Image alt=" logo" height={40} radius="sm" src={Logo} width={40} />
           <div className="flex flex-col">

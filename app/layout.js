@@ -1,6 +1,7 @@
 import { Montserrat} from "next/font/google";
 import "./globals.css";
 import Loginpage from "@/components/Logincomponents/Loginpage";
+import NextuiProviderWrapper from "./NextUIProvider";
 
 const inter = Montserrat({ subsets: ["latin"] });
 
@@ -13,8 +14,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-      <Loginpage/>
-      {children}
+      <NextuiProviderWrapper>
+          {children}
+        </NextuiProviderWrapper>
       </body>
     </html>
   );
