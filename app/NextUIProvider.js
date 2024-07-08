@@ -39,20 +39,19 @@ export default function NextuiProviderWrapper({ children }) {
 //   }
 
   return (
-    <Loginpage/>
-    // <NextUIProvider>
-    //   <main className="flex sticky top-0">
-    //     {/* {pathname !== '/Signin' && ( */}
-    //       <div className="sticky top-0">
-    //         <Sidenav/>
-    //       </div>
-    //     {/* )} */}
-    //     <div className="flex flex-col w-full bg-white">
-    //     {/* {pathname !== '/Signin' && (<Navbar />)} */}
-    //        <Navbarr/>
-    //       {children}
-    //     </div>
-    //   </main>
-    // </NextUIProvider>
+    <NextUIProvider>
+      <main className="flex sticky top-0">
+        {/* {pathname !== '/Signin' && ( */}
+          <div className="sticky top-0">
+            <Sidenav/>
+          </div>
+        {/* )} */}
+        <div className="flex flex-col w-full bg-white">
+        {/* {pathname !== '/Signin' && (<Navbar />)} */}
+           <Navbarr/>
+          {children}
+        </div>
+      </main>
+    </NextUIProvider>
   );
 }

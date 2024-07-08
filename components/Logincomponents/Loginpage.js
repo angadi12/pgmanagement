@@ -77,7 +77,7 @@ const Loginpage = () => {
                   <IoChevronDownOutline className="text-white ml-14" size={24} />
                 )}
                 {isDropdownOpen && (
-                <div className="absolute w-full top-full mt-1 z-10 bg-[#324970] left-0 right-0  rounded-md">
+                <div className="absolute w-full top-full mt-1 z-20 bg-[#324970] left-0 right-0  rounded-md">
                   {properties.map((property) => (
                     <div
                       key={property}

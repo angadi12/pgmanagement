@@ -13,3 +13,7 @@
     background: linear-gradient(90deg, #1E6FFF 0%, #005CFF 100%);
 
   }
+
+  .boxshadow{
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  }
