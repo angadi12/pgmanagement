@@ -6,7 +6,7 @@ import Bellicon from "../../public/Loginasset/Bellicon.png"
 
 export default function Navbarr() {
   return (
-    <Navbar isBordered maxWidth="full">
+    <Navbar shouldHideOnScroll isBordered maxWidth="full">
       <NavbarContent justify="start">
         <NavbarBrand className="mr-4">
         <p>Hello Admin!</p>
