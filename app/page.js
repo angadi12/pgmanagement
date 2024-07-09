@@ -14,7 +14,7 @@ import {
 } from "@nextui-org/react";
 import { useMemo, useState } from "react";
 import { IoPeople } from "react-icons/io5";
-import { FaBed } from "react-icons/fa6";
+import { FaB, FaBed } from "react-icons/fa6";
 import { IoIosWarning } from "react-icons/io";
 
 export const users = [
@@ -135,24 +135,39 @@ export default function Home() {
               
             </div>
           </div>
-          <div className="flex flex-col gap-4 justify-start items-start w-full">
+          <div className="flex flex-col gap-2 justify-start items-start w-full">
             <div className="w-full flex justify-between items-center  ">
               <p className="text-sm font-bold">Available Rooms</p>
               <p className="text-sm font-bold text-[#8B8B8B]">Floor 1</p>
             </div>
             <div className="grid grid-cols-1 gap-6 justify-center place-content-center items-center mx-auto w-full ">
-              <div className="ring-1 ring-gray-300  w-full h-44 rounded-lg"></div>
+              <div className="ring-1 ring-gray-300  w-full px-4 h-44 rounded-lg flex justify-start items-center gap-4">
+                <div className=" grid grid-cols-5 gap-2 items-start">
+                <div className="h-14 w-14 rounded-md bg-[#FFA200] text-white flex justify-center items-center"><FaBed size={24}/></div> 
+                <div className="h-14 w-14 rounded-md bg-[#FFA200] text-white flex justify-center items-center"><FaBed size={24}/></div> 
+                <div className="h-14 w-14 rounded-md bg-[#FFA200] text-white flex justify-center items-center"><FaBed size={24}/></div> 
+                <div className="h-14 w-14 rounded-md bg-[#1B9D31] text-white flex justify-center items-center"><FaBed size={24}/></div> 
+                <div className="h-14 w-14 rounded-md bg-[#FFA200] text-white flex justify-center items-center"><FaBed size={24}/></div> 
+                <div className="h-14 w-14 rounded-md bg-[#1B9D31] text-white flex justify-center items-center"><FaBed size={24}/></div> 
+                <div className="h-14 w-14 rounded-md bg-[#1B9D31] text-white flex justify-center items-center"><FaBed size={24}/></div> 
+                <div className="h-14 w-14 rounded-md bg-[#FFA200] text-white flex justify-center items-center"><FaBed size={24}/></div> 
+                <div className="h-14 w-14 rounded-md bg-[#ED0000] text-white flex justify-center items-center"><FaBed size={24}/></div> 
+                <div className="h-14 w-14 rounded-md bg-[#ED0000] text-white flex justify-center items-center"><FaBed size={24}/></div> 
+                </div>
+                <Divider className="h-32" orientation="vertical"/>
+                <div></div>
+              </div>
             </div>
           </div>
         </div>
         <div className="flex w-full justify-start items-start  h-auto">
-          <div className="flex flex-col gap-4  justify-start items-start w-full">
+          <div className="flex flex-col gap-2 justify-start items-start w-full">
             <div className="w-full flex justify-between items-center  ">
               <p className="text-sm font-bold">Tenant Status</p>
               <p className="text-sm font-bold text-[#8B8B8B]">3 Months</p>
             </div>
             <div className="flex flex-col justify-start items-start w-full">
-              <div className="w-full flex justify-between items-center bg-[#205093] p-2 rounded-t-md ">
+              <div className="w-full flex justify-between items-center h-14 bg-[#205093] p-2 rounded-t-md ">
                 <p className="text-sm font-bold text-white">Active Tenants</p>
                 <Button
                   variant="solid"
