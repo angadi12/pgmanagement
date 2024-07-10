@@ -19,67 +19,91 @@ import { IoIosWarning } from "react-icons/io";
 import { FaCircle } from "react-icons/fa6";
 import Revenueovr from "@/components/Chartcomponent/Revenueovr";
 import Expensebreak from "@/components/Chartcomponent/Expensebreak";
+import electricity from "../public/Loginasset/electricity.png"
+import Circle from "../public/Loginasset/Circle.png"
+import wifi from "../public/Loginasset/wifi.png"
+import water from "../public/Loginasset/water.png"
 
 export const users = [
   {
     key: "1",
     name: "Tony ",
-    role: "CEO",
-    status: "Active",
+    RoomNo: "E2",
+    StartDate: "12/12/12",
+    EndDate: "12/12/12",
+    RentStatus: "Active",
   },
   {
     key: "2",
     name: "Zoey ",
-    role: "Technical Lead",
-    status: "Paused",
+    RoomNo: "E2",
+    StartDate: "12/12/12",
+    EndDate: "12/12/12",
+    RentStatus: "Active",
   },
   {
     key: "3",
     name: "Jane ",
-    role: "Senior Developer",
-    status: "Active",
+    RoomNo: "E2",
+    StartDate: "12/12/12",
+    EndDate: "12/12/12",
+    RentStatus: "Active",
   },
   {
     key: "4",
     name: "William ",
-    role: "Community Manager",
-    status: "Vacation",
+    RoomNo: "E2",
+    StartDate: "12/12/12",
+    EndDate: "12/12/12",
+    RentStatus: "Active",
   },
   {
     key: "5",
     name: "Emily ",
-    role: "Marketing Manager",
-    status: "Active",
+    RoomNo: "E2",
+    StartDate: "12/12/12",
+    EndDate: "12/12/12",
+    RentStatus: "Active",
   },
   {
     key: "6",
     name: "Brian ",
-    role: "Product Manager",
-    status: "Active",
+    RoomNo: "E2",
+    StartDate: "12/12/12",
+    EndDate: "12/12/12",
+    RentStatus: "Active",
   },
   {
     key: "7",
     name: "Laura ",
-    role: "UX Designer",
-    status: "Active",
+    RoomNo: "E2",
+    StartDate: "12/12/12",
+    EndDate: "12/12/12",
+    RentStatus: "Active",
   },
   {
     key: "8",
     name: "Michael ",
-    role: "Data Analyst",
-    status: "Paused",
+    RoomNo: "E2",
+    StartDate: "12/12/12",
+    EndDate: "12/12/12",
+    RentStatus: "Active",
   },
   {
     key: "9",
     name: "Sophia ",
-    role: "Quality Assurance",
-    status: "Active",
+    RoomNo: "E2",
+    StartDate: "12/12/12",
+    EndDate: "12/12/12",
+    RentStatus: "Active",
   },
   {
     key: "10",
     name: "James ",
-    role: "Front-end Developer",
-    status: "Vacation",
+    RoomNo: "E2",
+    StartDate: "12/12/12",
+    EndDate: "12/12/12",
+    RentStatus: "Active",
   },
 ];
 export default function Home() {
@@ -257,10 +281,10 @@ export default function Home() {
                 >
                   <TableHeader>
                     <TableColumn key="name">NAME</TableColumn>
-                    <TableColumn key="Room No.">Room No.</TableColumn>
-                    <TableColumn key="Start Date">Start Date</TableColumn>
-                    <TableColumn key="End Date">End Date</TableColumn>
-                    <TableColumn key="Rent Status">Rent Status</TableColumn>
+                    <TableColumn key="RoomNo">Room No.</TableColumn>
+                    <TableColumn key="StartDate">Start Date</TableColumn>
+                    <TableColumn key="EndDate">End Date</TableColumn>
+                    <TableColumn key="RentStatus">Rent Status</TableColumn>
                   </TableHeader>
                   <TableBody items={items}>
                     {(item) => (
@@ -297,9 +321,9 @@ export default function Home() {
               <p className="text-sm font-bold ">Active Complaints</p>
             </div>
             <div className="grid grid-cols-2 gap-6 justify-center place-content-center items-center mx-auto w-full ">
-              <div className=" flex flex-col gap-4 w-full h-auto rounded-lg">
+              <div className=" flex flex-col gap-2 justify-between  w-full h-auto rounded-lg">
                 <Expensebreak />
-                <div className="w-full h-16 grid px-4 grid-cols-2 justify-center place-content-center items-center mx-auto  rounded-md ring-1 ring-gray-200">
+                <div className="w-full h-auto grid px-4 py-2 grid-cols-2 justify-center place-content-center items-center mx-auto  rounded-md ring-1 ring-gray-200">
                   <div className="flex flex-col justify-start items-start w-full" >
                     <p className="flex gap-1 items-center text-xs "><FaCircle className="text-[#0096FF]"/> Water Bill</p>
                     <p className="text-[#0096FF] text-[0.5rem]">Rs/- 3000</p>
@@ -320,9 +344,37 @@ export default function Home() {
                 </div>
               </div>
               <div className="flex flex-col gap-5 justify-start items-start  w-full h-auto rounded-lg">
-                <div className="w-full h-20 bg-[#FFA100]  rounded-md ring-1 ring-gray-200"></div>
-                <div className="w-full h-20 bg-[#0096FF]  rounded-md ring-1 ring-gray-200"></div>
-                <div className="w-full h-20 bg-[#ED6300] rounded-md ring-1 ring-gray-200"></div>
+                <div className="w-full h-auto py-3 bg-[#FFA100]  rounded-md ring-1 ring-gray-200 flex justify-center items-center gap-4">
+                  <div className=" w-14 h-14 rounded-full relative flex justify-center items-center ">
+                    <Image src={Circle} alt="cicle" />
+                    <Image src={electricity} alt="electricity" className="absolute"/>
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-white">Room: A7</p>
+                    <p className="text-xs font-medium text-white">Electrical Issue</p>
+                  </div>
+                </div>
+                <div className="w-full h-auto py-3 bg-[#0096FF]   rounded-md ring-1 ring-gray-200 flex justify-center items-center gap-4">
+                  <div className=" w-14 h-14 rounded-full relative flex justify-center items-center ">
+                    <Image src={Circle} alt="cicle" />
+                    <Image src={water} alt="electricity" className="absolute"/>
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-white">Room: A7</p>
+                    <p className="text-xs font-medium text-white">Plumbing Issue</p>
+                  </div>
+                </div>
+                <div className="w-full h-auto py-3 bg-[#ED6300]   rounded-md ring-1 ring-gray-200 flex justify-center items-center gap-4">
+                  <div className=" w-14 h-14 rounded-full relative flex justify-center items-center ">
+                    <Image src={Circle} alt="cicle" />
+                    <Image src={wifi} alt="electricity" className="absolute"/>
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-white">Room: A7</p>
+                    <p className="text-xs font-medium text-white">Internet Issue</p>
+                  </div>
+                </div>
+
               </div>
             </div>
           </div>
