@@ -39,7 +39,7 @@ export default function Navbarr() {
               as="button"
               className="transition-transform"
               color="primary"
-              name="Santosh Alimkar"
+              name="Pavan Alimkar"
               size="sm"
             />
            

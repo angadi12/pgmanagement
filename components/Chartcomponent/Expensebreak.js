@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { TrendingUp } from "lucide-react"
-import { Label, Pie, PieChart } from "recharts"
+import * as React from "react";
+import { TrendingUp } from "lucide-react";
+import { Label, Pie, PieChart } from "recharts";
 
 import {
   Card,
@@ -11,19 +11,19 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart"
+} from "@/components/ui/chart";
 const chartData = [
   { browser: "ElectricityBill", visitors: 275, fill: "#FFA100" },
   { browser: "GasBill", visitors: 200, fill: "#9747FF" },
   { browser: "WaterBill", visitors: 287, fill: "#0096FF" },
   { browser: "InternetBill", visitors: 173, fill: "#ED6300" },
-]
+];
 
 const chartConfig = {
   visitors: {
@@ -45,19 +45,19 @@ const chartConfig = {
     label: "Internet Bill",
     color: "#ED6300",
   },
-} 
+};
 
 export function Expensebreak() {
   const totalVisitors = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.visitors, 0)
-  }, [])
+    return chartData.reduce((acc, curr) => acc + curr.visitors, 0);
+  }, []);
 
   return (
-    <Card className="flex flex-col ">
+    <Card className="flex flex-col h-full">
       <CardContent className="flex-1 pb-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square h-[200px]"
+          className="mx-auto aspect-square h-full"
         >
           <PieChart>
             <ChartTooltip
@@ -68,7 +68,7 @@ export function Expensebreak() {
               data={chartData}
               dataKey="visitors"
               nameKey="browser"
-              innerRadius={70}
+              innerRadius={60}
               strokeWidth={2}
             >
               <Label
@@ -93,10 +93,10 @@ export function Expensebreak() {
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground text-xs"
                         >
-                         Increase in Expense
+                          Increase
                         </tspan>
                       </text>
-                    )
+                    );
                   }
                 }}
               />
@@ -104,9 +104,9 @@ export function Expensebreak() {
           </PieChart>
         </ChartContainer>
       </CardContent>
+    
     </Card>
-  )
+  );
 }
 
-
-export default Expensebreak
+export default Expensebreak;
