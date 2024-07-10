@@ -6,7 +6,7 @@ import Bellicon from "../../public/Loginasset/Bellicon.png"
 
 export default function Navbarr() {
   return (
-    <Navbar shouldHideOnScroll isBordered maxWidth="full">
+    <Navbar  isBordered maxWidth="full">
       <NavbarContent justify="start">
         <NavbarBrand className="mr-4">
         <p>Hello Admin!</p>
@@ -39,7 +39,7 @@ export default function Navbarr() {
               as="button"
               className="transition-transform"
               color="primary"
-              name="Santosh Alimkar"
+              name="Pavan Alimkar"
               size="sm"
             />
            
