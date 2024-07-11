@@ -7,7 +7,7 @@ import electricity2 from "../../public/Loginasset/electricity2.png";
 import Image from "next/image";
 import { GoChevronRight } from "react-icons/go";
 
-const page = () => {
+const Maintenance = () => {
   const [selected, setSelected] = React.useState("All Complaints");
 
   return (
@@ -140,4 +140,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Maintenance;
