@@ -8,7 +8,7 @@ import Image from "next/image";
 import { GoChevronRight } from "react-icons/go";
 import { BsThreeDots } from "react-icons/bs";
 
-const page = () => {
+const Notifications = () => {
   const [selected, setSelected] = React.useState("All Notifications");
 
   return (
@@ -116,4 +116,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Notifications;

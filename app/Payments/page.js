@@ -7,7 +7,7 @@ import person from "../../public/Loginasset/person.png";
 import Image from "next/image";
 import { GoChevronRight } from "react-icons/go";
 
-const page = () => {
+const Payments = () => {
   const [selected, setSelected] = React.useState("Today");
 
   return (
@@ -319,4 +319,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Payments;
