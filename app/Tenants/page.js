@@ -266,7 +266,7 @@ export default function Tennat() {
     new Set(INITIAL_VISIBLE_COLUMNS)
   );
   const [statusFilter, setStatusFilter] = React.useState("all");
-  const [rowsPerPage, setRowsPerPage] = React.useState(8);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
     column: "age",
     direction: "ascending",
@@ -528,9 +528,9 @@ export default function Tennat() {
 
   const classNames = React.useMemo(
     () => ({
-      wrapper: ["h-screen", "max-w-3xl",],
+      wrapper: ["h-screen", "max-w-3xl","border-1",],
       th: ["bg-[#205093]", "text-white", "border-b", "border-divider"],
-      td: [
+      td: ["p-3","border-b",
         // changing the rows border radius
         // first
         "group-data-[first=true]:first:before:rounded-none",
@@ -574,7 +574,7 @@ export default function Tennat() {
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody emptyContent={"No users found"} items={sortedItems}>
+      <TableBody emptyContent={"No Tennat found"} items={sortedItems}>
         {(item) => (
           <TableRow key={item.id}>
             {(columnKey) => (
