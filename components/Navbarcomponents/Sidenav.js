@@ -13,6 +13,7 @@ import { RiHeartAddFill } from "react-icons/ri";
 import { FiLogIn } from "react-icons/fi";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { IoIosPeople } from "react-icons/io";
 
 const Sidenav = () => {
   const router = useRouter();
@@ -40,6 +41,9 @@ const Sidenav = () => {
         break;
       case "/Maintenance":
         setSelected("Maintenance");
+        break;
+      case "/Ourstaff":
+        setSelected("Staff");
         break;
       case "/Notifications":
         setSelected("Notifications");
@@ -69,6 +73,9 @@ const Sidenav = () => {
         break;
       case "Maintenance":
         router.push("/Maintenance");
+        break;
+      case "Staff":
+        router.push("/Ourstaff");
         break;
       case "Notifications":
         router.push("/Notifications");
@@ -159,6 +166,15 @@ const Sidenav = () => {
                 <div className="flex items-center  w-32  gap-4">
                   <RiHeartAddFill size={24} />
                   <span>Maintenance</span>
+                </div>
+              }
+            ></Tab>
+            <Tab
+              key="Staff"
+              title={
+                <div className="flex items-center  w-32  gap-4">
+                  <IoIosPeople size={24} />
+                  <span>Our staff</span>
                 </div>
               }
             ></Tab>
