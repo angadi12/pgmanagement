@@ -269,7 +269,7 @@ export default function Salarystatus() {
     new Set(INITIAL_VISIBLE_COLUMNS)
   );
   const [statusFilter, setStatusFilter] = React.useState("all");
-  const [rowsPerPage, setRowsPerPage] = React.useState(8);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
     column: "age",
     direction: "ascending",
@@ -540,7 +540,7 @@ export default function Salarystatus() {
     () => ({
       wrapper: ["h-screen", "max-w-3xl",],
       th: ["bg-[#205093]", "text-white", "border-b", "border-divider"],
-      td: [
+      td: ["p-3","border-b",
         // changing the rows border radius
         // first
         "group-data-[first=true]:first:before:rounded-none",
