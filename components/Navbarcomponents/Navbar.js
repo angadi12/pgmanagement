@@ -5,6 +5,18 @@ import Image from "next/image";
 import Bellicon from "../../public/Loginasset/Bellicon.png"
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import {Autocomplete, AutocompleteItem} from "@nextui-org/react";
+
+
+export const animals = [
+  {label: "Branch 17", value: "cat", description: "The second most popular pet in the world"},
+  {label: "Branch 16", value: "dog", description: "The most popular pet in the world"},
+  {label: "Branch 15", value: "elephant", description: "The largest land animal"},
+  {label: "Branch 14", value: "lion", description: "The king of the jungle"},
+  {label: "Branch 13", value: "tiger", description: "The largest cat species"},
+  {label: "Branch 12", value: "giraffe", description: "The tallest land animal"},
+]
+
 export default function Navbarr() {
 const router=useRouter()
 
@@ -21,7 +33,17 @@ const router=useRouter()
       </NavbarContent>
 
       <NavbarContent as="div" className="items-center" justify="end">
-        <Input
+      <Autocomplete
+      size="md"
+      radius="sm"
+      variant="bordered"
+      defaultItems={animals}
+      placeholder="Select Branch"
+      className="w-60 bg-white  rounded-lg"
+    >
+      {(animal) => <AutocompleteItem key={animal.value}>{animal.label}</AutocompleteItem>}
+    </Autocomplete>
+        {/* <Input
           classNames={{
             base: "max-w-full sm:max-w-[14rem] h-10",
             mainWrapper: "h-full",
@@ -32,7 +54,7 @@ const router=useRouter()
           size="sm"
           startContent={<IoIosSearch size={18} />}
           type="search"
-        />
+        /> */}
      
 
          <Badge onClick={routetonoti} content="" color="primary">
