@@ -52,7 +52,7 @@ const Admincard = () => {
           This is a Sample Address of this particular Individual or Tenant
           </span>
         </div>
-      <Button className="bg-[#1E6FFF] text-white w-full rounded-sm h-8">View / Edit</Button>
+      <Button className="buttongradient text-white w-full rounded-sm h-8">View / Edit</Button>
       </div>
       {/* <div>
             <Image className='-mt-24 ' src={adminpic} alt='Branches'/>

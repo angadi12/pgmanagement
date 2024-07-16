@@ -7,7 +7,7 @@ import { FaCircle } from "react-icons/fa6";
 
 const Overallstatus = () => {
   return (
-    <div className="flex flex-col gap-4 w-full justify-start items-start  h-auto">
+    <div className="flex flex-col gap-4 w-full justify-start items-start  h-full">
       <div className="flex flex-col gap-2 justify-center items-center w-full">
         <div className="w-full flex justify-between items-center  ">
           <p className="text-sm font-bold">Overall Status</p>
@@ -63,7 +63,7 @@ const Overallstatus = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col gap-2 justify-start items-start w-full">
+      <div className="flex flex-col gap-2 justify-start items-start w-full h-full">
         <div className="w-full flex justify-between items-center  ">
           <p className="text-sm font-bold">Available Rooms</p>
           <p className="text-sm font-bold text-[#8B8B8B]">Floor 1</p>
