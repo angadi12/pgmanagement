@@ -14,6 +14,7 @@ import { FiLogIn } from "react-icons/fi";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { IoIosPeople } from "react-icons/io";
+import { FaBuildingColumns } from "react-icons/fa6";
 
 const Sidenav = () => {
   const router = useRouter();
@@ -45,8 +46,10 @@ const Sidenav = () => {
       case "/Ourstaff":
         setSelected("Staff");
         break;
-      case "/Notifications":
-        setSelected("Notifications");
+      
+        break;
+      case "/Branches":
+        setSelected("Branches");
         break;
       default:
         setSelected("Dashboard");
@@ -77,8 +80,9 @@ const Sidenav = () => {
       case "Staff":
         router.push("/Ourstaff");
         break;
-      case "Notifications":
-        router.push("/Notifications");
+    
+      case "Branches":
+        router.push("/Branches");
         break;
       default:
         router.push("/");
@@ -118,7 +122,7 @@ const Sidenav = () => {
              onprss
               key="Dashboard"
               title={
-                <div  className="flex items-center  w-32  gap-4">
+                <div  className="flex items-center  w-44  gap-4">
                   <MdDashboard size={24} />
                   <span>Dashboard</span>
                 </div>
@@ -127,7 +131,7 @@ const Sidenav = () => {
             <Tab
               key="Tenants"
               title={
-                <div  className="flex items-center  w-32  gap-4">
+                <div  className="flex items-center  w-44  gap-4">
                   <IoPeople size={24} />
                   <span>Tenants</span>
                 </div>
@@ -136,7 +140,7 @@ const Sidenav = () => {
             <Tab
               key="Rooms"
               title={
-                <div  className="flex items-center  w-32  gap-4">
+                <div  className="flex items-center  w-44  gap-4">
                   <MdMeetingRoom size={24} />
                   <span>Rooms</span>
                 </div>
@@ -145,7 +149,7 @@ const Sidenav = () => {
             <Tab
               key="Payments"
               title={
-                <div className="flex items-center  w-32  gap-4">
+                <div className="flex items-center  w-44  gap-4">
                   <FaIndianRupeeSign size={24} />
                   <span>Payments</span>
                 </div>
@@ -154,7 +158,7 @@ const Sidenav = () => {
             <Tab
               key="Expense"
               title={
-                <div className="flex items-center  w-32  gap-4">
+                <div className="flex items-center  w-44  gap-4">
                   <GiExpense size={24} />
                   <span>Expense</span>
                 </div>
@@ -163,7 +167,7 @@ const Sidenav = () => {
             <Tab
               key="Maintenance"
               title={
-                <div className="flex items-center  w-32  gap-4">
+                <div className="flex items-center  w-44  gap-4">
                   <RiHeartAddFill size={24} />
                   <span>Maintenance</span>
                 </div>
@@ -172,13 +176,22 @@ const Sidenav = () => {
             <Tab
               key="Staff"
               title={
-                <div className="flex items-center  w-32  gap-4">
+                <div className="flex items-center  w-44  gap-4">
                   <IoIosPeople size={24} />
                   <span>Our staff</span>
                 </div>
               }
             ></Tab>
             <Tab
+              key="Branches"
+              title={
+                <div className="flex items-center  w-44  gap-4">
+                  <FaBuildingColumns size={20} />
+                  <span>Manage Branches</span>
+                </div>
+              }
+            ></Tab>
+            {/* <Tab
               key="Notifications"
               title={
                 <div className="flex items-center  w-32  gap-4">
@@ -186,13 +199,13 @@ const Sidenav = () => {
                   <span>Notifications</span>
                 </div>
               }
-            ></Tab>
+            ></Tab> */}
           </Tabs>
         </div>
       </div>
 
-      <div className="flex justify-center items-center w-full h-auto mb-4 ">
-        <Button className="flex items-center  w-52 bg-transparent  gap-4 text-white font-semibold">
+      <div className="flex justify-start items-start w-full h-auto mb-4 px-4 ">
+        <Button className="flex items-center  w-full justify-start bg-transparent  gap-4 text-white font-semibold">
           <FiLogIn size={24} />
           <span>Logout</span>
         </Button>

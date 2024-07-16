@@ -1,10 +1,16 @@
 import React from "react";
-import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Input, DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar,Badge} from "@nextui-org/react";
+import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Input, DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar,Badge} from "@nextui-org/react";
 import { IoIosSearch } from "react-icons/io";
 import Image from "next/image";
 import Bellicon from "../../public/Loginasset/Bellicon.png"
-
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 export default function Navbarr() {
+const router=useRouter()
+
+  const routetonoti=()=>{
+    router.push("/Notifications")
+  }
   return (
     <Navbar  isBordered maxWidth="full">
       <NavbarContent justify="start">
@@ -27,10 +33,15 @@ export default function Navbarr() {
           startContent={<IoIosSearch size={18} />}
           type="search"
         />
-         <Badge content="" color="primary">
+     
 
-        <Image className="object-contain h-10 w-10" src={Bellicon} alt="Bellicon"/>
+         <Badge onClick={routetonoti} content="" color="primary">
+
+          <Image onClick={routetonoti} className="object-contain h-10 w-10 cursor-pointer" src={Bellicon} alt="Bellicon"/>
          </Badge>
+     
+
+       
         <Dropdown placement="bottom-end">
           <DropdownTrigger>
             <Avatar
