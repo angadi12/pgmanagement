@@ -21,6 +21,7 @@ import {
 } from "@nextui-org/react";
 import { Tabs, Tab } from "@nextui-org/react";
 import Personaldetails from "../Tennatcomponents/Personaldetails";
+import Roomsanddura from "../Tennatcomponents/Roomsanddura";
 
 export const users = [
   {
@@ -248,7 +249,8 @@ const Tennattable = () => {
                   />
                 </Tabs>
                 <div className="w-full h-auto">
-                  <Personaldetails/>
+                {selected ==="Personal Details" && <Personaldetails/>}
+                {selected ==="Room & Duration" && <Roomsanddura/>}
                 </div>
               </ModalBody>
               <ModalFooter className="flex justify-center items-center text-center">
