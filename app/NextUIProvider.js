@@ -5,6 +5,8 @@ import { usePathname, useRouter } from "next/navigation";
 import Navbarr from "@/components/Navbarcomponents/Navbar";
 import Sidenav from "@/components/Navbarcomponents/Sidenav";
 import Loginpage from "@/components/Logincomponents/Loginpage";
+import { Store } from '../lib/Store'
+import { Provider } from 'react-redux'
 // import Cookies from "js-cookie";
 
 export default function NextuiProviderWrapper({ children }) {
@@ -39,6 +41,7 @@ export default function NextuiProviderWrapper({ children }) {
 //   }
 
   return (
+    
     <NextUIProvider>
       <main className="flex sticky top-0">
         {/* {pathname !== '/Signin' && ( */}
