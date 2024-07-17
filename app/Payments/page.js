@@ -6,11 +6,23 @@ import { Tabs, Tab, Chip } from "@nextui-org/react";
 import person from "../../public/Loginasset/person.png";
 import Image from "next/image";
 import { GoChevronRight } from "react-icons/go";
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+} from "@nextui-org/react";
+import Createpayment from "@/components/Paymentcomponet/Createpayment";
 
 const Payments = () => {
   const [selected, setSelected] = React.useState("Today");
+  const [selectedtab, setSelectedtab] = React.useState("Payment Details");
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
+    <>
     <section className="flex justify-center items-center w-full h-auto flex-col mx-auto p-4">
       <div className="w-full px-4 text-start">
         <p className="text-lg font-semibold">Rent Collection</p>
@@ -89,6 +101,7 @@ const Payments = () => {
           />
           <div className="flex gap-3">
             <Button
+            onPress={onOpen}
               className="bg-[#205093] text-background"
               endContent={<FaPlus />}
               size="sm"
@@ -316,6 +329,85 @@ const Payments = () => {
         </div>
       </div>
     </section>
+
+
+
+    <Modal
+      isDismissable={false} isKeyboardDismissDisabled={true}
+        backdrop="blur"
+        size="4xl"
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        motionProps={{
+          variants: {
+            enter: {
+              y: 0,
+              opacity: 1,
+              transition: {
+                duration: 0.3,
+                ease: "easeOut",
+              },
+            },
+            exit: {
+              y: -20,
+              opacity: 0,
+              transition: {
+                duration: 0.2,
+                ease: "easeIn",
+              },
+            },
+          },
+        }}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col text-center">
+              Create New Payment
+              </ModalHeader>
+              <ModalBody>
+                <Tabs
+                  selectedKey={selectedtab}
+                  onSelectionChange={setSelectedtab}
+                  aria-label="Options"
+                  color="primary"
+                  variant="underlined"
+                  classNames={{
+                    tabList: "gap-6 w-full relative rounded-none p-0 ",
+                    cursor: "w-full bg-[#205093]",
+                    tab: "w-auto px-0 h-10",
+                    tabContent:
+                      "group-data-[selected=true]:text-[#205093] font-semibold",
+                  }}
+                >
+                  <Tab
+                    key="Payment Details"
+                    title={
+                      <div className="flex items-center space-x-2">
+                        <span>Payment Details</span>
+                      </div>
+                    }
+                  />
+                 
+                </Tabs>
+                <div className="w-full h-auto">
+                {selectedtab ==="Payment Details" && <Createpayment/>}
+                </div>
+              </ModalBody>
+              <ModalFooter className="flex justify-center items-center text-center">
+                <Button
+                  className="buttongradient text-white rounded-md w-60 uppercase"
+                  onPress={onClose}
+                >
+                 Submit & Mark as Paid
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+
+    </>
   );
 };
 
