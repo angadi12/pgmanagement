@@ -7,6 +7,9 @@ import { IoMdLock } from "react-icons/io";
 import { BiSolidBuildingHouse } from "react-icons/bi";
 import { IoChevronDownOutline } from "react-icons/io5";
 import { IoChevronUp } from "react-icons/io5";
+import { Superadminlogin } from "@/lib/API/Auth";
+import toast, { Toaster } from 'react-hot-toast';
+import Cookies from "js-cookie";
 
 import {
   Card,
@@ -22,6 +25,8 @@ import {
 const Loginpage = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const properties = ["Property 1", "Property 2", "Property 3"]; // Example properties
 
@@ -33,7 +38,26 @@ const Loginpage = () => {
     setSelectedProperty(property);
     setIsDropdownOpen(false);
   };
+
+  const handleSubmit = async () => {
+    const data = {
+      Email: email,
+      Password: password,
+    };
+    const result = await Superadminlogin(data);
+    if (result.status) {
+      console.log(result.token)
+      Cookies.set("token", result.token, { expires: 7 });
+      window.location.href = "/";
+    } else {
+      toast.error(result.message || "An error occurred");
+    }
+  };
+
+
+
   return (
+    <>
     <main className="h-screen w-full backgroundlayer flex justify-center items-center flex-col">
       {/* <Image src={Wave1} className='object-contain w-full'/> */}
       <div className="md:w-96 lg:w-96 w-11/12 h-auto rounded-lg overflow-hidden mx-auto">
@@ -54,6 +78,9 @@ const Loginpage = () => {
               <input
                 className="outline-none bg-transparent text-white placeholder:text-white placeholder:text-sm placeholder:font-medium"
                 placeholder="User Name"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
               />
             </div>
             <div className="bg-[#324970] rounded-md w-11/12 mx-auto h-12 flex justify-start px-2 items-center gap-4">
@@ -62,6 +89,9 @@ const Loginpage = () => {
                 className="outline-none bg-transparent text-white placeholder:text-white placeholder:text-sm placeholder:font-medium w-full"
                 placeholder="Password"
                 type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
               />
             </div>
             <div onClick={toggleDropdown} className="bg-[#324970]  relative rounded-md w-11/12 mx-auto h-12 flex justify-start px-2 items-center gap-4">
@@ -109,7 +139,7 @@ const Loginpage = () => {
             </Link>
           </div>
           <div className="w-full flex justify-center items-center py-2">
-            <Button className="buttongradient w-11/12 text-white font-semibold rounded-md">
+            <Button onPress={handleSubmit} className="buttongradient w-11/12 text-white font-semibold rounded-md">
               Login
             </Button>
           </div>
@@ -118,7 +148,35 @@ const Loginpage = () => {
       <div className="flex justify-center items-center fixed bottom-2">
         <p className="text-sm font-semibold text-white">Designed by AWT</p>
       </div>
+
+      
     </main>
+    <Toaster
+  position="top-center"
+  reverseOrder={false}
+  gutter={8}
+  containerClassName=""
+  containerStyle={{}}
+  toastOptions={{
+    // Define default options
+    className: '',
+    duration: 5000,
+    style: {
+      background: '#363636',
+      color: '#fff',
+    },
+
+    // Default options for specific types
+    success: {
+      duration: 3000,
+      theme: {
+        primary: 'green',
+        secondary: 'black',
+      },
+    },
+  }}
+/>
+    </>
   );
 };
 
