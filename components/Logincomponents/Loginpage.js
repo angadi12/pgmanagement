@@ -133,7 +133,7 @@ const Loginpage = () => {
         }
         router.push('/');
       } else {
-        toast.error(result.message || "An error occurred");
+        toast.error(result.message || "An error occurred during login");
       }
     } catch (error) {
       toast.error("An error occurred during login");
