@@ -19,13 +19,23 @@ import {
   Pagination,
   Tooltip
 } from "@nextui-org/react";
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+} from "@nextui-org/react";
 import { FaPlus } from "react-icons/fa6";
 import { IoEyeSharp } from "react-icons/io5";
 import { RiPencilFill } from "react-icons/ri";
 import { MdDelete } from "react-icons/md";
+import { Tabs, Tab } from "@nextui-org/react";
 
 import fillter from "../../public/Loginasset/fillter.png"
 import Image from "next/image";
+import Createexpense from "@/components/Expensecomponent/Createexpense";
 // import {VerticalDotsIcon} from "./VerticalDotsIcon";
 // import {SearchIcon} from "./SearchIcon";
 // import {ChevronDownIcon} from "./ChevronDownIcon";
@@ -263,6 +273,9 @@ const statusColorMap = {
 const INITIAL_VISIBLE_COLUMNS = ["name", "Contact","Room","Start","End","Complaints", "Modify"];
 
 export default function Expense() {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [selected, setSelected] = React.useState("Expense Details");
+
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
@@ -478,6 +491,7 @@ export default function Expense() {
               </DropdownMenu>
             </Dropdown> */}
             <Button
+            onPress={onOpen}
               className="bg-[#205093] text-background"
               endContent={<FaPlus />}
               size="sm"
@@ -563,6 +577,7 @@ export default function Expense() {
   );
 
   return (
+    <>
     <Table
       isCompact
       className="px-4"
@@ -601,5 +616,83 @@ export default function Expense() {
         )}
       </TableBody>
     </Table>
+
+
+    <Modal
+      isDismissable={false} isKeyboardDismissDisabled={true}
+        backdrop="blur"
+        size="4xl"
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        motionProps={{
+          variants: {
+            enter: {
+              y: 0,
+              opacity: 1,
+              transition: {
+                duration: 0.3,
+                ease: "easeOut",
+              },
+            },
+            exit: {
+              y: -20,
+              opacity: 0,
+              transition: {
+                duration: 0.2,
+                ease: "easeIn",
+              },
+            },
+          },
+        }}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col text-center">
+              Create New Expense
+              </ModalHeader>
+              <ModalBody>
+                <Tabs
+                  selectedKey={selected}
+                  onSelectionChange={setSelected}
+                  aria-label="Options"
+                  color="primary"
+                  variant="underlined"
+                  classNames={{
+                    tabList: "gap-6 w-full relative rounded-none p-0 ",
+                    cursor: "w-full bg-[#205093]",
+                    tab: "w-auto px-0 h-10",
+                    tabContent:
+                      "group-data-[selected=true]:text-[#205093] font-semibold",
+                  }}
+                >
+                  <Tab
+                    key="Expense Details"
+                    title={
+                      <div className="flex items-center space-x-2">
+                        <span>Expense Details</span>
+                      </div>
+                    }
+                  />
+                 
+                </Tabs>
+                <div className="w-full h-auto">
+                {selected ==="Expense Details" && <Createexpense/>}
+                </div>
+              </ModalBody>
+              <ModalFooter className="flex justify-center items-center text-center">
+                <Button
+                  className="buttongradient text-white rounded-md w-60 uppercase"
+                  onPress={onClose}
+                >
+                 Create Expense
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+
+    </>
   );
 }
