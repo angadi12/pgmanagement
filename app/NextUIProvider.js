@@ -31,12 +31,12 @@ export default function NextuiProviderWrapper({ children }) {
 
   if (isAuthenticated && pathname === '/Signin') {
     // Render nothing or a loading state while redirecting
-    return <div className="flex justify-center items-center h-screen">Loading...</div>;
+    return <div className="flex justify-center items-center h-screen backgroundlayer">Loading...</div>;
   }
 
   if (!isAuthenticated && pathname !== '/Signin') {
     // Render nothing or a loading state while redirecting
-    return <div className="flex justify-center items-center h-screen">Loading...</div>;
+    return <div className="flex justify-center flex-col gap-4 text-white items-center h-screen backgroundlayer"><span className="loader"></span>Loading...</div>;
   }
 
   return (
