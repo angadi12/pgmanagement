@@ -58,7 +58,7 @@ const Maintenance = () => {
           </Tabs>
         </div>
         <div className="flex gap-3 justify-end items-end">
-          <Input
+          {/* <Input
             isClearable
             classNames={{
               base: "w-full sm:max-w-[60%]",
@@ -70,13 +70,13 @@ const Maintenance = () => {
             variant="bordered"
             // onClear={() => setFilterValue("")}
             // onValueChange={onSearchChange}
-          />
+          /> */}
           <div className="flex gap-3">
-            <Button
+            {/* <Button
               className="bg-[#205093] text-background"
               endContent={<FaPlus />}
               size="sm"
-            ></Button>
+            ></Button> */}
           </div>
         </div>
       </div>
