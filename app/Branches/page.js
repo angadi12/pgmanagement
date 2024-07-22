@@ -29,7 +29,7 @@ const Branches = () => {
     <>
       <section className="flex justify-center items-center w-full h-auto flex-col mx-auto p-4">
         <div className="w-full px-4 text-start">
-          <p className="text-lg font-semibold">Green PG</p>
+          <p className="text-lg font-semibold">Manage PG</p>
         </div>
         <div className="w-full flex justify-between items-center px-4 mt-4">
           <div>
@@ -59,7 +59,7 @@ const Branches = () => {
                 key="Admins"
                 title={
                   <div className="flex items-center space-x-2">
-                    <span>Admins (Branch 2)</span>
+                    <span>Admins</span>
                   </div>
                 }
               />
@@ -165,12 +165,7 @@ const Branches = () => {
                 </div>
               </ModalBody>
               <ModalFooter className="flex justify-center items-center text-center">
-                <Button
-                  className="buttongradient text-white rounded-md w-60 uppercase font-semibold"
-                  onPress={onClose}
-                >
-                  Create Branch
-                </Button>
+                
               </ModalFooter>
             </>
           )}
