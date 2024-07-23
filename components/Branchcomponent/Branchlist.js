@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Branchcard from "./Branchcard";
 import { FaCirclePlus } from "react-icons/fa6";
 import { Button } from "@nextui-org/react";
@@ -23,10 +23,28 @@ const Branchlist = () => {
   const branches = useSelector((state) => state.branches.branches);
   const dispatch = useDispatch();
   const status = useSelector((state) => state.branches.status);
+  const filterQuery = useSelector((state) => state.branches.filterQuery);
+  const [filteredBranches, setFilteredBranches] = useState(branches);
 
   useEffect(() => {
     dispatch(fetchBranches());
   }, [dispatch]);
+
+
+  useEffect(() => {
+    dispatch(fetchBranches());
+  }, [dispatch]);
+
+  useEffect(() => {
+    setFilteredBranches(
+      branches?.filter((branch) =>
+        typeof branch.Branchname === "string" &&
+        branch.Branchname.toLowerCase().includes(filterQuery.toLowerCase())
+      )
+    );
+  }, [branches, filterQuery]);
+
+
 
   const handleRefresh = () => {
     dispatch(fetchBranches());
@@ -35,17 +53,17 @@ const Branchlist = () => {
   return (
     <>
       {status === "loading" ? (
-        <p className="flex justify-start items-center flex-col gap-2 h-screen w-full mt-24">
+        <p className="flex justify-start items-center flex-col gap-2 h-[40vh] w-full mt-24">
           <span className="loader3 "></span>
         </p>
       ) : (
         <div className="w-full grid grid-cols-2 justify-center items-center place-content-center mx-auto gap-6">
-          {status === "succeeded" && branches.length === 0 && (
+          {status === "succeeded" && filteredBranches?.length === 0 && (
             <div className="w-full boxshadow h-40 flex justify-center items-center p-3 rounded-md">
-              <p>No branches added yet.</p>
+              <p>No branches Found</p>
             </div>
           )}
-          {branches?.map(
+          {filteredBranches?.map(
             (data, index) =>
               status === "succeeded" && <Branchcard data={data} key={index} />
           )}

@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import adminpic from "../../public/Loginasset/adminpic.png";
 import { MdEmail } from "react-icons/md";
@@ -18,11 +18,32 @@ import { Tabs, Tab, Chip } from "@nextui-org/react";
 import Personaldetails from './Personaldetails';
 import Allocverify from './Allocverify';
 import Userandpass from './Userandpass';
+import Updateadmindetails from "./Updateadmindetails";
+import { useDispatch } from "react-redux";
+import { setAdminId, clearSelectedAdmin } from "@/lib/AdminSlice";
 
-const Admincard = () => {
+const Admincard = ({admin}) => {
   const [selectedtab2, setSelectedtab2] = React.useState("Personal Details");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [Open, SetOpen, ] = useState(false);
+  const dispatch = useDispatch();
+
+  const handleOpen = () => {
+    dispatch(setAdminId(admin._id));
+    SetOpen(true);
+  };
+
+  const handleClose = () => {
+    dispatch(clearSelectedAdmin());
+    SetOpen(false);
+  };
+
+  useEffect(() => {
+    if (!Open) {
+      dispatch(clearSelectedAdmin());
+    }
+  }, [Open, dispatch]);
+
   return (
     <>
       <div className="w-full boxshadow h-full rounded-md flex flex-col justify-center items-center ">
@@ -31,11 +52,11 @@ const Admincard = () => {
           alt="Profile Picture"
           className="rounded-full mx-auto -mt-12 w-24 h-24"
         />
-        <h2 class="text-lg font-bold mt-2">Mithul M</h2>
+        <h2 class="text-lg font-bold mt-2">{admin?.name}</h2>
         <p className="text-sm font-bold flex items-center gap-2">
           Branch 1:<span className="text-[#1B9D31]">Full Access</span>
         </p>
-        <div className="bg-[#F0F0F0] p-4 flex flex-col justify-center items-center w-full mt-2 gap-4">
+        <div className="bg-[#F0F0F0] p-4 flex flex-col justify-center items-center w-full h-full mt-2 gap-4">
           <div className=" flex justify-between gap-4  items-center w-full">
             <div>
               <p className="text-xs font-bold flex items-center gap-2">
@@ -44,7 +65,7 @@ const Admincard = () => {
               </p>
             </div>
             <span className="text-xs font-semibold text-gray-400 text-end">
-              mithulofficial02@gmail.com
+             {admin?.Email}
             </span>
           </div>
           <div className=" flex justify-between gap-4  items-center w-full">
@@ -55,7 +76,7 @@ const Admincard = () => {
               </p>
             </div>
             <span className="text-[0.7rem] font-semibold text-gray-400 text-end">
-              +91-7353830989 (+91-6382645389)
+              +91{admin?.Number}
             </span>
           </div>
           <div className=" flex justify-between gap-4  items-center w-full">
@@ -66,10 +87,10 @@ const Admincard = () => {
               </p>
             </div>
             <span className="text-[0.7rem] font-semibold text-gray-400 text-end">
-              This is a Sample Address of this particular Individual or Tenant
+              ---
             </span>
           </div>
-          <Button onPress={()=>SetOpen(true)} className="buttongradient text-white w-full rounded-sm h-8">
+          <Button onPress={handleOpen} className="buttongradient text-white w-full rounded-sm h-8">
             View / Edit
           </Button>
         </div>
@@ -81,6 +102,7 @@ const Admincard = () => {
         backdrop="blur"
         size="4xl"
         isOpen={Open}
+        onClose={handleClose}
         onOpenChange={SetOpen}
         motionProps={{
           variants: {
@@ -132,7 +154,7 @@ const Admincard = () => {
                       </div>
                     }
                   />
-                  <Tab
+                  {/* <Tab
                     key="Allocation & Verification"
                     title={
                       <div className="flex items-center space-x-2">
@@ -147,23 +169,18 @@ const Admincard = () => {
                         <span>User Name & Password</span>
                       </div>
                     }
-                  />
+                  /> */}
                 </Tabs>
                 <div className="w-full h-auto">
-                  {selectedtab2 === "Personal Details" && <Personaldetails />}
-                  {selectedtab2 === "Allocation & Verification" && (
+                  {selectedtab2 === "Personal Details" && <Updateadmindetails/>}
+                  {/* {selectedtab2 === "Allocation & Verification" && (
                     <Allocverify />
                   )}
-                  {selectedtab2 === "User Name & Password" && <Userandpass />}
+                  {selectedtab2 === "User Name & Password" && <Userandpass />} */}
                 </div>
               </ModalBody>
               <ModalFooter className="flex justify-center items-center text-center">
-                <Button
-                  className="buttongradient text-white rounded-md w-60 uppercase font-semibold"
-                  onPress={onClose}
-                >
-                  Next
-                </Button>
+               
               </ModalFooter>
             </>
           )}

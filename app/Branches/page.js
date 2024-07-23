@@ -17,6 +17,9 @@ import Createbranch from "@/components/Branchcomponent/Createbranch";
 import Personaldetails from "@/components/Branchcomponent/Personaldetails";
 import Allocverify from "@/components/Branchcomponent/Allocverify";
 import Userandpass from "@/components/Branchcomponent/Userandpass";
+import { useDispatch } from "react-redux";
+import { setFilterQuery as setBranchFilterQuery } from "../../lib/BranchSlice";
+import { setFilterQuery as setAdminFilterQuery } from "@/lib/AdminSlice";
 
 const Branches = () => {
   const [selected, setSelected] = React.useState("Branches");
@@ -24,6 +27,17 @@ const Branches = () => {
   const [selectedtab2, setSelectedtab2] = React.useState("Personal Details");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [Open, SetOpen, ] = useState(false);
+  const dispatch = useDispatch();
+
+
+  const handleSearchChange = (event) => {
+    const query = event.target.value;
+    if (selected === "Branches") {
+      dispatch(setBranchFilterQuery(query));
+    } else if (selected === "Admins") {
+      dispatch(setAdminFilterQuery(query));
+    }
+  };
 
   return (
     <>
@@ -67,9 +81,8 @@ const Branches = () => {
           </div>
           <div className="flex gap-3 justify-end items-end">
             <Input
-              isClearable
               classNames={{
-                base: "w-full sm:max-w-[60%]",
+                base: "w-full sm:max-w-[70%]",
                 inputWrapper: "border-1",
               }}
               placeholder="Search by name..."
@@ -77,7 +90,7 @@ const Branches = () => {
               startContent={""}
               variant="bordered"
               // onClear={() => setFilterValue("")}
-              // onValueChange={onSearchChange}
+              onChange={handleSearchChange}
             />
             <div className="flex gap-3">
               {selected ==='Branches' ?<Button
@@ -230,7 +243,7 @@ const Branches = () => {
                       </div>
                     }
                   />
-                  <Tab
+                  {/* <Tab
                     key="Allocation & Verification"
                     title={
                       <div className="flex items-center space-x-2">
@@ -245,21 +258,16 @@ const Branches = () => {
                         <span>User Name & Password</span>
                       </div>
                     }
-                  />
+                  /> */}
                 </Tabs>
                 <div className="w-full h-auto">
                   {selectedtab2 === "Personal Details" && <Personaldetails/>}
-                  {selectedtab2 === "Allocation & Verification" && <Allocverify/>}
-                  {selectedtab2 === "User Name & Password" && <Userandpass/>}
+                  {/* {selectedtab2 === "Allocation & Verification" && <Allocverify/>}
+                  {selectedtab2 === "User Name & Password" && <Userandpass/>} */}
                 </div>
               </ModalBody>
               <ModalFooter className="flex justify-center items-center text-center">
-                <Button
-                  className="buttongradient text-white rounded-md w-60 uppercase font-semibold"
-                  onPress={onClose}
-                >
-                 Next
-                </Button>
+               
               </ModalFooter>
             </>
           )}
