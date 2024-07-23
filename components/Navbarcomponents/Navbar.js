@@ -1,69 +1,99 @@
-import React from "react";
-import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Input, DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar,Badge} from "@nextui-org/react";
-import { IoIosSearch } from "react-icons/io";
+"use client";
+import React, { useEffect, useState } from "react";
+import {
+  Navbar,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem,
+  Input,
+  DropdownItem,
+  DropdownTrigger,
+  Dropdown,
+  DropdownMenu,
+  Avatar,
+  Badge,
+} from "@nextui-org/react";
 import Image from "next/image";
-import Bellicon from "../../public/Loginasset/Bellicon.png"
-import Link from "next/link";
+import Bellicon from "../../public/Loginasset/Bellicon.png";
 import { useRouter } from "next/navigation";
-import {Autocomplete, AutocompleteItem} from "@nextui-org/react";
-
-
-export const animals = [
-  {label: "Branch 17", value: "cat", description: "The second most popular pet in the world"},
-  {label: "Branch 16", value: "dog", description: "The most popular pet in the world"},
-  {label: "Branch 15", value: "elephant", description: "The largest land animal"},
-  {label: "Branch 14", value: "lion", description: "The king of the jungle"},
-  {label: "Branch 13", value: "tiger", description: "The largest cat species"},
-  {label: "Branch 12", value: "giraffe", description: "The tallest land animal"},
-]
+import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchBranches, setSelectedBranch } from "../../lib/BranchSlice";
+import { BsBuildingsFill } from "react-icons/bs";
 
 export default function Navbarr() {
-const router=useRouter()
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const branches = useSelector((state) => state.branches.branches);
+  const selectedBranchId = useSelector(
+    (state) => state.branches.selectedBranchId
+  );
+  const [selectedKey, setSelectedKey] = useState(selectedBranchId);
 
-  const routetonoti=()=>{
-    router.push("/Notifications")
-  }
+  useEffect(() => {
+    dispatch(fetchBranches());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (branches?.length > 0 && selectedKey === null) {
+      setSelectedKey(branches[0]?._id);
+      dispatch(setSelectedBranch(branches[0]?._id));
+    }
+  }, [branches, selectedKey, dispatch]);
+
+  const handleBranchSelect = (key) => {
+    setSelectedKey(key);
+    dispatch(setSelectedBranch(key));
+  };
+
+  const routetonoti = () => {
+    router.push("/Notifications");
+  };
   return (
-    <Navbar  isBordered maxWidth="full">
+    <Navbar isBordered maxWidth="full">
       <NavbarContent justify="start">
         <NavbarBrand className="mr-4">
-        <p>Hello Admin!</p>
+          <p>Hello Admin!</p>
         </NavbarBrand>
-       
       </NavbarContent>
 
       <NavbarContent as="div" className="items-center" justify="end">
-      <Autocomplete
-      size="md"
-      radius="sm"
-      variant="bordered"
-      defaultItems={animals}
-      placeholder="Select Branch"
-      className="w-60 bg-white  rounded-lg"
-    >
-      {(animal) => <AutocompleteItem key={animal.value}>{animal.label}</AutocompleteItem>}
-    </Autocomplete>
-        {/* <Input
-          classNames={{
-            base: "max-w-full sm:max-w-[14rem] h-10",
-            mainWrapper: "h-full",
-            input: "text-small",
-            inputWrapper: "h-full font-normal text-default-500 bg-white ring-1 ring-gray-200 dark:bg-default-500/20",
+       {branches?.length>0 && <Autocomplete
+          startContent={<BsBuildingsFill className="text-gray-600" size={24} />}
+          inputProps={{
+            classNames: {
+              input: "uppercase",
+            },
           }}
-          placeholder="Type to search..."
-          size="sm"
-          startContent={<IoIosSearch size={18} />}
-          type="search"
-        /> */}
-     
+          size="md"
+          radius="sm"
+          variant="bordered"
+          defaultItems={branches?.map((branch) => ({
+            key: branch?._id,
+            label: branch?.Branchname,
+            value: branch?._id,
+          }))}
+          placeholder="Select Branch"
+          className="w-60 bg-white rounded-lg uppercase"
+          selectedKey={selectedKey}
+          onSelectionChange={handleBranchSelect}
+        >
+          {(branch) => (
+            <AutocompleteItem key={branch?.value} className="uppercase">
+              {branch?.label}
+            </AutocompleteItem>
+          )}
+        </Autocomplete>}
 
-         <Badge onClick={routetonoti} content="" color="primary">
+        <Badge onClick={routetonoti} content="" color="primary">
+          <Image
+            onClick={routetonoti}
+            className="object-contain h-10 w-10 cursor-pointer"
+            src={Bellicon}
+            alt="Bellicon"
+          />
+        </Badge>
 
-          <Image onClick={routetonoti} className="object-contain h-10 w-10 cursor-pointer" src={Bellicon} alt="Bellicon"/>
-         </Badge>
-     
-
-       
         <Dropdown placement="bottom-end">
           <DropdownTrigger>
             <Avatar
@@ -75,7 +105,6 @@ const router=useRouter()
               name="Pavan Alimkar"
               size="sm"
             />
-           
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
             <DropdownItem key="profile" className="h-14 gap-2">
@@ -83,7 +112,7 @@ const router=useRouter()
               <p className="font-semibold">Santosh@example.com</p>
             </DropdownItem>
             <DropdownItem key="settings">My Settings</DropdownItem>
-         
+
             <DropdownItem key="logout" color="primary">
               Log Out
             </DropdownItem>
@@ -93,5 +122,3 @@ const router=useRouter()
     </Navbar>
   );
 }
-
-

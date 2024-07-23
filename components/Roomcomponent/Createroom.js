@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, Input } from "@nextui-org/react";
 import { Select, SelectItem } from "@nextui-org/react";
-
+import { Createroomapi } from '@/lib/API/Room';
 
 export const animals = [
     { key: "cat", label: "Cat" },
@@ -13,6 +13,25 @@ export const animals = [
     { key: "dolphin", label: "Dolphin" },
   ];
 const Createroom = () => {
+  const [formData, setFormData] = useState({
+    roomName: "",
+    RoomNumber: "",
+    RoomType: "",
+    RoomDetails: [],
+    SharingType: "",
+    Price: "",
+    branch: "",
+    floor: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+  
   return (
     <div className="flex flex-col justify-center items-center gap-6">
     <div className="w-full text-start">

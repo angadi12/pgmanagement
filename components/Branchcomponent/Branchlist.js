@@ -1,5 +1,5 @@
-'use client'
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import Branchcard from "./Branchcard";
 import { FaCirclePlus } from "react-icons/fa6";
 import { Button } from "@nextui-org/react";
@@ -12,26 +12,76 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import Createbranch from "./Createbranch";
-import { Tabs, Tab,  } from "@nextui-org/react"
+import { Tabs, Tab } from "@nextui-org/react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchBranches } from "@/lib/BranchSlice";
 
 const Branchlist = () => {
   const [selected, setSelected] = React.useState("Branches");
   const [selectedtab, setSelectedtab] = React.useState("Branch Details");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const branches = useSelector((state) => state.branches.branches);
+  const dispatch = useDispatch();
+  const status = useSelector((state) => state.branches.status);
+  const filterQuery = useSelector((state) => state.branches.filterQuery);
+  const [filteredBranches, setFilteredBranches] = useState(branches);
+
+  useEffect(() => {
+    dispatch(fetchBranches());
+  }, [dispatch]);
+
+
+  useEffect(() => {
+    dispatch(fetchBranches());
+  }, [dispatch]);
+
+  useEffect(() => {
+    setFilteredBranches(
+      branches?.filter((branch) =>
+        typeof branch.Branchname === "string" &&
+        branch.Branchname.toLowerCase().includes(filterQuery.toLowerCase())
+      )
+    );
+  }, [branches, filterQuery]);
+
+
+
+  const handleRefresh = () => {
+    dispatch(fetchBranches());
+  };
 
   return (
     <>
-    <div className="w-full grid grid-cols-2 justify-center items-center place-content-center mx-auto gap-6">
-      <Branchcard />
-      <Branchcard />
-      <Branchcard />
-      <Button onPress={onOpen} className="w-full  h-40 flex justify-center ring-2 ring-[#205093] bg-[#B9D6FF59]  items-center p-3 rounded-md">
-        <FaCirclePlus size={40} className="text-[#205093]" />
-      </Button>
-    </div>
+      {status === "loading" ? (
+        <p className="flex justify-start items-center flex-col gap-2 h-[40vh] w-full mt-24">
+          <span className="loader3 "></span>
+        </p>
+      ) : (
+        <div className="w-full grid grid-cols-2 justify-center items-center place-content-center mx-auto gap-6">
+          {status === "succeeded" && filteredBranches?.length === 0 && (
+            <div className="w-full boxshadow h-40 flex justify-center items-center p-3 rounded-md">
+              <p>No branches Found</p>
+            </div>
+          )}
+          {filteredBranches?.map(
+            (data, index) =>
+              status === "succeeded" && <Branchcard data={data} key={index} />
+          )}
 
-    <Modal
-      isDismissable={false} isKeyboardDismissDisabled={true}
+          {status === "succeeded" && (
+            <Button
+              onPress={onOpen}
+              className="w-full  h-40 flex justify-center ring-2 ring-[#205093] bg-[#B9D6FF59]  items-center p-3 rounded-md"
+            >
+              <FaCirclePlus size={40} className="text-[#205093]" />
+            </Button>
+          )}
+        </div>
+      )}
+
+      <Modal
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
         backdrop="blur"
         size="4xl"
         isOpen={isOpen}
@@ -61,7 +111,7 @@ const Branchlist = () => {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col text-center">
-              Create New Branch
+                Create New Branch
               </ModalHeader>
               <ModalBody>
                 <Tabs
@@ -86,25 +136,18 @@ const Branchlist = () => {
                       </div>
                     }
                   />
-                 
                 </Tabs>
                 <div className="w-full h-auto">
-                {selectedtab ==="Branch Details" && <Createbranch/>}
+                  {selectedtab === "Branch Details" && (
+                    <Createbranch onClose={onClose} onRefresh={handleRefresh} />
+                  )}
                 </div>
               </ModalBody>
-              <ModalFooter className="flex justify-center items-center text-center">
-                <Button
-                  className="buttongradient text-white rounded-md w-60 uppercase font-semibold"
-                  onPress={onClose}
-                >
-                Create Branch
-                </Button>
-              </ModalFooter>
+              <ModalFooter className="flex justify-center items-center text-center"></ModalFooter>
             </>
           )}
         </ModalContent>
       </Modal>
-
     </>
   );
 };

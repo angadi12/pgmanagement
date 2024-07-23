@@ -67,7 +67,6 @@ export default function NextuiProviderWrapper({ children }) {
 
 
 
-console.log(branches)
 
   return (
     
