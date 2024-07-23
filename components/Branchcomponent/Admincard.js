@@ -53,9 +53,10 @@ const Admincard = ({admin}) => {
           className="rounded-full mx-auto -mt-12 w-24 h-24"
         />
         <h2 class="text-lg font-bold mt-2">{admin?.name}</h2>
-        <p className="text-sm font-bold flex items-center gap-2">
-          Branch 1:<span className="text-[#1B9D31]">Full Access</span>
+        <p className="text-xs font-bold flex items-center gap-2">
+        Access:<span className="text-[#1B9D31]">{admin.permission.join(",")}</span>
         </p>
+        <div className="py-2">{admin.activate? <Chip size="sm" color="success" className="text-white">Activate</Chip>: <Chip className="text-white" size="sm" color="danger">Success</Chip>}</div>
         <div className="bg-[#F0F0F0] p-4 flex flex-col justify-center items-center w-full h-full mt-2 gap-4">
           <div className=" flex justify-between gap-4  items-center w-full">
             <div>
