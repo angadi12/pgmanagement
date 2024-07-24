@@ -59,7 +59,7 @@ export default function Navbarr() {
 
       <NavbarContent as="div" className="items-center" justify="end">
        {branches?.length>0 && <Autocomplete
-          startContent={<BsBuildingsFill className="text-gray-600" size={24} />}
+          startContent={<BsBuildingsFill className="text-[#005CFF]" size={24} />}
           inputProps={{
             classNames: {
               input: "uppercase",
@@ -79,8 +79,9 @@ export default function Navbarr() {
           onSelectionChange={handleBranchSelect}
         >
           {(branch) => (
-            <AutocompleteItem key={branch?.value} className="uppercase">
-              {branch?.label}
+            <AutocompleteItem   color="primary"   variant="flat"     startContent={<BsBuildingsFill className="text-gray-600" size={10} />}
+  key={branch?.value} value={branch?.id} className="uppercase flex items-center gap-2">
+            {branch?.label}
             </AutocompleteItem>
           )}
         </Autocomplete>}

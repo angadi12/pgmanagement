@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Table,
   TableHeader,
@@ -19,7 +19,7 @@ import {
   Pagination,
 } from "@nextui-org/react";
 import { FaPlus } from "react-icons/fa6";
-import fillter from "../../public/Loginasset/fillter.png"
+import fillter from "../../public/Loginasset/fillter.png";
 import Image from "next/image";
 import {
   Modal,
@@ -32,29 +32,26 @@ import {
 import { Tabs, Tab } from "@nextui-org/react";
 import Personaldetails from "@/components/Tennatcomponents/Personaldetails";
 import Roomsanddura from "@/components/Tennatcomponents/Roomsanddura";
-// import {VerticalDotsIcon} from "./VerticalDotsIcon";
-// import {SearchIcon} from "./SearchIcon";
-// import {ChevronDownIcon} from "./ChevronDownIcon";
-// import {columns, users, statusOptions} from "./data";
-// import {capitalize} from "./utils";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchTenantsByBranch } from "@/lib/TennatSlice";
+
 const columns = [
-  {name: "ID", uid: "id", },
-  {name: "Name", uid: "name", },
-  {name: "Contact No.", uid: "Contact", },
-  {name: "Room No.", uid: "Room", },
-  {name: "Start Date", uid: "Start"},
-  {name: "End Date", uid: "End"},
-  {name: "Active Complaints", uid: "Complaints"},
-  {name: "Rent Status", uid: "status", sortable: true},
+  { name: "ID", uid: "_id" },
+  { name: "Name", uid: "UserName" },
+  { name: "Contact No.", uid: "UserNumber" },
+  { name: "Room No.", uid: "room.RoomNumber" },
+  { name: "Start Date", uid: "StartDate" },
+  { name: "End Date", uid: "LastDate" },
+  { name: "Rent Status", uid: "Status", sortable: true },
 ];
 
 export function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 const statusOptions = [
-  {name: "Paid Due", uid: "Paid"},
-  {name: "Pending Due", uid: "Pending"},
-  {name: "Overdue Due", uid: "Overdue"},
+  { name: "Paid Due", uid: "Paid" },
+  { name: "Pending Due", uid: "Pending" },
+  { name: "Overdue Due", uid: "Overdue" },
 ];
 
 const users = [
@@ -66,37 +63,37 @@ const users = [
     Complaints: "No Active Complaints",
     status: "Paid",
     Room: "29",
-    Contact:"1234567890"
+    Contact: "1234567890",
   },
   {
     id: 2,
-   name: "Pavan Alimkar",
+    name: "Pavan Alimkar",
     End: "12/12/24",
     Start: "12/12/24",
     Complaints: "No Active Complaints",
     status: "Paid",
     Room: "29",
-    Contact:"1234567890"
+    Contact: "1234567890",
   },
   {
     id: 3,
-   name: "Pavan Alimkar",
+    name: "Pavan Alimkar",
     End: "12/12/24",
     Start: "12/12/24",
     Complaints: "No Active Complaints",
     status: "Overdue",
     Room: "29",
-    Contact:"1234567890"
+    Contact: "1234567890",
   },
   {
     id: 4,
-  name: "Pavan Alimkar",
+    name: "Pavan Alimkar",
     End: "12/12/24",
     Start: "12/12/24",
     Complaints: "1 Complaints",
     status: "Overdue",
     Room: "29",
-    Contact:"1234567890"
+    Contact: "1234567890",
   },
   {
     id: 5,
@@ -106,37 +103,37 @@ const users = [
     Complaints: "1 Active Complaint",
     status: "Paid",
     Room: "29",
-    Contact:"1234567890"
+    Contact: "1234567890",
   },
   {
     id: 6,
-   name: "Pavan Alimkar",
+    name: "Pavan Alimkar",
     End: "12/12/24",
     Start: "12/12/24",
     Complaints: "No Active Complaints",
     status: "Overdue",
     Room: "29",
-    Contact:"1234567890"
+    Contact: "1234567890",
   },
   {
     id: 7,
-   name: "Pavan Alimkar",
+    name: "Pavan Alimkar",
     End: "12/12/24",
     Start: "12/12/24",
     Complaints: "No Active Complaints",
     status: "Overdue",
     Room: "29",
-    Contact:"1234567890"
+    Contact: "1234567890",
   },
   {
     id: 8,
-   name: "Pavan Alimkar",
+    name: "Pavan Alimkar",
     End: "12/12/24",
     Start: "12/12/24",
     Complaints: "No Active Complaints",
     status: "Paid",
     Room: "29",
-    Contact:"1234567890"
+    Contact: "1234567890",
   },
   {
     id: 9,
@@ -146,48 +143,48 @@ const users = [
     Complaints: "No Active Complaints",
     status: "Paid",
     Room: "29",
-    Contact:"1234567890"
+    Contact: "1234567890",
   },
   {
     id: 10,
-   name: "Pavan Alimkar",
+    name: "Pavan Alimkar",
     End: "12/12/24",
     Start: "12/12/24",
     Complaints: "No Active Complaints",
     status: "Paid",
     Room: "29",
-    Contact:"1234567890"
+    Contact: "1234567890",
   },
   {
     id: 11,
-   name: "Pavan Alimkar",
+    name: "Pavan Alimkar",
     End: "12/12/24",
     Start: "12/12/24",
     Complaints: "Complaints",
     status: "Overdue",
     Room: "29",
-    Contact:"1234567890"
+    Contact: "1234567890",
   },
   {
     id: 12,
-   name: "Pavan Alimkar",
+    name: "Pavan Alimkar",
     End: "12/12/24",
     Start: "12/12/24",
     Complaints: "Complaints",
     status: "Paid",
     Room: "29",
-    Contact:"1234567890"
+    Contact: "1234567890",
   },
   {
     id: 13,
     name: "Oliver Scott",
-   name: "Pavan Alimkar",
+    name: "Pavan Alimkar",
     End: "12/12/24",
     Start: "12/12/24",
     Complaints: "Complaints",
     status: "Pending",
     Room: "29",
-    Contact:"1234567890"
+    Contact: "1234567890",
   },
   {
     id: 14,
@@ -197,7 +194,7 @@ const users = [
     Complaints: "Complaints",
     status: "Overdue",
     Room: "29",
-    Contact:"1234567890"
+    Contact: "1234567890",
   },
   {
     id: 15,
@@ -207,27 +204,27 @@ const users = [
     Complaints: "Complaints",
     status: "Paid",
     Room: "29",
-    Contact:"1234567890"
+    Contact: "1234567890",
   },
   {
     id: 16,
-   name: "Pavan Alimkar",
+    name: "Pavan Alimkar",
     End: "12/12/24",
     Start: "12/12/24",
     Complaints: "Complaints",
     status: "Pending",
     Room: "29",
-    Contact:"1234567890"
+    Contact: "1234567890",
   },
   {
     id: 17,
-   name: "Pavan Alimkar",
+    name: "Pavan Alimkar",
     End: "12/12/24",
     Start: "12/12/24",
     Complaints: "Complaints",
     status: "Paid",
     Room: "29",
-    Contact:"1234567890"
+    Contact: "1234567890",
   },
   {
     id: 18,
@@ -237,40 +234,59 @@ const users = [
     Complaints: "Complaints",
     status: "Paid",
     Room: "29",
-    Contact:"1234567890"
+    Contact: "1234567890",
   },
   {
     id: 19,
-   name: "Pavan Alimkar",
+    name: "Pavan Alimkar",
     End: "12/12/24",
     Start: "12/12/24",
     Complaints: "Complaints",
     status: "Pending",
     Room: "29",
-    Contact:"1234567890"
+    Contact: "1234567890",
   },
   {
     id: 20,
-   name: "Pavan Alimkar",
+    name: "Pavan Alimkar",
     End: "12/12/24",
     Start: "12/12/24",
     Complaints: "Complaints",
     status: "Paid",
     Room: "29",
-    Contact:"1234567890"
+    Contact: "1234567890",
   },
 ];
 
-export {columns, users, statusOptions};
+export { columns, users, statusOptions };
 const statusColorMap = {
   Paid: "success",
   Overdue: "danger",
   Pending: "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "Contact","Room","Start","End","Complaints", "status"];
+const INITIAL_VISIBLE_COLUMNS = [
+  "UserName",
+  "UserNumber",
+  "room.RoomNumber",
+  "StartDate",
+  "LastDate",
+  "Status",
+];
 
 export default function Tennat() {
+  const dispatch = useDispatch();
+  const { tenants, status, error } = useSelector((state) => state.tenants);
+  const selectedBranchId = useSelector(
+    (state) => state.branches.selectedBranchId
+  );
+
+  useEffect(() => {
+    if (selectedBranchId) {
+      dispatch(fetchTenantsByBranch(selectedBranchId));
+    }
+  }, [selectedBranchId, dispatch]);
+
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [selected, setSelected] = React.useState("Personal Details");
 
@@ -300,24 +316,24 @@ export default function Tennat() {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...users];
+    let filteredUsers = [...tenants];
 
     if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase())
+      filteredUsers = filteredUsers.filter((tenant) =>
+        tenant.name.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
     if (
       statusFilter !== "all" &&
       Array.from(statusFilter).length !== statusOptions.length
     ) {
-      filteredUsers = filteredUsers.filter((user) =>
-        Array.from(statusFilter).includes(user.status)
+      filteredUsers = filteredUsers.filter((tenant) =>
+        Array.from(statusFilter).includes(tenant.status)
       );
     }
 
     return filteredUsers;
-  }, [users, filterValue, statusFilter]);
+  }, [tenants, filterValue, statusFilter]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -336,14 +352,12 @@ export default function Tennat() {
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((user, columnKey) => {
-    const cellValue = user[columnKey];
+  const renderCell = React.useCallback((tenant, columnKey) => {
+    const cellValue = tenant[columnKey];
 
     switch (columnKey) {
       case "name":
-        return (
-         <p>{user.name}</p>
-        );
+        return <p>{tenant.UserName}</p>;
       case "role":
         return (
           <div className="flex flex-col">
@@ -365,11 +379,7 @@ export default function Tennat() {
           </Chip>
         );
       case "Complaints":
-        return (
-          <p>
-            {user.Complaints}
-          </p>
-        );
+        return <p>{user.Complaints}</p>;
       default:
         return cellValue;
     }
@@ -405,7 +415,7 @@ export default function Tennat() {
     return (
       <div className="flex flex-col  gap-4 mt-4 px-2">
         <div>
-          <p className="text-lg font-semibold">Present Tenants <span className="text-[#205093]">(72*)</span></p>
+          <p className="text-lg font-semibold">Present Tenants </p>
         </div>
         <div className="flex gap-3 justify-end items-end">
           <Input
@@ -426,13 +436,12 @@ export default function Tennat() {
             <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
                 <Button
-               
                   endContent={""}
                   size="sm"
                   className="ring-1 ring-gray-300"
                   variant="light"
                 >
-                 <Image src={fillter} className="h-6 w-6"/>
+                  <Image src={fillter} className="h-6 w-6" />
                 </Button>
               </DropdownTrigger>
               <DropdownMenu
@@ -476,18 +485,16 @@ export default function Tennat() {
               </DropdownMenu>
             </Dropdown> */}
             <Button
-             onPress={onOpen}
+              onPress={onOpen}
               className="bg-[#205093] text-background"
               endContent={<FaPlus />}
               size="sm"
-            >
-             
-            </Button>
+            ></Button>
           </div>
         </div>
         <div className="flex justify-between items-center">
           <span className="text-default-400 text-small">
-            Total {users.length} users
+            Total {tenants.length} Tenants
           </span>
           <label className="flex items-center text-default-400 text-small">
             Rows per page:
@@ -509,7 +516,7 @@ export default function Tennat() {
     visibleColumns,
     onSearchChange,
     onRowsPerPageChange,
-    users.length,
+    tenants.length,
     hasSearchFilter,
   ]);
 
@@ -531,22 +538,36 @@ export default function Tennat() {
           onChange={setPage}
         />
         <div className="hidden sm:flex w-[30%] justify-end gap-2">
-          <Button className="bg-[#205093] text-white" isDisabled={pages === 1} size="sm" variant="flat" onPress={onPreviousPage}>
+          <Button
+            className="bg-[#205093] text-white"
+            isDisabled={pages === 1}
+            size="sm"
+            variant="flat"
+            onPress={onPreviousPage}
+          >
             Previous
           </Button>
-          <Button className="bg-[#205093] text-white" isDisabled={pages === 1} size="sm" variant="flat" onPress={onNextPage}>
+          <Button
+            className="bg-[#205093] text-white"
+            isDisabled={pages === 1}
+            size="sm"
+            variant="flat"
+            onPress={onNextPage}
+          >
             Next
           </Button>
         </div>
       </div>
     );
-  }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
+  }, [selectedKeys, tenants.length, page, pages, hasSearchFilter]);
 
   const classNames = React.useMemo(
     () => ({
-      wrapper: ["h-screen", "max-w-3xl","border-1",],
+      wrapper: ["h-screen", "max-w-3xl", "border-1"],
       th: ["bg-[#205093]", "text-white", "border-b", "border-divider"],
-      td: ["p-3","border-b",
+      td: [
+        "p-3",
+        "border-b",
         // changing the rows border radius
         // first
         "group-data-[first=true]:first:before:rounded-none",
@@ -563,48 +584,53 @@ export default function Tennat() {
 
   return (
     <>
-    <Table
-      isCompact
-      className="px-4"
-      removeWrapper
-      aria-label="Example table with custom cells, pagination and sorting"
-      bottomContent={bottomContent}
-      bottomContentPlacement="outside"
-      
-      classNames={classNames}
-      selectedKeys={selectedKeys}
-      // selectionMode="multiple"
-      sortDescriptor={sortDescriptor}
-      topContent={topContent}
-      topContentPlacement="outside"
-      onSelectionChange={setSelectedKeys}
-      onSortChange={setSortDescriptor}
-    >
-      <TableHeader columns={headerColumns}>
-        {(column) => (
-          <TableColumn
-            key={column.uid}
-            align={column.uid === "actions" ? "center" : "start"}
-            allowsSorting={column.sortable}
-          >
-            {column.name}
-          </TableColumn>
-        )}
-      </TableHeader>
-      <TableBody emptyContent={"No Tennat found"} items={sortedItems}>
-        {(item) => (
-          <TableRow key={item.id}>
-            {(columnKey) => (
-              <TableCell>{renderCell(item, columnKey)}</TableCell>
+      {status === "loading" ? (
+        <div className="w-full h-full col-span-3 flex justify-center items-center">
+          <span className="loader3 "></span>
+        </div>
+      ) : (
+        <Table
+          isCompact
+          className="px-4"
+          removeWrapper
+          aria-label="Example table with custom cells, pagination and sorting"
+          bottomContent={bottomContent}
+          bottomContentPlacement="outside"
+          classNames={classNames}
+          selectedKeys={selectedKeys}
+          // selectionMode="multiple"
+          sortDescriptor={sortDescriptor}
+          topContent={topContent}
+          topContentPlacement="outside"
+          onSelectionChange={setSelectedKeys}
+          onSortChange={setSortDescriptor}
+        >
+          <TableHeader columns={headerColumns}>
+            {(column) => (
+              <TableColumn
+                key={column.uid}
+                align={column.uid === "actions" ? "center" : "start"}
+                allowsSorting={column.sortable}
+              >
+                {column.name}
+              </TableColumn>
             )}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+          </TableHeader>
+          <TableBody emptyContent={"No Tenants found"} items={sortedItems}>
+            {(item) => (
+              <TableRow key={item._id}>
+                {(columnKey) => (
+                  <TableCell>{renderCell(item, columnKey)}</TableCell>
+                )}
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      )}
 
-
-    <Modal
-      isDismissable={false} isKeyboardDismissDisabled={true}
+      <Modal
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
         backdrop="blur"
         size="4xl"
         isOpen={isOpen}
@@ -669,8 +695,8 @@ export default function Tennat() {
                   />
                 </Tabs>
                 <div className="w-full h-auto">
-                {selected ==="Personal Details" && <Personaldetails/>}
-                {selected ==="Room & Duration" && <Roomsanddura/>}
+                  {selected === "Personal Details" && <Personaldetails />}
+                  {selected === "Room & Duration" && <Roomsanddura />}
                 </div>
               </ModalBody>
               <ModalFooter className="flex justify-center items-center text-center">
@@ -685,7 +711,6 @@ export default function Tennat() {
           )}
         </ModalContent>
       </Modal>
-
     </>
   );
 }

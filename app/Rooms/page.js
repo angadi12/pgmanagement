@@ -1,6 +1,5 @@
 "use client";
-
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Table,
   TableHeader,
@@ -17,6 +16,8 @@ import {
   Chip,
   User,
   Pagination,
+  Tooltip,
+  Badge
 } from "@nextui-org/react";
 import {
   Modal,
@@ -28,246 +29,69 @@ import {
 } from "@nextui-org/react";
 import { Tabs, Tab } from "@nextui-org/react";
 import { FaPlus } from "react-icons/fa6";
-import fillter from "../../public/Loginasset/fillter.png"
+import { IoEyeSharp } from "react-icons/io5";
+import { RiPencilFill } from "react-icons/ri";
+import { MdDelete } from "react-icons/md";
+import fillter from "../../public/Loginasset/fillter.png";
 import Image from "next/image";
 import Createroom from "@/components/Roomcomponent/Createroom";
-// import {VerticalDotsIcon} from "./VerticalDotsIcon";
-// import {SearchIcon} from "./SearchIcon";
-// import {ChevronDownIcon} from "./ChevronDownIcon";
-// import {columns, users, statusOptions} from "./data";
-// import {capitalize} from "./utils";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchRoomsByBranch } from "@/lib/RoomSlice";
+import { FaBed } from "react-icons/fa6";
+
 const columns = [
-  {name: "ID", uid: "id", },
-  {name: "Room No.", uid: "name", },
-  {name: "Room Type", uid: "Contact", },
-  {name: "Specialty", uid: "Room", },
-  {name: "Room Complaints", uid: "Start"},
-  {name: "Rent Amount", uid: "End"},
-  {name: "Room Status", uid: "status", sortable: true},
+  { name: "ID", uid: "_id" },
+  { name: "Room No.", uid: "RoomNumber" },
+  { name: "Room Name", uid: "roomName" },
+  { name: "Room Type", uid: "RoomType" },
+  { name: "No. of Sharing", uid: "SharingType" },
+  { name: "Rent Amount", uid: "Price" },
+  { name: "Reamining Bed", uid: "ReaminingBed" },
+  { name: "Room Status", uid: "reaminingBed", sortable: true },
+  { name: "ACTIONS", uid: "actions" },
 ];
 
 export function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 const statusOptions = [
-  {name: "Available", uid: "Available"},
-  {name: "Full", uid: "Full"},
+  { name: "Available", uid: "Available" },
+  { name: "Not Available", uid: "NotAvailable" },
 ];
 
-const users = [
-  {
-    id: 1,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 2,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 3,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Overdue",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 4,
-  name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "1 Complaints",
-    status: "Overdue",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 5,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "1 Active Complaint",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 6,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Overdue",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 7,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Overdue",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 8,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 9,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 10,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 11,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Overdue",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 12,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 13,
-    name: "Oliver Scott",
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Pending",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 14,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Overdue",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 15,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 16,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Pending",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 17,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 18,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 19,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Pending",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 20,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-];
-
-export {columns, users, statusOptions};
+export { columns, statusOptions };
 const statusColorMap = {
-  Paid: "success",
-  Full: "danger",
-  Pending: "warning",
+  Available: "success",
+  NotAvailable: "danger",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "Contact","Room","Start","End","Complaints", "status"];
+const INITIAL_VISIBLE_COLUMNS = [
+  "roomName",
+  "RoomNumber",
+  "RoomType",
+  "SharingType",
+  "Price",
+  "ReaminingBed",
+  "reaminingBed",
+  "actions",
+];
 
+const getRoomStatus = (reaminingBed) => {
+  return reaminingBed > 0 ? "Available" : "NotAvailable";
+};
 export default function Rooms() {
+  const dispatch = useDispatch();
+  const { rooms, status, error } = useSelector((state) => state.rooms);
+  const selectedBranchId = useSelector(
+    (state) => state.branches.selectedBranchId
+  );
+
+  useEffect(() => {
+    if (selectedBranchId) {
+      dispatch(fetchRoomsByBranch(selectedBranchId));
+    }
+  }, [selectedBranchId, dispatch]);
+
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [selected, setSelected] = React.useState("Room Details");
 
@@ -284,7 +108,7 @@ export default function Rooms() {
   });
   const [page, setPage] = React.useState(1);
 
-  const pages = Math.ceil(users.length / rowsPerPage);
+  const pages = Math.ceil(rooms.length / rowsPerPage);
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -297,24 +121,26 @@ export default function Rooms() {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...users];
+    let filteredUsers = [...rooms];
 
     if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase())
+      filteredUsers = filteredUsers.filter(
+        (room) =>
+          typeof room.roomName === "string" &&
+          room?.roomName.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
     if (
       statusFilter !== "all" &&
       Array.from(statusFilter).length !== statusOptions.length
     ) {
-      filteredUsers = filteredUsers.filter((user) =>
-        Array.from(statusFilter).includes(user.status)
+      filteredUsers = filteredUsers.filter((room) =>
+        Array.from(statusFilter).includes(getRoomStatus(room.reaminingBed))
       );
     }
 
     return filteredUsers;
-  }, [users, filterValue, statusFilter]);
+  }, [rooms, filterValue, statusFilter]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -333,39 +159,67 @@ export default function Rooms() {
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((user, columnKey) => {
-    const cellValue = user[columnKey];
+  const renderCell = React.useCallback((room, columnKey) => {
+    const cellValue = room[columnKey];
 
     switch (columnKey) {
-      case "name":
-        return (
-         <p>{user.name}</p>
-        );
-      case "role":
+      case "roomName":
+        return <p>{room.roomName}</p>;
+      case "RoomType":
+        return <p className="capitalize">{room.RoomType.toLowerCase()}</p>;
+      case "RoomNumber":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
             <p className="text-bold text-tiny capitalize text-default-500">
-              {user.team}
+              {room.RoomNumber}
             </p>
           </div>
         );
-      case "status":
+      case "SharingType":
         return (
-          <Chip
-            className="capitalize border-none gap-1  "
-            color={statusColorMap[user.status]}
-            size="sm"
-            variant="flat"
-          >
-            {cellValue}
-          </Chip>
+          <div className="flex flex-col">
+            <p className="text-bold">{room.SharingType}</p>
+          </div>
         );
-      case "Complaints":
+      case "ReaminingBed":
         return (
-          <p>
-            {user.Complaints}
-          </p>
+          <Badge content={room.reaminingBed} shape="circle" size="sm" color="danger">
+            <FaBed size={20} />
+          </Badge>
+        );
+      case "reaminingBed":
+        const status = room.reaminingBed > 0 ? "Available" : "NotAvailable";
+        return (
+          <div className="flex ">
+            <Chip
+              className="capitalize border-none gap-1  rounded-md"
+              color={statusColorMap[status]}
+              size="sm"
+              variant="flat"
+            >
+              {status}
+            </Chip>
+          </div>
+        );
+      case "actions":
+        return (
+          <div className="relative flex items-center gap-4">
+            <Tooltip content="Details">
+              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                <IoEyeSharp />
+              </span>
+            </Tooltip>
+            <Tooltip content="Edit">
+              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                <RiPencilFill />
+              </span>
+            </Tooltip>
+            <Tooltip color="primary" content="Delete">
+              <span className="text-lg text-red-500 cursor-pointer active:opacity-50">
+                <MdDelete />
+              </span>
+            </Tooltip>
+          </div>
         );
       default:
         return cellValue;
@@ -402,7 +256,7 @@ export default function Rooms() {
     return (
       <div className="flex flex-col  gap-4 mt-4 px-2">
         <div>
-          <p className="text-lg font-semibold">Total Rooms <span className="text-[#205093]">(50*)</span></p>
+          <p className="text-lg font-semibold">Manage Rooms</p>
         </div>
         <div className="flex gap-3 justify-end items-end">
           <Input
@@ -428,7 +282,7 @@ export default function Rooms() {
                   className="ring-1 ring-gray-300"
                   variant="light"
                 >
-                 <Image src={fillter} className="h-6 w-6"/>
+                  <Image src={fillter} className="h-6 w-6" />
                 </Button>
               </DropdownTrigger>
               <DropdownMenu
@@ -446,44 +300,18 @@ export default function Rooms() {
                 ))}
               </DropdownMenu>
             </Dropdown>
-            {/* <Dropdown>
-              <DropdownTrigger className="hidden sm:flex">
-                <Button
-                  endContent={""}
-                  size="sm"
-                  variant="flat"
-                >
-                  Columns
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label="Table Columns"
-                closeOnSelect={false}
-                selectedKeys={visibleColumns}
-                selectionMode="multiple"
-                onSelectionChange={setVisibleColumns}
-              >
-                {columns.map((column) => (
-                  <DropdownItem key={column.uid} className="capitalize">
-                    {capitalize(column.name)}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown> */}
+
             <Button
-            onPress={onOpen}
+              onPress={onOpen}
               className="bg-[#205093] text-background"
               endContent={<FaPlus />}
               size="sm"
-            >
-             
-            </Button>
+            ></Button>
           </div>
         </div>
         <div className="flex justify-between items-center">
           <span className="text-default-400 text-small">
-            Total {users.length} users
+            Total {rooms.length} Rooms
           </span>
           <label className="flex items-center text-default-400 text-small">
             Rows per page:
@@ -505,7 +333,7 @@ export default function Rooms() {
     visibleColumns,
     onSearchChange,
     onRowsPerPageChange,
-    users.length,
+    rooms.length,
     hasSearchFilter,
   ]);
 
@@ -527,22 +355,36 @@ export default function Rooms() {
           onChange={setPage}
         />
         <div className="hidden sm:flex w-[30%] justify-end gap-2">
-          <Button className="bg-[#205093] text-white" isDisabled={pages === 1} size="sm" variant="flat" onPress={onPreviousPage}>
+          <Button
+            className="bg-[#205093] text-white"
+            isDisabled={pages === 1}
+            size="sm"
+            variant="flat"
+            onPress={onPreviousPage}
+          >
             Previous
           </Button>
-          <Button className="bg-[#205093] text-white" isDisabled={pages === 1} size="sm" variant="flat" onPress={onNextPage}>
+          <Button
+            className="bg-[#205093] text-white"
+            isDisabled={pages === 1}
+            size="sm"
+            variant="flat"
+            onPress={onNextPage}
+          >
             Next
           </Button>
         </div>
       </div>
     );
-  }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
+  }, [selectedKeys, rooms.length, page, pages, hasSearchFilter]);
 
   const classNames = React.useMemo(
     () => ({
-      wrapper: ["h-screen", "max-w-3xl",],
+      wrapper: ["h-screen", "max-w-3xl"],
       th: ["bg-[#205093]", "text-white", "border-b", "border-divider"],
-      td: ["p-3","border-b",
+      td: [
+        "p-3",
+        "border-b",
         // changing the rows border radius
         // first
         "group-data-[first=true]:first:before:rounded-none",
@@ -559,47 +401,53 @@ export default function Rooms() {
 
   return (
     <>
-    <Table
-      isCompact
-      className="px-4"
-      removeWrapper
-      aria-label="Example table with custom cells, pagination and sorting"
-      bottomContent={bottomContent}
-      bottomContentPlacement="outside"
-      
-      classNames={classNames}
-      selectedKeys={selectedKeys}
-      // selectionMode="multiple"
-      sortDescriptor={sortDescriptor}
-      topContent={topContent}
-      topContentPlacement="outside"
-      onSelectionChange={setSelectedKeys}
-      onSortChange={setSortDescriptor}
-    >
-      <TableHeader columns={headerColumns}>
-        {(column) => (
-          <TableColumn
-            key={column.uid}
-            align={column.uid === "actions" ? "center" : "start"}
-            allowsSorting={column.sortable}
-          >
-            {column.name}
-          </TableColumn>
-        )}
-      </TableHeader>
-      <TableBody emptyContent={"No users found"} items={sortedItems}>
-        {(item) => (
-          <TableRow key={item.id}>
-            {(columnKey) => (
-              <TableCell>{renderCell(item, columnKey)}</TableCell>
+      {status === "loading" ? (
+        <div className="w-full h-full col-span-3 flex justify-center items-center">
+          <span className="loader3 "></span>
+        </div>
+      ) : (
+        <Table
+          isCompact
+          className="px-4"
+          removeWrapper
+          aria-label="Example table with custom cells, pagination and sorting"
+          bottomContent={bottomContent}
+          bottomContentPlacement="outside"
+          classNames={classNames}
+          selectedKeys={selectedKeys}
+          // selectionMode="multiple"
+          sortDescriptor={sortDescriptor}
+          topContent={topContent}
+          topContentPlacement="outside"
+          onSelectionChange={setSelectedKeys}
+          onSortChange={setSortDescriptor}
+        >
+          <TableHeader columns={headerColumns}>
+            {(column) => (
+              <TableColumn
+                key={column.uid}
+                align={column.uid === "actions" ? "center" : "start"}
+                allowsSorting={column.sortable}
+              >
+                {column.name}
+              </TableColumn>
             )}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+          </TableHeader>
+          <TableBody emptyContent={"No Rooms found"} items={sortedItems}>
+            {(item) => (
+              <TableRow key={item._id}>
+                {(columnKey) => (
+                  <TableCell>{renderCell(item, columnKey)}</TableCell>
+                )}
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      )}
 
-    <Modal
-      isDismissable={false} isKeyboardDismissDisabled={true}
+      <Modal
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
         backdrop="blur"
         size="4xl"
         isOpen={isOpen}
@@ -629,7 +477,7 @@ export default function Rooms() {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col text-center">
-              Create New Room
+                Create New Room
               </ModalHeader>
               <ModalBody>
                 <Tabs
@@ -654,20 +502,12 @@ export default function Rooms() {
                       </div>
                     }
                   />
-                 
                 </Tabs>
                 <div className="w-full h-auto">
-                {selected ==="Room Details" && <Createroom/>}
+                  {selected === "Room Details" && <Createroom />}
                 </div>
               </ModalBody>
-              <ModalFooter className="flex justify-center items-center text-center">
-                <Button
-                  className="buttongradient text-white rounded-md w-60 uppercase"
-                  onPress={onClose}
-                >
-                  Create
-                </Button>
-              </ModalFooter>
+              <ModalFooter className="flex justify-center items-center text-center"></ModalFooter>
             </>
           )}
         </ModalContent>

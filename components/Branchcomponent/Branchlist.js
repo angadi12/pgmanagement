@@ -63,6 +63,11 @@ const Branchlist = () => {
               <p>No branches Found</p>
             </div>
           )}
+          { filteredBranches === undefined && (
+            <div className="w-full boxshadow h-40 flex justify-center items-center p-3 rounded-md">
+              <p>Error while fetching branch details</p>
+            </div>
+          )}
           {filteredBranches?.map(
             (data, index) =>
               status === "succeeded" && <Branchcard data={data} key={index} />
