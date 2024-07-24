@@ -195,10 +195,10 @@ const Updateadmindetails = () => {
               className="w-full"
               multiple
             >
-              <SelectItem key="Rooms">Rooms</SelectItem>
-              <SelectItem key="Tenant">Tenant</SelectItem>
-              <SelectItem key="Expense">Expense</SelectItem>
-              <SelectItem key="Payment">Payment</SelectItem>
+              <SelectItem  color="primary"   variant="flat"  key="Rooms">Rooms</SelectItem>
+              <SelectItem  color="primary"   variant="flat"  key="Tenant">Tenant</SelectItem>
+              <SelectItem  color="primary"   variant="flat"  key="Expense">Expense</SelectItem>
+              <SelectItem  color="primary"   variant="flat"  key="Payment">Payment</SelectItem>
             </Select>
             <Select
               selectedKeys={new Set([formData.branch])}
@@ -212,7 +212,7 @@ const Updateadmindetails = () => {
               className="w-full"
             >
               {branches?.map((branch) => (
-                <SelectItem key={branch._id} value={branch._id}>
+                <SelectItem  color="primary"   variant="flat"  key={branch._id} value={branch._id}>
                   {branch.Branchname}
                 </SelectItem>
               ))}

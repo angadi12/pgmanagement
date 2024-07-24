@@ -28,6 +28,7 @@ const Adminlist = () => {
   const selectedBranchId = useSelector((state) => state.branches.selectedBranchId); 
   const filterQuery = useSelector((state) => state.admins.filterQuery);
   const [filteredAdmins, setFilteredAdmins] = useState(admins);
+  const error = useSelector((state) => state.admins.error);
 
 
   useEffect(() => {
@@ -45,7 +46,8 @@ const Adminlist = () => {
     );
   }, [admins, filterQuery]);
   
-
+console.log("error",error)
+console.log("admin",filteredAdmins)
   return (
     <>
     <div className='w-full h-auto  mx-auto grid grid-cols-3 justify-center items-start place-content-center content-stretch gap-y-16 gap-4 mt-20'>
@@ -58,6 +60,11 @@ const Adminlist = () => {
           <div className="w-full h-40 col-span-3 flex justify-center items-center flex-col gap-4  rounded-md">
             <p>No admins found.</p>
             <FaCirclePlus onClick={()=>SetOpen(true)}  size={50} className='text-[#205093]'/>
+          </div>
+        )}
+        { filteredAdmins === undefined &&  (
+          <div className="w-full h-40 col-span-3 flex justify-center items-center flex-col gap-4  rounded-md">
+            <p>Failed To fetch data refresh the page </p>
           </div>
         )}
         {status !== "loading" && filteredAdmins?.map((admin) => (
