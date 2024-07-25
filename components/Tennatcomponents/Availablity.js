@@ -1,20 +1,27 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Button, Chip, Input } from "@nextui-org/react";
+import { Button, Chip, Divider, Input, Tooltip } from "@nextui-org/react";
 import { Select, SelectItem } from "@nextui-org/react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchFloorsByBranch } from "../../lib/TennatSlice";
 import { fetchRoomsByBranch } from "../../lib/RoomSlice";
 import { GetRoomsbyBranch } from "../../lib/API/Room";
 import { motion } from "framer-motion";
+import { FaBed } from "react-icons/fa6";
+import {setSelectedRoomId} from "../../lib/CreatetenantSlice"
+import { setCurrentStep } from "../../lib/CreatetenantSlice"; 
 
 const Availablity = () => {
   const dispatch = useDispatch();
+  const selectedRoomId = useSelector((state) => state.createTenant.selectedRoomId);
+
   const [sharing, setSharing] = useState("");
   const [formData, setFormData] = useState({
     floor: "",
   });
   const [availableRooms, setAvailableRooms] = useState([]);
+  const [filteredRooms, setFilteredRooms] = useState([]);
+
   const selectedBranchId = useSelector(
     (state) => state.branches.selectedBranchId
   );
@@ -22,6 +29,7 @@ const Availablity = () => {
   const floors = useSelector((state) => state.tenants.floors);
   const [loading, setLoading] = useState(false);
   const [filterError, setFilterError] = useState("");
+  const [selectedRoom, setSelectedRoom] = useState(null);
 
   useEffect(() => {
     if (selectedBranchId) {
@@ -39,6 +47,14 @@ const Availablity = () => {
     setFormData({ ...formData, [key]: selectedArray[0] });
   };
 
+  const handleRoomSelectChange = (selectedKeys) => {
+    const selectedArray = Array.from(selectedKeys);
+    setSelectedRoom(selectedArray[0]);
+    dispatch(setSelectedRoomId(selectedArray[0]))
+  };
+
+  console.log(selectedRoom);
+
   const filterRooms = async () => {
     setFilterError("");
     if (!sharing || !formData.floor) {
@@ -52,8 +68,7 @@ const Availablity = () => {
 
       const filteredRooms = rooms?.data.filter(
         (room) =>
-          room.SharingType >= parseInt(sharing) &&
-          room.floor === formData.floor
+          room.SharingType >= parseInt(sharing) && room.floor === formData.floor
       );
 
       if (filteredRooms.length === 0) {
@@ -96,7 +111,23 @@ const Availablity = () => {
 
   const sortedFloors = sortFloors(floors, floorOrder);
 
-  console.log("Loading state:", loading);
+  useEffect(() => {
+    if (formData.floor) {
+      const filtered = rooms.filter((room) => room.floor === formData.floor);
+      setFilteredRooms(filtered);
+    }
+  }, [formData.floor, rooms]);
+
+  const disabledRoomKeys = availableRooms
+    .filter((room) => room.reaminingBed === 0)
+    .map((room) => room._id);
+
+
+    const handlenext=()=>{
+      if(selectedRoomId){
+        dispatch(setCurrentStep("Personal Details"))
+      }
+    }
 
   return (
     <div className="flex flex-col justify-center items-center gap-4">
@@ -161,7 +192,7 @@ const Availablity = () => {
           {filterError}
         </motion.p>
       )}
-      <div className="w-full h-52 py-2 grid lg:grid-cols-1 grid-cols-1 gap-4 place-content-start justify-start items-start">
+      <div className="w-full py-2 grid lg:grid-cols-1 grid-cols-1 gap-4 place-content-start justify-start items-start">
         {availableRooms.length > 0 && (
           <Select
             size="lg"
@@ -170,15 +201,103 @@ const Availablity = () => {
             color="primary"
             placeholder="Select Available Room"
             className="w-full"
-            selectedKeys={new Set()}
+            disabledKeys={new Set(disabledRoomKeys)}
+            selectedKeys={new Set([selectedRoom])}
+            onSelectionChange={handleRoomSelectChange}
+            items={availableRooms}
+            renderValue={(items) => {
+              return items.map((item) => (
+                <div key={item.key} className="flex items-center gap-2">
+                  <FaBed size={20} className="text-[#205093]" />
+                  <div className="flex items-center gap-2">
+                    <span>{`Room ${item.data.roomName}`}</span>
+                    <span className="text-default-500 text-tiny">
+                      {`Floor: ${item.data.floor}`}
+                    </span>
+                  </div>
+                </div>
+              ));
+            }}
           >
-            {availableRooms?.map((room) => (
-              <SelectItem color="primary" variant="flat" key={room._id} value={room._id}>
-                {room.RoomNumber}
+            {(room) => (
+              <SelectItem
+                color="primary"
+                variant="flat"
+                key={room._id}
+                textValue={`Room ${room.RoomNumber}`}
+              >
+                <div className="flex gap-2 justify-between w-full items-center">
+                  <div className="flex items-center  gap-2">
+                    <FaBed size={14} className="text-[#205093]" />
+                    <span className="text-small">{`Room ${room.roomName}`}</span>
+                    <span className="text-tiny text-default-400">{`Floor: ${room.floor}`}</span>
+                  </div>
+                  <div className="flex flex-col justify-end items-center gap-1 mr-4">
+                    <div className="text-xs font-bold text-green-700">
+                      Available Bed:
+                      <span className="text-red-400 ml-2">
+                        {room.reaminingBed}
+                      </span>
+                    </div>
+                    <div className="text-tiny">
+                      No of sharing {room.SharingType}
+                    </div>
+                  </div>
+                </div>
               </SelectItem>
-            ))}
+            )}
           </Select>
         )}
+      </div>
+      <div className="flex flex-col justify-center items-start gap-2 w-full mt-4 h-auto">
+        <div className="flex justify-between items-center w-full">
+          <p className="font-semibold">Allocate Room</p>
+          <p className="font-semibold"></p>
+        </div>
+        <div className="grid grid-cols-10 gap-4 w-full items-start mt-4">
+          {filteredRooms.map((room, index) => (
+            <div
+              key={index}
+              className="flex flex-col justify-center items-center gap-2"
+            >
+              <Tooltip
+                content={
+                  <div className="px-1 py-2">
+                    <div className="text-xs font-bold text-green-700">
+                      Available Bed:
+                      <span className="text-red-400 ml-2">
+                        {room.reaminingBed}
+                      </span>
+                    </div>
+                    <div className="text-tiny">
+                      No of sharing {room.SharingType}
+                    </div>
+                  </div>
+                }
+              >
+                <Button
+                  variant="light"
+                  className="flex flex-col h-full w-auto p-1"
+                >
+                  <div
+                    className={`h-12 w-12 rounded-md ${
+                      room.reaminingBed === 0 ? "bg-[#ED0000]" : "bg-[#1B9D31]"
+                    } text-white flex justify-center items-center`}
+                  >
+                    <FaBed size={24} />
+                  </div>
+                  <p className="font-semibold text-sm">{room.roomName}</p>
+                </Button>
+              </Tooltip>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex justify-center items-center w-full">
+        <Button onPress={handlenext} isDisabled={!selectedRoomId} className="buttongradient text-white rounded-md w-60 uppercase font-semibold">
+          Next
+        </Button>
       </div>
     </div>
   );

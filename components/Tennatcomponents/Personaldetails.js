@@ -1,6 +1,9 @@
 import React from "react";
 import { Button, Input } from "@nextui-org/react";
 import { Select, SelectItem } from "@nextui-org/react";
+import {setPersonalDetails} from "../../lib/CreatetenantSlice"
+import { setCurrentStep } from "../../lib/CreatetenantSlice"; 
+import { useSelector, useDispatch } from "react-redux";
 
 export const animals = [
   { key: "cat", label: "Cat" },
@@ -13,6 +16,16 @@ export const animals = [
 ];
 
 const Personaldetails = () => {
+  const dispatch = useDispatch();
+  const selectedRoomId = useSelector((state) => state.createTenant.selectedRoomId);
+  const personalDetails = useSelector((state) => state.createTenant.personalDetails);
+
+  const handlenext=()=>{
+    if(selectedRoomId && personalDetails.length>0){
+      dispatch(setCurrentStep("Room & Duration"))
+    }
+  }
+
   return (
     <div className="flex flex-col justify-center items-center gap-4">
       <div className="w-full text-start">
@@ -107,6 +120,12 @@ const Personaldetails = () => {
         <span className="text-xs text-gray-400 no-underline">
           (For Profile Picture - PNG, JPG only)
         </span>
+      </div>
+
+      <div className="flex justify-center items-center w-full">
+        <Button onPress={handlenext} isDisabled={personalDetails.length===0} className="buttongradient text-white rounded-md w-60 uppercase font-semibold">
+          Next
+        </Button>
       </div>
     </div>
   );

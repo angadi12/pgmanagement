@@ -3,15 +3,23 @@ import { Tabs, Tab } from "@nextui-org/react";
 import Personaldetails from "@/components/Tennatcomponents/Personaldetails";
 import Roomsanddura from "@/components/Tennatcomponents/Roomsanddura";
 import Availablity from "./Availablity";
+import { useSelector, useDispatch } from "react-redux";
+import { setCurrentStep } from "../../lib/CreatetenantSlice"; 
 
 const Createtennat = () => {
-  const [selected, setSelected] = React.useState("Personal Details");
+  const dispatch = useDispatch();
+  const currentStep = useSelector((state) => state.createTenant.currentStep);
+  const selectedRoomId = useSelector((state) => state.createTenant.selectedRoomId);
+
+  const handleTabChange = (key) => {
+    dispatch(setCurrentStep(key));
+  };
 
   return (
     <>
       <Tabs
-        selectedKey={selected}
-        onSelectionChange={setSelected}
+        selectedKey={currentStep}
+        onSelectionChange={handleTabChange}
         aria-label="Options"
         color="primary"
         variant="underlined"
@@ -48,9 +56,9 @@ const Createtennat = () => {
         />
       </Tabs>
       <div className="w-full h-auto">
-        {selected === "Personal Details" && <Personaldetails />}
-        {selected === "Availability" && <Availablity/>}
-        {selected === "Room & Duration" && <Roomsanddura />}
+        {currentStep === "Personal Details" && <Personaldetails />}
+        {currentStep === "Availability" && <Availablity />}
+        {currentStep === "Room & Duration" && <Roomsanddura />}
       </div>
     </>
   );
