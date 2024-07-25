@@ -59,6 +59,7 @@ export default function Navbarr() {
 
       <NavbarContent as="div" className="items-center" justify="end">
        {branches?.length>0 && <Autocomplete
+          color="primary" 
           startContent={<BsBuildingsFill className="text-[#005CFF]" size={24} />}
           inputProps={{
             classNames: {

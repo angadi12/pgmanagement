@@ -56,13 +56,13 @@ export function capitalize(str) {
 }
 const statusOptions = [
   { name: "Available", uid: "Available" },
-  { name: "Not Available", uid: "NotAvailable" },
+  { name: "Not Available", uid: "Occupied" },
 ];
 
 export { columns, statusOptions };
 const statusColorMap = {
   Available: "success",
-  NotAvailable: "danger",
+  Occupied: "danger",
 };
 
 const INITIAL_VISIBLE_COLUMNS = [
@@ -77,7 +77,7 @@ const INITIAL_VISIBLE_COLUMNS = [
 ];
 
 const getRoomStatus = (reaminingBed) => {
-  return reaminingBed > 0 ? "Available" : "NotAvailable";
+  return reaminingBed > 0 ? "Available" : "Occupied";
 };
 export default function Rooms() {
   const dispatch = useDispatch();
@@ -103,12 +103,12 @@ export default function Rooms() {
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "age",
+    column: "RoomNumber",
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);
 
-  const pages = Math.ceil(rooms.length / rowsPerPage);
+  const pages = Math.ceil(rooms?.length / rowsPerPage);
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -151,8 +151,8 @@ export default function Rooms() {
 
   const sortedItems = React.useMemo(() => {
     return [...items].sort((a, b) => {
-      const first = a[sortDescriptor.column];
-      const second = b[sortDescriptor.column];
+      const first = parseInt(a[sortDescriptor.column], 10);
+      const second = parseInt(b[sortDescriptor.column], 10);
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
@@ -184,11 +184,11 @@ export default function Rooms() {
       case "ReaminingBed":
         return (
           <Badge content={room.reaminingBed} shape="circle" size="sm" color="danger">
-            <FaBed size={20} />
+            <FaBed className="text-[#205093]" size={24} />
           </Badge>
         );
       case "reaminingBed":
-        const status = room.reaminingBed > 0 ? "Available" : "NotAvailable";
+        const status = room.reaminingBed > 0 ? "Available" : "Occupied";
         return (
           <div className="flex ">
             <Chip
@@ -214,7 +214,7 @@ export default function Rooms() {
                 <RiPencilFill />
               </span>
             </Tooltip>
-            <Tooltip color="primary" content="Delete">
+            <Tooltip color="danger" content="Delete">
               <span className="text-lg text-red-500 cursor-pointer active:opacity-50">
                 <MdDelete />
               </span>
@@ -294,7 +294,7 @@ export default function Rooms() {
                 onSelectionChange={setStatusFilter}
               >
                 {statusOptions.map((status) => (
-                  <DropdownItem key={status.uid} className="capitalize">
+                  <DropdownItem key={status.uid} className="capitalize" color="primary" variant="flat">
                     {capitalize(status.name)}
                   </DropdownItem>
                 ))}
@@ -512,6 +512,9 @@ export default function Rooms() {
           )}
         </ModalContent>
       </Modal>
+
+
+
     </>
   );
 }
