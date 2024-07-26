@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -93,6 +93,10 @@ export default function Rooms() {
   }, [selectedBranchId, dispatch]);
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+const [openview,Setopenview]=useState(false)
+const [opendelete,Setopendelete]=useState(false)
+const [openedit,Setopenedit]=useState(false)
+
   const [selected, setSelected] = React.useState("Room Details");
 
   const [filterValue, setFilterValue] = React.useState("");
@@ -205,17 +209,17 @@ export default function Rooms() {
         return (
           <div className="relative flex items-center gap-4">
             <Tooltip content="Details">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <span onClick={()=>Setopenview(true)} className="text-lg text-default-400 cursor-pointer active:opacity-50">
                 <IoEyeSharp />
               </span>
             </Tooltip>
             <Tooltip content="Edit">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <span onClick={()=>Setopenedit(true)} className="text-lg text-default-400 cursor-pointer active:opacity-50">
                 <RiPencilFill />
               </span>
             </Tooltip>
             <Tooltip color="danger" content="Delete">
-              <span className="text-lg text-red-500 cursor-pointer active:opacity-50">
+              <span onClick={()=>Setopendelete(true)} className="text-lg text-red-500 cursor-pointer active:opacity-50">
                 <MdDelete />
               </span>
             </Tooltip>
@@ -380,7 +384,7 @@ export default function Rooms() {
 
   const classNames = React.useMemo(
     () => ({
-      wrapper: ["h-screen", "max-w-3xl"],
+      wrapper: ["h-auto", "w-full"],
       th: ["bg-[#205093]", "text-white", "border-b", "border-divider"],
       td: [
         "p-3",
@@ -506,6 +510,139 @@ export default function Rooms() {
                 <div className="w-full h-auto">
                   {selected === "Room Details" && <Createroom />}
                 </div>
+              </ModalBody>
+              <ModalFooter className="flex justify-center items-center text-center"></ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+
+
+
+      <Modal
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
+        backdrop="blur"
+        size="4xl"
+        isOpen={openview}
+        onOpenChange={Setopenview}
+        motionProps={{
+          variants: {
+            enter: {
+              y: 0,
+              opacity: 1,
+              transition: {
+                duration: 0.3,
+                ease: "easeOut",
+              },
+            },
+            exit: {
+              y: -20,
+              opacity: 0,
+              transition: {
+                duration: 0.2,
+                ease: "easeIn",
+              },
+            },
+          },
+        }}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col text-center">
+               View Room
+              </ModalHeader>
+              <ModalBody>
+                
+              </ModalBody>
+              <ModalFooter className="flex justify-center items-center text-center"></ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+
+
+      <Modal
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
+        backdrop="blur"
+        size="xl"
+        isOpen={opendelete}
+        onOpenChange={Setopendelete}
+        motionProps={{
+          variants: {
+            enter: {
+              y: 0,
+              opacity: 1,
+              transition: {
+                duration: 0.3,
+                ease: "easeOut",
+              },
+            },
+            exit: {
+              y: -20,
+              opacity: 0,
+              transition: {
+                duration: 0.2,
+                ease: "easeIn",
+              },
+            },
+          },
+        }}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col text-center">
+              Confirm Delete
+              </ModalHeader>
+              <ModalBody>
+                
+              </ModalBody>
+              <ModalFooter className="flex justify-center items-center text-center"></ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+
+
+      <Modal
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
+        backdrop="blur"
+        size="4xl"
+        isOpen={openedit}
+        onOpenChange={Setopenedit}
+        motionProps={{
+          variants: {
+            enter: {
+              y: 0,
+              opacity: 1,
+              transition: {
+                duration: 0.3,
+                ease: "easeOut",
+              },
+            },
+            exit: {
+              y: -20,
+              opacity: 0,
+              transition: {
+                duration: 0.2,
+                ease: "easeIn",
+              },
+            },
+          },
+        }}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col text-center">
+               Upadte Room Details
+              </ModalHeader>
+              <ModalBody>
+                
               </ModalBody>
               <ModalFooter className="flex justify-center items-center text-center"></ModalFooter>
             </>

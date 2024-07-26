@@ -113,7 +113,7 @@ const Availablity = () => {
 
   useEffect(() => {
     if (formData.floor) {
-      const filtered = rooms.filter((room) => room.floor === formData.floor);
+      const filtered = rooms?.filter((room) => room.floor === formData.floor);
       setFilteredRooms(filtered);
     }
   }, [formData.floor, rooms]);
@@ -159,7 +159,7 @@ const Availablity = () => {
             handleSelectChange("floor", selectedKeys)
           }
         >
-          {sortedFloors.map((floor) => (
+          {sortedFloors?.map((floor) => (
             <SelectItem
               color="primary"
               variant="flat"

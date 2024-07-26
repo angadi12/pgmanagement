@@ -10,8 +10,18 @@ const Createtennat = () => {
   const dispatch = useDispatch();
   const currentStep = useSelector((state) => state.createTenant.currentStep);
   const selectedRoomId = useSelector((state) => state.createTenant.selectedRoomId);
-
+  const personalDetails = useSelector(
+    (state) => state.createTenant.personalDetails
+  );
   const handleTabChange = (key) => {
+    if (key === "Personal Details" && !selectedRoomId ) {
+      // Prevent switching to Personal Details if no room is selected
+      return;
+    }
+    if (key === "Room & Duration" && Object.keys(personalDetails).length==0) {
+      // Prevent switching to Room & Duration if no personal details are provided
+      return;
+    }
     dispatch(setCurrentStep(key));
   };
 
@@ -35,6 +45,7 @@ const Createtennat = () => {
           title={
             <div className="flex items-center space-x-2">
               <span>Availability</span>
+
             </div>
           }
         />
