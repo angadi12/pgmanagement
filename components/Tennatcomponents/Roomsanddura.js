@@ -83,7 +83,14 @@ const Roomsanddura = () => {
     }
   };
 
-
+  const handlePaidAmountChange = (e) => {
+    const value = e.target.value;
+    if (parseInt(value, 10) > roomDetails?.Price) {
+     toast.error("Paid amount cannot be greater than room price.");
+    } else {
+      setPaidAmount(value);
+    }
+  };
   
 
   return (
@@ -138,16 +145,17 @@ const Roomsanddura = () => {
           size="lg"
           placeholder="Paid Amount"
           value={paidAmount}
-          onChange={(e) => setPaidAmount(e.target.value)}
-        />
+          
+          onChange={handlePaidAmountChange}
+          />
       </div>
       <div className="w-full flex flex-col py-2 justify-end items-end ">
          <div className="flex flex-col justify-start items-start gap-4">
-         <div >
+         {/* <div >
          <p>Room Price : {roomDetails?.Price}</p>
          <p>Total Paid : {paidAmount}</p>
 
-         </div>
+         </div> */}
 
         <Button className=" text-white bg-red-500 rounded-md">
         Overdue  : {roomDetails?.Price - paidAmount}
@@ -176,6 +184,7 @@ const Roomsanddura = () => {
           style: {
             background: "linear-gradient(90deg, #222C68 0%, #1D5B9E 100%)",
             color: "#fff",
+           
           },
 
           // Default options for specific types

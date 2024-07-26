@@ -17,7 +17,12 @@ import {
   User,
   Pagination,
   Tooltip,
-  Badge
+  Badge,
+  Divider,
+  Card,
+  CardFooter,
+  CircularProgress,
+  CardBody,
 } from "@nextui-org/react";
 import {
   Modal,
@@ -38,6 +43,8 @@ import Createroom from "@/components/Roomcomponent/Createroom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchRoomsByBranch } from "@/lib/RoomSlice";
 import { FaBed } from "react-icons/fa6";
+import Roomimage from "../../public/Loginasset/Roomimage.png";
+import Updateroom from "@/components/Roomcomponent/Updateroom";
 
 const columns = [
   { name: "ID", uid: "_id" },
@@ -93,9 +100,9 @@ export default function Rooms() {
   }, [selectedBranchId, dispatch]);
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-const [openview,Setopenview]=useState(false)
-const [opendelete,Setopendelete]=useState(false)
-const [openedit,Setopenedit]=useState(false)
+  const [openview, Setopenview] = useState(false);
+  const [opendelete, Setopendelete] = useState(false);
+  const [openedit, Setopenedit] = useState(false);
 
   const [selected, setSelected] = React.useState("Room Details");
 
@@ -187,7 +194,12 @@ const [openedit,Setopenedit]=useState(false)
         );
       case "ReaminingBed":
         return (
-          <Badge content={room.reaminingBed} shape="circle" size="sm" color="danger">
+          <Badge
+            content={room.reaminingBed}
+            shape="circle"
+            size="sm"
+            color="danger"
+          >
             <FaBed className="text-[#205093]" size={24} />
           </Badge>
         );
@@ -209,17 +221,26 @@ const [openedit,Setopenedit]=useState(false)
         return (
           <div className="relative flex items-center gap-4">
             <Tooltip content="Details">
-              <span onClick={()=>Setopenview(true)} className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <span
+                onClick={() => Setopenview(true)}
+                className="text-lg text-default-400 cursor-pointer active:opacity-50"
+              >
                 <IoEyeSharp />
               </span>
             </Tooltip>
             <Tooltip content="Edit">
-              <span onClick={()=>Setopenedit(true)} className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <span
+                onClick={() => Setopenedit(true)}
+                className="text-lg text-default-400 cursor-pointer active:opacity-50"
+              >
                 <RiPencilFill />
               </span>
             </Tooltip>
             <Tooltip color="danger" content="Delete">
-              <span onClick={()=>Setopendelete(true)} className="text-lg text-red-500 cursor-pointer active:opacity-50">
+              <span
+                onClick={() => Setopendelete(true)}
+                className="text-lg text-red-500 cursor-pointer active:opacity-50"
+              >
                 <MdDelete />
               </span>
             </Tooltip>
@@ -298,7 +319,12 @@ const [openedit,Setopenedit]=useState(false)
                 onSelectionChange={setStatusFilter}
               >
                 {statusOptions.map((status) => (
-                  <DropdownItem key={status.uid} className="capitalize" color="primary" variant="flat">
+                  <DropdownItem
+                    key={status.uid}
+                    className="capitalize"
+                    color="primary"
+                    variant="flat"
+                  >
                     {capitalize(status.name)}
                   </DropdownItem>
                 ))}
@@ -320,7 +346,7 @@ const [openedit,Setopenedit]=useState(false)
           <label className="flex items-center text-default-400 text-small">
             Rows per page:
             <select
-              className="bg-transparent outline-none text-default-400 text-small"
+              className="bg-transparent outline-none text-default-400 text-small "
               onChange={onRowsPerPageChange}
             >
               <option value="5">5</option>
@@ -517,8 +543,6 @@ const [openedit,Setopenedit]=useState(false)
         </ModalContent>
       </Modal>
 
-
-
       <Modal
         isDismissable={false}
         isKeyboardDismissDisabled={true}
@@ -551,17 +575,84 @@ const [openedit,Setopenedit]=useState(false)
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col text-center">
-               View Room
+               
               </ModalHeader>
               <ModalBody>
-                
+                <div className="flex justify-evenly items-start h-60 gap-4 w-full">
+                  <div>
+                    <Image
+                      src={Roomimage}
+                      className="object-contain"
+                      alt="Roomimage"
+                    />
+                  </div>
+                  <div className="flex flex-col justify-between items-start h-full py-4">
+                    <div className="flex flex-col justify-start items-start text-sm font-semibold">
+                      <p>Floor 1</p>
+                      <p className="flex flex-col justify-start items-start text-sm font-bold">
+                        A4
+                      </p>
+                    </div>
+                    <div className="flex flex-col justify-start items-start text-sm font-semibold">
+                      <p>Present Tenant</p>
+                    </div>
+                  </div>
+                  <Divider orientation="vertical" />
+                  <div className="flex flex-col justify-between items-start h-full py-4">
+                    <div className="flex flex-col gap-2 justify-start items-start text-sm font-semibold">
+                      <p>Room Details</p>
+                      <p className="flex flex-col justify-start items-start text-xs ">
+                      Type: Triple Sharing
+                      </p>
+                      <p className="flex flex-col justify-start items-start text-xs">
+                      Specialty: AC, Heater
+                      </p>
+                      <p className="flex flex-col justify-start items-start text-xs ">
+                      Complaints: None
+                      </p>
+                    </div>
+                    <div className="flex flex-col gap-2 justify-start items-start text-xs ">
+                      <p className="flex   items-center gap-2 text-sm font-semibold">Rent: <span className="text-green-600">9000/-</span></p>
+                      <p className="flex  items-center gap-2 text-sm font-semibold">Status:  <span className="text-green-600">1 Available</span></p>
+                    </div>
+                  </div>
+                  <Divider orientation="vertical" />
+                  <div className=" flex-col  flex justify-center items-center gap-4">
+                    <Card className=" border-none shadow-none">
+                      <CardBody className="justify-center items-center pb-0">
+                        <CircularProgress
+                          classNames={{
+                            svg: "w-40 h-40 drop-shadow-md",
+                            indicator: "stroke-[#205093]",
+                            track: "stroke-[#205093]/10",
+                            value: "text-3xl font-semibold text-[#205093]",
+                          }}
+                          value={70}
+                          strokeWidth={4}
+                          showValueLabel={true}
+                        />
+                      </CardBody>
+                      <CardFooter className="justify-center items-center pt-0 mt-4">
+                        <Chip
+                          classNames={{
+                            base: "border-1 border-[#205093]/30",
+                            content:
+                              "text-[#205093]/90 text-small font-semibold",
+                          }}
+                          variant="bordered"
+                        >
+                         Tenant Satisfaction
+                        </Chip>
+                      </CardFooter>
+                    </Card>
+                  </div>
+                </div>
               </ModalBody>
               <ModalFooter className="flex justify-center items-center text-center"></ModalFooter>
             </>
           )}
         </ModalContent>
       </Modal>
-
 
       <Modal
         isDismissable={false}
@@ -595,17 +686,21 @@ const [openedit,Setopenedit]=useState(false)
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col text-center">
-              Confirm Delete
+                Confirm Delete
               </ModalHeader>
               <ModalBody>
-                
+                <div className="flex w-full justify-start items-start">
+                  <p>Do you want to delete Room ?</p>
+                </div>
               </ModalBody>
-              <ModalFooter className="flex justify-center items-center text-center"></ModalFooter>
+              <ModalFooter className="flex justify-end items-end ">
+                <Button onPress={onClose} color="primary" variant="solid">Cancel</Button>
+                <Button color="danger" variant="solid">Delete</Button>
+              </ModalFooter>
             </>
           )}
         </ModalContent>
       </Modal>
-
 
       <Modal
         isDismissable={false}
@@ -639,19 +734,16 @@ const [openedit,Setopenedit]=useState(false)
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col text-center">
-               Upadte Room Details
+                Upadte Room Details
               </ModalHeader>
               <ModalBody>
-                
+                <Updateroom/>
               </ModalBody>
               <ModalFooter className="flex justify-center items-center text-center"></ModalFooter>
             </>
           )}
         </ModalContent>
       </Modal>
-
-
-
     </>
   );
 }

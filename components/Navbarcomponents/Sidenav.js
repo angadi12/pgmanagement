@@ -92,7 +92,7 @@ const Sidenav = () => {
   return (
     <div
       style={{ position: "sticky", top: 0 }}
-      className=" h-[100vh]  backgroundlayer w-60 flex flex-col justify-between"
+      className=" h-[100vh]  backgroundlayer w-60 lg:flex md:flex  hidden flex-col justify-between"
     >
       <div className="flex gap-3 bg-[#172953] justify-center items-center p-3 rounded-br-[3rem] ">
         <Image alt=" logo" height={40} radius="sm" src={Logo} width={40} />
