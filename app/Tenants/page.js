@@ -29,11 +29,9 @@ import {
   ModalFooter,
   useDisclosure,
 } from "@nextui-org/react";
-import { Tabs, Tab } from "@nextui-org/react";
-import Personaldetails from "@/components/Tennatcomponents/Personaldetails";
-import Roomsanddura from "@/components/Tennatcomponents/Roomsanddura";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchTenantsByBranch } from "@/lib/TennatSlice";
+import Createtennat from "@/components/Tennatcomponents/Createtennat";
 
 const columns = [
   { name: "ID", uid: "_id" },
@@ -54,211 +52,211 @@ const statusOptions = [
   { name: "Overdue Due", uid: "Overdue" },
 ];
 
-const users = [
-  {
-    id: 1,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact: "1234567890",
-  },
-  {
-    id: 2,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact: "1234567890",
-  },
-  {
-    id: 3,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Overdue",
-    Room: "29",
-    Contact: "1234567890",
-  },
-  {
-    id: 4,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "1 Complaints",
-    status: "Overdue",
-    Room: "29",
-    Contact: "1234567890",
-  },
-  {
-    id: 5,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "1 Active Complaint",
-    status: "Paid",
-    Room: "29",
-    Contact: "1234567890",
-  },
-  {
-    id: 6,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Overdue",
-    Room: "29",
-    Contact: "1234567890",
-  },
-  {
-    id: 7,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Overdue",
-    Room: "29",
-    Contact: "1234567890",
-  },
-  {
-    id: 8,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact: "1234567890",
-  },
-  {
-    id: 9,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact: "1234567890",
-  },
-  {
-    id: 10,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact: "1234567890",
-  },
-  {
-    id: 11,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Overdue",
-    Room: "29",
-    Contact: "1234567890",
-  },
-  {
-    id: 12,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact: "1234567890",
-  },
-  {
-    id: 13,
-    name: "Oliver Scott",
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Pending",
-    Room: "29",
-    Contact: "1234567890",
-  },
-  {
-    id: 14,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Overdue",
-    Room: "29",
-    Contact: "1234567890",
-  },
-  {
-    id: 15,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact: "1234567890",
-  },
-  {
-    id: 16,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Pending",
-    Room: "29",
-    Contact: "1234567890",
-  },
-  {
-    id: 17,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact: "1234567890",
-  },
-  {
-    id: 18,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact: "1234567890",
-  },
-  {
-    id: 19,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Pending",
-    Room: "29",
-    Contact: "1234567890",
-  },
-  {
-    id: 20,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact: "1234567890",
-  },
-];
+// const tenants = [
+//   {
+//     id: 1,
+//     name: "Pavan Alimkar",
+//     End: "12/12/24",
+//     Start: "12/12/24",
+//     Complaints: "No Active Complaints",
+//     status: "Paid",
+//     Room: "29",
+//     Contact: "1234567890",
+//   },
+//   {
+//     id: 2,
+//     name: "Pavan Alimkar",
+//     End: "12/12/24",
+//     Start: "12/12/24",
+//     Complaints: "No Active Complaints",
+//     status: "Paid",
+//     Room: "29",
+//     Contact: "1234567890",
+//   },
+//   {
+//     id: 3,
+//     name: "Pavan Alimkar",
+//     End: "12/12/24",
+//     Start: "12/12/24",
+//     Complaints: "No Active Complaints",
+//     status: "Overdue",
+//     Room: "29",
+//     Contact: "1234567890",
+//   },
+//   {
+//     id: 4,
+//     name: "Pavan Alimkar",
+//     End: "12/12/24",
+//     Start: "12/12/24",
+//     Complaints: "1 Complaints",
+//     status: "Overdue",
+//     Room: "29",
+//     Contact: "1234567890",
+//   },
+//   {
+//     id: 5,
+//     name: "Pavan Alimkar",
+//     End: "12/12/24",
+//     Start: "12/12/24",
+//     Complaints: "1 Active Complaint",
+//     status: "Paid",
+//     Room: "29",
+//     Contact: "1234567890",
+//   },
+//   {
+//     id: 6,
+//     name: "Pavan Alimkar",
+//     End: "12/12/24",
+//     Start: "12/12/24",
+//     Complaints: "No Active Complaints",
+//     status: "Overdue",
+//     Room: "29",
+//     Contact: "1234567890",
+//   },
+//   {
+//     id: 7,
+//     name: "Pavan Alimkar",
+//     End: "12/12/24",
+//     Start: "12/12/24",
+//     Complaints: "No Active Complaints",
+//     status: "Overdue",
+//     Room: "29",
+//     Contact: "1234567890",
+//   },
+//   {
+//     id: 8,
+//     name: "Pavan Alimkar",
+//     End: "12/12/24",
+//     Start: "12/12/24",
+//     Complaints: "No Active Complaints",
+//     status: "Paid",
+//     Room: "29",
+//     Contact: "1234567890",
+//   },
+//   {
+//     id: 9,
+//     name: "Pavan Alimkar",
+//     End: "12/12/24",
+//     Start: "12/12/24",
+//     Complaints: "No Active Complaints",
+//     status: "Paid",
+//     Room: "29",
+//     Contact: "1234567890",
+//   },
+//   {
+//     id: 10,
+//     name: "Pavan Alimkar",
+//     End: "12/12/24",
+//     Start: "12/12/24",
+//     Complaints: "No Active Complaints",
+//     status: "Paid",
+//     Room: "29",
+//     Contact: "1234567890",
+//   },
+//   {
+//     id: 11,
+//     name: "Pavan Alimkar",
+//     End: "12/12/24",
+//     Start: "12/12/24",
+//     Complaints: "Complaints",
+//     status: "Overdue",
+//     Room: "29",
+//     Contact: "1234567890",
+//   },
+//   {
+//     id: 12,
+//     name: "Pavan Alimkar",
+//     End: "12/12/24",
+//     Start: "12/12/24",
+//     Complaints: "Complaints",
+//     status: "Paid",
+//     Room: "29",
+//     Contact: "1234567890",
+//   },
+//   {
+//     id: 13,
+//     name: "Oliver Scott",
+//     name: "Pavan Alimkar",
+//     End: "12/12/24",
+//     Start: "12/12/24",
+//     Complaints: "Complaints",
+//     status: "Pending",
+//     Room: "29",
+//     Contact: "1234567890",
+//   },
+//   {
+//     id: 14,
+//     name: "Pavan Alimkar",
+//     End: "12/12/24",
+//     Start: "12/12/24",
+//     Complaints: "Complaints",
+//     status: "Overdue",
+//     Room: "29",
+//     Contact: "1234567890",
+//   },
+//   {
+//     id: 15,
+//     name: "Pavan Alimkar",
+//     End: "12/12/24",
+//     Start: "12/12/24",
+//     Complaints: "Complaints",
+//     status: "Paid",
+//     Room: "29",
+//     Contact: "1234567890",
+//   },
+//   {
+//     id: 16,
+//     name: "Pavan Alimkar",
+//     End: "12/12/24",
+//     Start: "12/12/24",
+//     Complaints: "Complaints",
+//     status: "Pending",
+//     Room: "29",
+//     Contact: "1234567890",
+//   },
+//   {
+//     id: 17,
+//     name: "Pavan Alimkar",
+//     End: "12/12/24",
+//     Start: "12/12/24",
+//     Complaints: "Complaints",
+//     status: "Paid",
+//     Room: "29",
+//     Contact: "1234567890",
+//   },
+//   {
+//     id: 18,
+//     name: "Pavan Alimkar",
+//     End: "12/12/24",
+//     Start: "12/12/24",
+//     Complaints: "Complaints",
+//     status: "Paid",
+//     Room: "29",
+//     Contact: "1234567890",
+//   },
+//   {
+//     id: 19,
+//     name: "Pavan Alimkar",
+//     End: "12/12/24",
+//     Start: "12/12/24",
+//     Complaints: "Complaints",
+//     status: "Pending",
+//     Room: "29",
+//     Contact: "1234567890",
+//   },
+//   {
+//     id: 20,
+//     name: "Pavan Alimkar",
+//     End: "12/12/24",
+//     Start: "12/12/24",
+//     Complaints: "Complaints",
+//     status: "Paid",
+//     Room: "29",
+//     Contact: "1234567890",
+//   },
+// ];
 
-export { columns, users, statusOptions };
+export { columns, statusOptions };
 const statusColorMap = {
   Paid: "success",
   Overdue: "danger",
@@ -288,7 +286,6 @@ export default function Tennat() {
   }, [selectedBranchId, dispatch]);
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [selected, setSelected] = React.useState("Personal Details");
 
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
@@ -303,7 +300,7 @@ export default function Tennat() {
   });
   const [page, setPage] = React.useState(1);
 
-  const pages = Math.ceil(users.length / rowsPerPage);
+  const pages = Math.ceil(tenants?.length / rowsPerPage);
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -316,7 +313,9 @@ export default function Tennat() {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...tenants];
+
+      let filteredUsers = [...tenants];
+  
 
     if (hasSearchFilter) {
       filteredUsers = filteredUsers.filter((tenant) =>
@@ -663,49 +662,10 @@ export default function Tennat() {
                 Create New Tenant
               </ModalHeader>
               <ModalBody>
-                <Tabs
-                  selectedKey={selected}
-                  onSelectionChange={setSelected}
-                  aria-label="Options"
-                  color="primary"
-                  variant="underlined"
-                  classNames={{
-                    tabList: "gap-6 w-full relative rounded-none p-0 ",
-                    cursor: "w-full bg-[#205093]",
-                    tab: "w-auto px-0 h-10",
-                    tabContent:
-                      "group-data-[selected=true]:text-[#205093] font-semibold",
-                  }}
-                >
-                  <Tab
-                    key="Personal Details"
-                    title={
-                      <div className="flex items-center space-x-2">
-                        <span>Personal Details</span>
-                      </div>
-                    }
-                  />
-                  <Tab
-                    key="Room & Duration"
-                    title={
-                      <div className="flex items-center space-x-2">
-                        <span>Room & Duration</span>
-                      </div>
-                    }
-                  />
-                </Tabs>
-                <div className="w-full h-auto">
-                  {selected === "Personal Details" && <Personaldetails />}
-                  {selected === "Room & Duration" && <Roomsanddura />}
-                </div>
+               <Createtennat onClose={onclose}/>
               </ModalBody>
               <ModalFooter className="flex justify-center items-center text-center">
-                <Button
-                  className="buttongradient text-white rounded-md w-60"
-                  onPress={onClose}
-                >
-                  NEXT
-                </Button>
+                
               </ModalFooter>
             </>
           )}

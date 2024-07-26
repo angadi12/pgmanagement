@@ -125,7 +125,7 @@ const Loginpage = () => {
 
       if (result.status) {
         console.log(result.token);
-        Cookies.set("token", result.token, { expires: 7 });
+        Cookies.set("token", result.token);
         if (rememberMe) {
           localStorage.setItem("rememberedEmail", data.Email);
         } else {
