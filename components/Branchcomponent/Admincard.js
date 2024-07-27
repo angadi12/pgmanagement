@@ -13,19 +13,25 @@ import {
   ModalBody,
   ModalFooter,
   useDisclosure,
+  Switch
 } from "@nextui-org/react";
 import { Tabs, Tab, Chip } from "@nextui-org/react";
 import Personaldetails from './Personaldetails';
 import Allocverify from './Allocverify';
 import Userandpass from './Userandpass';
 import Updateadmindetails from "./Updateadmindetails";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { setAdminId, clearSelectedAdmin } from "@/lib/AdminSlice";
+import {Updateadminstatusapi} from "../../lib/API/Admin"
+import { fetchAdmins } from '@/lib/AdminSlice';
 
 const Admincard = ({admin}) => {
   const [selectedtab2, setSelectedtab2] = React.useState("Personal Details");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [Open, SetOpen, ] = useState(false);
+  const [isSelected, setIsSelected] = React.useState(admin?.activate);
+  const selectedBranchId = useSelector((state) => state.branches.selectedBranchId); 
+
   const dispatch = useDispatch();
 
   const handleOpen = () => {
@@ -44,9 +50,32 @@ const Admincard = ({admin}) => {
     }
   }, [Open, dispatch]);
 
+
+  const handleToggle = async (id) => {
+    try {
+      const response = await Updateadminstatusapi(id);
+
+      if (response.statuscode === 200) {
+        dispatch(fetchAdmins(selectedBranchId));
+        
+      } else {
+        console.error("Error updating activation status:", response.message);
+      
+      }
+    } catch (error) {
+      console.error("Error updating activation status:", error);
+      
+    }
+  };
+
+
   return (
     <>
-      <div className="w-full boxshadow h-full rounded-md flex flex-col justify-center items-center ">
+      <div className="w-full boxshadow relative h-full rounded-md flex flex-col justify-center items-center ">
+       <div className="absolute top-2 right-0">
+       <Switch size="sm" isSelected={admin?.activate} onValueChange={()=>handleToggle(admin._id)}>
+      </Switch> 
+       </div>
         <Image
           src={adminpic}
           alt="Profile Picture"
@@ -56,7 +85,7 @@ const Admincard = ({admin}) => {
         <p className="text-xs font-bold flex items-center gap-2">
         Access:<span className="text-[#1B9D31]">{admin.permission.join(",")}</span>
         </p>
-        <div className="py-2">{admin.activate? <Chip size="sm" color="success" className="text-white">Activate</Chip>: <Chip className="text-white" size="sm" color="danger">Success</Chip>}</div>
+        <div className="py-2">{admin.activate? <Chip size="sm" color="success" className="text-white">Activate</Chip>: <Chip className="text-white" size="sm" color="danger">Deactivate</Chip>}</div>
         <div className="bg-[#F0F0F0] p-4 flex flex-col justify-center items-center w-full h-full mt-2 gap-4">
           <div className=" flex justify-between gap-4  items-center w-full">
             <div>

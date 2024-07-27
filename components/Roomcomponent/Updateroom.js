@@ -1,8 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Input } from "@nextui-org/react";
 import { Select, SelectItem } from "@nextui-org/react";
-import { Createroomapi } from "@/lib/API/Room";
+import { Upadteroomapi, GetRoomsbyroomid } from "@/lib/API/Room";
 import { useDispatch, useSelector } from "react-redux";
 import toast, { Toaster } from "react-hot-toast";
 import { fetchRoomsByBranch } from "@/lib/RoomSlice";
@@ -29,14 +29,55 @@ export const Amentities = [
   { key: "Kitchen", label: "Kitchen" },
 ];
 
-const Updateroom = () => {
+const Updateroom = ({ id, Setopenedit }) => {
   const dispatch = useDispatch();
   const status = useSelector((state) => state.rooms.status);
   const error = useSelector((state) => state.rooms.error);
   const [loading, setLoading] = useState(false);
+  const [loadingData, setLoadingData] = useState(true);
   const selectedBranchId = useSelector(
     (state) => state.branches.selectedBranchId
   );
+
+  const isValidObjectId = (id) => /^[0-9a-fA-F]{24}$/.test(id);
+
+  useEffect(() => {
+    const fetchRoomData = async () => {
+      if (!isValidObjectId(id)) {
+        toast.error("Invalid branch ID");
+        setLoadingData(false);
+        return;
+      }
+
+      setLoadingData(true);
+      try {
+        const result = await GetRoomsbyroomid(id);
+        if (result.status) {
+          setFormData({
+            roomName: result.data.roomName,
+            RoomNumber: result.data.RoomNumber,
+            RoomType: result.data.RoomType,
+            RoomDetails: result.data.RoomDetails,
+            SharingType: result.data.SharingType.toString(),
+            Price: result.data.Price,
+            branch: result.data.branch,
+            floor: result.data.floor,
+          });
+        } else {
+          toast.error(result.message || "Failed to fetch branch data");
+        }
+      } catch (error) {
+        toast.error("An error occurred while fetching branch data");
+      } finally {
+        setLoadingData(false);
+      }
+    };
+
+    if (id) {
+      fetchRoomData();
+    }
+  }, [id]);
+
   const [formData, setFormData] = useState({
     roomName: "",
     RoomNumber: "",
@@ -90,9 +131,9 @@ const Updateroom = () => {
     }
     setLoading(true);
 
-    const result = await Createroomapi(formData);
+    const result = await Upadteroomapi(formData, id);
     if (result.status) {
-      toast.success("Room created successfully");
+      Setopenedit(false);
       dispatch(fetchRoomsByBranch(selectedBranchId));
       setLoading(false);
     } else {
@@ -103,160 +144,164 @@ const Updateroom = () => {
 
   return (
     <>
-      <div className="flex flex-col justify-center items-center gap-4">
-        <div className="w-full text-start">
-          <p className="text-lg font-semibold">Fill Room Details</p>
+      {loadingData ? (
+        <div className="w-full flex justify-center items-center h-80">
+          <span className="loader3"></span>
         </div>
-        <div className="w-full grid lg:grid-cols-2 grid-cols-1 gap-6 place-content-center justify-between items-start ">
-          <Input
-            type="text"
-            name="roomName"
-            variant="bordered"
-            radius="sm"
-            className="w-full rounded-none"
-            size="lg"
-            placeholder="Room Name"
-            value={formData.roomName}
-            onChange={handleChange}
-          />
-          <Input
-            type="Number"
-            name="RoomNumber"
-            variant="bordered"
-            radius="sm"
-            className="w-full rounded-none"
-            size="lg"
-            placeholder="Room Number"
-            value={formData.RoomNumber}
-            onChange={handleChange}
-          />
-          <Select
-            size="lg"
-            radius="sm"
-            variant="bordered"
-            placeholder="Room Type"
-            className="w-full"
-            selectedKeys={new Set([formData.RoomType])}
-            onSelectionChange={(selectedKeys) =>
-              handleSelectChange("RoomType", selectedKeys)
-            }
-          >
-            <SelectItem color="primary" variant="flat" key="AC">
-              AC
-            </SelectItem>
-            <SelectItem color="primary" variant="flat" key="NON-AC">
-              Non-AC
-            </SelectItem>
-          </Select>
-          <Select
-            size="lg"
-            radius="sm"
-            variant="bordered"
-            placeholder="No. of Sharing"
-            className="w-full"
-            selectedKeys={new Set([formData.SharingType])}
-            onSelectionChange={(selectedKeys) =>
-              handleSelectChange("SharingType", selectedKeys)
-            }
-          >
-            <SelectItem color="primary" variant="flat" key="1">
-              1
-            </SelectItem>
-            <SelectItem color="primary" variant="flat" key="2">
-              2
-            </SelectItem>
-            <SelectItem color="primary" variant="flat" key="3">
-              3
-            </SelectItem>
-            <SelectItem color="primary" variant="flat" key="4">
-              4
-            </SelectItem>
-          </Select>
-
-          
-        </div>
-        <div className="w-full grid lg:grid-cols-1 grid-cols-1 gap-4 place-content-center justify-between items-start ">
-        <Select
-            items={Amentities}
-            showScrollIndicators={true}
-            size="lg"
-            radius="sm"
-            isMultiline={true}
-            selectionMode="multiple"
-            variant="bordered"
-            placeholder="Room Details"
-            className="w-full"
-            selectedKeys={new Set(formData.RoomDetails)}
-            onSelectionChange={(selectedKeys) =>
-              handleSelectChange("RoomDetails", selectedKeys)
-            }
-          >
-            {(amenity) => (
-              <SelectItem
-                showScrollIndicators={true}
-                color="primary"
-                variant="flat"
-              >
-                {amenity.label}
+      ) : (
+        <div className="flex flex-col justify-center items-center gap-4">
+          <div className="w-full text-start">
+            <p className="text-lg font-semibold">Update Room Details</p>
+          </div>
+          <div className="w-full grid lg:grid-cols-2 grid-cols-1 gap-6 place-content-center justify-between items-start ">
+            <Input
+              type="text"
+              name="roomName"
+              variant="bordered"
+              radius="sm"
+              className="w-full rounded-none"
+              size="lg"
+              placeholder="Room Name"
+              value={formData.roomName}
+              onChange={handleChange}
+            />
+            <Input
+              type="Number"
+              name="RoomNumber"
+              variant="bordered"
+              radius="sm"
+              className="w-full rounded-none"
+              size="lg"
+              placeholder="Room Number"
+              value={formData.RoomNumber}
+              onChange={handleChange}
+            />
+            <Select
+              size="lg"
+              radius="sm"
+              variant="bordered"
+              placeholder="Room Type"
+              className="w-full"
+              selectedKeys={new Set([formData.RoomType])}
+              onSelectionChange={(selectedKeys) =>
+                handleSelectChange("RoomType", selectedKeys)
+              }
+            >
+              <SelectItem color="primary" variant="flat" key="AC">
+                AC
               </SelectItem>
-            )}
-          </Select>
-        </div>
-        <div className="w-full grid lg:grid-cols-2 grid-cols-1 gap-4 place-content-center justify-between items-start ">
-          <Input
-            type="Number"
-            name="Price"
-            variant="bordered"
-            radius="sm"
-            className="w-full rounded-none"
-            size="lg"
-            placeholder="Set Room Rent"
-            value={formData.Price}
-            onChange={handleChange}
-          />
-          <Select
-            size="lg"
-            radius="sm"
-            variant="bordered"
-            placeholder="Select Floor"
-            className="w-full"
-            selectedKeys={new Set([formData.floor])}
-            onSelectionChange={(selectedKeys) =>
-              handleSelectChange("floor", selectedKeys)
-            }
-          >
-            <SelectItem color="primary" variant="flat" key="First">
-              First
-            </SelectItem>
-            <SelectItem color="primary" variant="flat" key="Secound">
-              Secound
-            </SelectItem>
-            <SelectItem color="primary" variant="flat" key="Third">
-              Third
-            </SelectItem>
-            <SelectItem color="primary" variant="flat" key="Fourth">
-              Fourth
-            </SelectItem>
-          </Select>
-        </div>
+              <SelectItem color="primary" variant="flat" key="NON-AC">
+                Non-AC
+              </SelectItem>
+            </Select>
+            <Select
+              size="lg"
+              radius="sm"
+              variant="bordered"
+              placeholder="No. of Sharing"
+              className="w-full"
+              selectedKeys={new Set([formData.SharingType])}
+              onSelectionChange={(selectedKeys) =>
+                handleSelectChange("SharingType", selectedKeys)
+              }
+            >
+              <SelectItem color="primary" variant="flat" key="1">
+                1
+              </SelectItem>
+              <SelectItem color="primary" variant="flat" key="2">
+                2
+              </SelectItem>
+              <SelectItem color="primary" variant="flat" key="3">
+                3
+              </SelectItem>
+              <SelectItem color="primary" variant="flat" key="4">
+                4
+              </SelectItem>
+            </Select>
+          </div>
+          <div className="w-full grid lg:grid-cols-1 grid-cols-1 gap-4 place-content-center justify-between items-start ">
+            <Select
+              items={Amentities}
+              showScrollIndicators={true}
+              size="lg"
+              radius="sm"
+              isMultiline={true}
+              selectionMode="multiple"
+              variant="bordered"
+              placeholder="Room Details"
+              className="w-full"
+              selectedKeys={new Set(formData.RoomDetails)}
+              onSelectionChange={(selectedKeys) =>
+                handleSelectChange("RoomDetails", selectedKeys)
+              }
+            >
+              {(amenity) => (
+                <SelectItem
+                  showScrollIndicators={true}
+                  color="primary"
+                  variant="flat"
+                >
+                  {amenity.label}
+                </SelectItem>
+              )}
+            </Select>
+          </div>
+          <div className="w-full grid lg:grid-cols-2 grid-cols-1 gap-4 place-content-center justify-between items-start ">
+            <Input
+              type="Number"
+              name="Price"
+              variant="bordered"
+              radius="sm"
+              className="w-full rounded-none"
+              size="lg"
+              placeholder="Set Room Rent"
+              value={formData.Price}
+              onChange={handleChange}
+            />
+            <Select
+              size="lg"
+              radius="sm"
+              variant="bordered"
+              placeholder="Select Floor"
+              className="w-full"
+              selectedKeys={new Set([formData.floor])}
+              onSelectionChange={(selectedKeys) =>
+                handleSelectChange("floor", selectedKeys)
+              }
+            >
+              <SelectItem color="primary" variant="flat" key="First">
+                First
+              </SelectItem>
+              <SelectItem color="primary" variant="flat" key="Secound">
+                Secound
+              </SelectItem>
+              <SelectItem color="primary" variant="flat" key="Third">
+                Third
+              </SelectItem>
+              <SelectItem color="primary" variant="flat" key="Fourth">
+                Fourth
+              </SelectItem>
+            </Select>
+          </div>
 
-        <div className="w-full text-start flex justify-start items-center gap-2 py-2">
-          <p className="text-[#205093] text-sm font-bold underline cursor-pointer">
-            +Upload Room Image
-          </p>
-          <span className="text-xs text-gray-400 no-underline">
-            (PNG, JPG only)
-          </span>
+          <div className="w-full text-start flex justify-start items-center gap-2 py-2">
+            <p className="text-[#205093] text-sm font-bold underline cursor-pointer">
+              +Upload Room Image
+            </p>
+            <span className="text-xs text-gray-400 no-underline">
+              (PNG, JPG only)
+            </span>
+          </div>
+          <div className="flex justify-center items-center w-full">
+            <Button
+              onPress={handleSubmit}
+              className="buttongradient text-white rounded-md w-60 uppercase font-semibold"
+            >
+              {loading ? <span className="loader2"></span> : "Update"}
+            </Button>
+          </div>
         </div>
-        <div className="flex justify-center items-center w-full">
-          <Button
-            onPress={handleSubmit}
-            className="buttongradient text-white rounded-md w-60 uppercase font-semibold"
-          >
-            {loading ? <span className="loader2"></span> : "Create"}
-          </Button>
-        </div>
-      </div>
+      )}
 
       <Toaster
         position="top-center"
@@ -287,5 +332,4 @@ const Updateroom = () => {
   );
 };
 
-
-export default Updateroom
+export default Updateroom;

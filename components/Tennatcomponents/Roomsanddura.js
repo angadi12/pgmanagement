@@ -62,7 +62,7 @@ const Roomsanddura = () => {
       Amount: paidAmount,
       Maintaince: 0,
       Security: 0,
-      DueAmount: roomDetails.price - paidAmount,
+      DueAmount: roomDetails?.price - paidAmount,
       NumberOfmonth: numberOfMonths,
       branch: selectedBranchId
     };

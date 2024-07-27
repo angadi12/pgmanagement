@@ -45,6 +45,7 @@ import { fetchRoomsByBranch } from "@/lib/RoomSlice";
 import { FaBed } from "react-icons/fa6";
 import Roomimage from "../../public/Loginasset/Roomimage.png";
 import Updateroom from "@/components/Roomcomponent/Updateroom";
+import {GetRoomsbyroomid} from "../../lib/API/Room"
 
 const columns = [
   { name: "ID", uid: "_id" },
@@ -98,6 +99,11 @@ export default function Rooms() {
       dispatch(fetchRoomsByBranch(selectedBranchId));
     }
   }, [selectedBranchId, dispatch]);
+
+  // single room state
+  const [Selectedroomid,Setselectedroomid]=useState()
+  const [roomdata,Setroomdata]=useState()
+  const [loadingroomdata,setLoadingData]=useState(true)
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [openview, Setopenview] = useState(false);
@@ -222,7 +228,7 @@ export default function Rooms() {
           <div className="relative flex items-center gap-4">
             <Tooltip content="Details">
               <span
-                onClick={() => Setopenview(true)}
+                onClick={() =>{ Setopenview(true),Setselectedroomid(room._id)}}
                 className="text-lg text-default-400 cursor-pointer active:opacity-50"
               >
                 <IoEyeSharp />
@@ -230,7 +236,7 @@ export default function Rooms() {
             </Tooltip>
             <Tooltip content="Edit">
               <span
-                onClick={() => Setopenedit(true)}
+                onClick={() => {Setopenedit(true),Setselectedroomid(room._id)}}
                 className="text-lg text-default-400 cursor-pointer active:opacity-50"
               >
                 <RiPencilFill />
@@ -429,6 +435,40 @@ export default function Rooms() {
     []
   );
 
+
+// fetch single room
+const isValidObjectId = (id) => /^[0-9a-fA-F]{24}$/.test(id);
+
+useEffect(() => {
+  const fetchsingleroomData = async () => {
+      if (!isValidObjectId(Selectedroomid)) {
+          toast.error("Invalid branch ID");
+          setLoadingData(false);
+          return;
+        }
+
+    setLoadingData(true);
+    try {
+      const result = await GetRoomsbyroomid(Selectedroomid);
+      if (result.status) {
+       Setroomdata(result.data)
+      } else {
+        toast.error(result.message || "Failed to fetch branch data");
+      }
+    } catch (error) {
+      toast.error("An error occurred while fetching branch data");
+    } finally {
+      setLoadingData(false);
+    }
+  };
+
+  if (Selectedroomid) {
+    fetchsingleroomData();
+  }
+}, [Selectedroomid]);
+
+
+
   return (
     <>
       {status === "loading" ? (
@@ -543,6 +583,8 @@ export default function Rooms() {
         </ModalContent>
       </Modal>
 
+      {/* view */}
+
       <Modal
         isDismissable={false}
         isKeyboardDismissDisabled={true}
@@ -575,45 +617,52 @@ export default function Rooms() {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col text-center">
-               
               </ModalHeader>
               <ModalBody>
-                <div className="flex justify-evenly items-start h-60 gap-4 w-full">
+              {loadingroomdata ?
+                <div className="flex justify-center items-center h-60 gap-4 w-full">
+                  <span className="loader3"></span>
+                </div> :  <div className="flex justify-evenly items-center h-60 gap-4 w-full">
                   <div>
                     <Image
                       src={Roomimage}
-                      className="object-contain"
+                      className="object-fill h-full"
                       alt="Roomimage"
                     />
                   </div>
                   <div className="flex flex-col justify-between items-start h-full py-4">
                     <div className="flex flex-col justify-start items-start text-sm font-semibold">
-                      <p>Floor 1</p>
+                      <p>Floor : {roomdata.floor}</p>
                       <p className="flex flex-col justify-start items-start text-sm font-bold">
-                        A4
+                      {roomdata.roomName}
                       </p>
                     </div>
                     <div className="flex flex-col justify-start items-start text-sm font-semibold">
                       <p>Present Tenant</p>
+                      {
+                        roomdata.Users.map((name,id)=>(
+                          <p key={id}>{name.UserName}</p>
+                        ))
+                      }
                     </div>
                   </div>
                   <Divider orientation="vertical" />
                   <div className="flex flex-col justify-between items-start h-full py-4">
-                    <div className="flex flex-col gap-2 justify-start items-start text-sm font-semibold">
+                    <div className="flex flex-col flex-wrap gap-2 justify-start items-start text-sm font-semibold">
                       <p>Room Details</p>
                       <p className="flex flex-col justify-start items-start text-xs ">
-                      Type: Triple Sharing
+                      Type: {roomdata.SharingType}
                       </p>
                       <p className="flex flex-col justify-start items-start text-xs">
-                      Specialty: AC, Heater
+                      Specialty: {roomdata?.RoomDetails.join(",")}
                       </p>
                       <p className="flex flex-col justify-start items-start text-xs ">
-                      Complaints: None
+                      Reamining Beds:{roomdata?.reaminingBed}
                       </p>
                     </div>
                     <div className="flex flex-col gap-2 justify-start items-start text-xs ">
-                      <p className="flex   items-center gap-2 text-sm font-semibold">Rent: <span className="text-green-600">9000/-</span></p>
-                      <p className="flex  items-center gap-2 text-sm font-semibold">Status:  <span className="text-green-600">1 Available</span></p>
+                      <p className="flex   items-center gap-2 text-sm font-semibold">Rent: <span className="text-green-600">{roomdata?.Price}/-</span></p>
+                      <p className="flex  items-center gap-2 text-sm font-semibold">Status:  <span className={roomdata?.reaminingBed >0?"text-green-600":"text-red-600"}>{roomdata?.reaminingBed} Beds Available</span></p>
                     </div>
                   </div>
                   <Divider orientation="vertical" />
@@ -646,13 +695,15 @@ export default function Rooms() {
                       </CardFooter>
                     </Card>
                   </div>
-                </div>
+                </div>}
               </ModalBody>
               <ModalFooter className="flex justify-center items-center text-center"></ModalFooter>
             </>
           )}
         </ModalContent>
       </Modal>
+
+      {/* delete */}
 
       <Modal
         isDismissable={false}
@@ -737,7 +788,7 @@ export default function Rooms() {
                 Upadte Room Details
               </ModalHeader>
               <ModalBody>
-                <Updateroom/>
+                <Updateroom id={Selectedroomid} Setopenedit={Setopenedit}/>
               </ModalBody>
               <ModalFooter className="flex justify-center items-center text-center"></ModalFooter>
             </>
