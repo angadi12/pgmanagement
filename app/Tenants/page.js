@@ -55,7 +55,7 @@ const columns = [
   { name: "Room No.", uid: "RoomNumber" },
   { name: "Start Date", uid: "StartDate" },
   { name: "Last Date", uid: "LastDate" },
-  { name: "No. of months", uid: "Numberofmonth" },
+  { name: "No. of months", uid: "NumberOfmonth" },
   { name: "Rent Status", uid: "Status", sortable: true },
   { name: "ACTIONS", uid: "actions" },
 ];
@@ -284,7 +284,7 @@ const INITIAL_VISIBLE_COLUMNS = [
   "RoomNumber",
   "StartDate",
   "LastDate",
-  "Numberofmonth",
+  "NumberOfmonth",
   "Status",
   "actions",
 ];
@@ -415,6 +415,12 @@ export default function Tennat() {
         return (
           <p className="text-bold capitalize ">
             {tenant.LastDate}
+          </p>
+        );
+      case "NumberOfmonth":
+        return (
+          <p className="text-bold capitalize ">
+            {tenant.NumberOfmonth}
           </p>
         );
       case "Status":
