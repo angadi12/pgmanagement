@@ -4,32 +4,23 @@ import { DatePicker, Button } from "@nextui-org/react";
 import { parseDate, getLocalTimeZone } from "@internationalized/date";
 import {Input} from "@nextui-org/react";
 import { useSelector, useDispatch } from "react-redux";
-import { Creattennatmapi } from "@/lib/API/Tennat";
+import { UpadteTenantapi } from "@/lib/API/Tennat";
 import toast, { Toaster } from "react-hot-toast";
-import { fetchTenantsByBranch } from "@/lib/TennatSlice";
-import  {setCurrentStep} from "../../lib/CreatetenantSlice"
+import { fetchTenantsByBranch,fetchSingleTenant } from "@/lib/TennatSlice";
 
-const formatDate = (date) => {
-  const d = new Date(date);
-  const month = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  const year = d.getFullYear();
-  return `${month}/${day}/${year}`;
-};
+const isValidObjectId = (id) => /^[0-9a-fA-F]{24}$/.test(id);
 
-const Roomsanddura = ({Setopenmodal}) => {
-  const [startDate, setStartDate] = useState(parseDate(new Date().toISOString().split('T')[0]));
-  const [endDate, setEndDate] = useState(parseDate(new Date().toISOString().split('T')[0]));
+
+const Updateroomsanddura = ({Setopenedit}) => {
+  const [value, setValue] = React.useState(parseDate("2024-04-04"));
+  const [startDate, setStartDate] = useState(parseDate("2024-04-04"));
+  const [endDate, setEndDate] = useState(parseDate("2024-04-04"));
   const [roomPrice, setRoomPrice] = useState("");
-  const [paidAmount, setPaidAmount] = useState(0);
-  const [security, setSecurity] = useState(0);
-  const [maintenance, setMaintenance] = useState(0);
-  const [numberOfMonths, setNumberOfMonths] = useState(1);
+  const [paidAmount, setPaidAmount] = useState("");
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [totalRent, setTotalRent] = useState(0);
-  const [dueAmount, setDueAmount] = useState(0);
+  const singleTenant = useSelector((state) => state.tenants.singleTenant);
 
   const selectedRoomId = useSelector((state) => state.createTenant.selectedRoomId);
   const rooms = useSelector((state) => state.rooms.rooms);
@@ -40,56 +31,59 @@ const Roomsanddura = ({Setopenmodal}) => {
   const selectedBranchId = useSelector(
     (state) => state.branches.selectedBranchId
   );
+  const selectedTenantId = useSelector(
+    (state) => state.tenants.selectedTenantId
+  );
 
+  const calculateNumberOfMonths = (start, end) => {
+    const startYear = start.getFullYear();
+    const endYear = end.getFullYear();
+    const startMonth = start.getMonth();
+    const endMonth = end.getMonth();
 
-  
-
- useEffect(() => {
-    if (roomDetails) {
-      setRoomPrice(roomDetails.Price);
-      calculateTotalRent(roomDetails.Price, numberOfMonths);
-    }
-  }, [roomDetails, numberOfMonths]);
-
-  const calculateTotalRent = (price, months) => {
-    const total = price * months;
-    setTotalRent(total);
-    setDueAmount(total - paidAmount);
+    return (endYear - startYear) * 12 + (endMonth - startMonth);
   };
 
+  useEffect(() => {
+    if ( isValidObjectId(selectedTenantId)) {
+      dispatch(fetchSingleTenant({tenantId: selectedTenantId }));
+    } else {
+      console.error("Invalid ObjectId(s) provided");
+    }
+  }, [selectedTenantId]);
 
 
 
   const handleCreateTenant = async () => {
-    if (!startDate || paidAmount === "" || security === "" || maintenance === "" || numberOfMonths < 1) {
-      toast.error("All fields are required");
+    if (!startDate || !endDate || !paidAmount) {
+      setError("All fields are required");
       return;
     }
+    setError(null);
     setLoading(true);
 
-
+    const numberOfMonths = calculateNumberOfMonths(new Date(startDate), new Date(endDate));
 
     const data = {
       UserName: personalDetails.UserName,
       UserNumber: personalDetails.UserNumber,
-      StartDate: formatDate(startDate),
-      LastDate: formatDate(endDate),
+      StartDate: startDate.toString(),
+      LastDate:endDate.toString(),
       room: selectedRoomId,
       Amount: paidAmount,
-      Maintaince: maintenance,
-      Security:security,
-      DueAmount: dueAmount,
+      Maintaince: 0,
+      Security: 0,
+      DueAmount: roomDetails?.Price - paidAmount,
       NumberOfmonth: numberOfMonths,
       branch: selectedBranchId
     };
 
     try {
-      const result = await Creattennatmapi(data);
+      const result = await UpadteTenantapi(data,selectedTenantId);
       if (result.status) {
         toast.success("Tenant created successfully")
         dispatch(fetchTenantsByBranch(selectedBranchId));
-        Setopenmodal(false)
-        dispatch(setCurrentStep("Availability"))
+        Setopenedit(false)
       } else {
         toast.error(result.message)
         setError(result.message);
@@ -102,14 +96,14 @@ const Roomsanddura = ({Setopenmodal}) => {
   };
 
   const handlePaidAmountChange = (e) => {
-    const value = parseInt(e.target.value, 10);
-    if (value > totalRent) {
-      toast.error("Paid amount cannot be greater than total rent.");
+    const value = e.target.value;
+    if (parseInt(value, 10) > roomDetails?.Price) {
+     toast.error("Paid amount cannot be greater than room price.");
     } else {
       setPaidAmount(value);
-      setDueAmount(totalRent - value);
     }
   };
+  
 
   return (
     <>
@@ -128,46 +122,16 @@ const Roomsanddura = ({Setopenmodal}) => {
           value={startDate}
           onChange={setStartDate}
         />
-        
-        <Input
-            type="number"
-            name="NumberOfmonth"
-            label="Number of months"
-            labelPlacement="outside"
-            variant="bordered"
-            radius="sm"
-            className="w-full rounded-none"
-            size="lg"
-            placeholder="Number of months"
-            value={numberOfMonths}
-            onChange={(e) => setNumberOfMonths(parseInt(e.target.value, 10))}
-          />
-        <Input
-            type="number"
-            name="Security"
-            label="Security"
-            labelPlacement="outside"
-            variant="bordered"
-            radius="sm"
-            className="w-full rounded-none"
-            size="lg"
-            placeholder="0"
-            value={security}
-            onChange={(e) => setSecurity(parseInt(e.target.value, 10))}
-          />
-          <Input
-            type="number"
-            name="Maintainance"
-            label="Maintainance"
-            labelPlacement="outside"
-            variant="bordered"
-            radius="sm"
-            className="w-full rounded-none"
-            size="lg"
-            placeholder="0"
-            value={maintenance}
-            onChange={(e) => setMaintenance(parseInt(e.target.value, 10))}
-          />
+        <DatePicker
+          size="lg"
+          radius="sm"
+          label="Last Date"
+          labelPlacement="outside"
+          variant="bordered"
+          className="w-full"
+          value={endDate}
+          onChange={setEndDate}
+        />
         <Input
           type="text"
           name="Roomprice"
@@ -183,7 +147,7 @@ const Roomsanddura = ({Setopenmodal}) => {
         
         />
         <Input
-          type="number"
+          type="text"
           name="Paidamount"
           variant="bordered"
           label="Amount paid by Tenant"
@@ -191,7 +155,7 @@ const Roomsanddura = ({Setopenmodal}) => {
           radius="sm"
           className="w-full rounded-none"
           size="lg"
-          placeholder="0"
+          placeholder="Paid Amount"
           value={paidAmount}
           
           onChange={handlePaidAmountChange}
@@ -206,14 +170,14 @@ const Roomsanddura = ({Setopenmodal}) => {
          </div> */}
 
         <Button className=" text-white bg-red-500 rounded-md">
-        Overdue  : {dueAmount}
+        Overdue  : {roomDetails?.Price - paidAmount}
         </Button>
          </div>
       </div>
 
       <div className="flex justify-center items-center w-full">
         <Button onPress={handleCreateTenant} className="buttongradient text-white rounded-md w-60 uppercase font-semibold">
-          {loading?<span className="loader2"></span>:"Create"}
+          {loading?<span className="loader2"></span>:"Update"}
         </Button>
       </div>
     </div>
@@ -248,4 +212,6 @@ const Roomsanddura = ({Setopenmodal}) => {
   );
 };
 
-export default Roomsanddura;
+
+
+export default Updateroomsanddura

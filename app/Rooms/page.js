@@ -138,7 +138,7 @@ export default function Rooms() {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...rooms];
+    let filteredUsers = Array.isArray(rooms) ? [...rooms] : [];
 
     if (hasSearchFilter) {
       filteredUsers = filteredUsers.filter(
@@ -347,7 +347,7 @@ export default function Rooms() {
         </div>
         <div className="flex justify-between items-center">
           <span className="text-default-400 text-small">
-            Total {rooms.length} Rooms
+            Total {rooms?.length} Rooms
           </span>
           <label className="flex items-center text-default-400 text-small">
             Rows per page:
@@ -369,7 +369,7 @@ export default function Rooms() {
     visibleColumns,
     onSearchChange,
     onRowsPerPageChange,
-    rooms.length,
+    rooms?.length,
     hasSearchFilter,
   ]);
 
@@ -589,7 +589,7 @@ useEffect(() => {
         isDismissable={false}
         isKeyboardDismissDisabled={true}
         backdrop="blur"
-        size="4xl"
+        size="5xl"
         isOpen={openview}
         onOpenChange={Setopenview}
         motionProps={{
@@ -633,7 +633,7 @@ useEffect(() => {
                   <div className="flex flex-col justify-between items-start h-full py-4">
                     <div className="flex flex-col justify-start items-start text-sm font-semibold">
                       <p>Floor : {roomdata.floor}</p>
-                      <p className="flex flex-col justify-start items-start text-sm font-bold">
+                      <p className="flex flex-col justify-start items-start text-sm font-bold text-gray-500">
                       {roomdata.roomName}
                       </p>
                     </div>
@@ -641,7 +641,7 @@ useEffect(() => {
                       <p>Present Tenant</p>
                       {
                         roomdata.Users.map((name,id)=>(
-                          <p key={id}>{name.UserName}</p>
+                          <p key={id} className="text-sm text-gray-500">{name.UserName}</p>
                         ))
                       }
                     </div>
@@ -650,13 +650,13 @@ useEffect(() => {
                   <div className="flex flex-col justify-between items-start h-full py-4">
                     <div className="flex flex-col flex-wrap gap-2 justify-start items-start text-sm font-semibold">
                       <p>Room Details</p>
-                      <p className="flex flex-col justify-start items-start text-xs ">
+                      <p className="flex flex-col justify-start items-start text-xs text-gray-500 ">
                       Type: {roomdata.SharingType}
                       </p>
-                      <p className="flex flex-col justify-start items-start text-xs">
+                      <p className="flex flex-col justify-start items-start text-xs text-gray-500">
                       Specialty: {roomdata?.RoomDetails.join(",")}
                       </p>
-                      <p className="flex flex-col justify-start items-start text-xs ">
+                      <p className="flex flex-col justify-start items-start text-xs text-gray-500">
                       Reamining Beds:{roomdata?.reaminingBed}
                       </p>
                     </div>
@@ -695,6 +695,13 @@ useEffect(() => {
                       </CardFooter>
                     </Card>
                   </div>
+                  {/* <div>
+                    <Image
+                      src={Roomimage}
+                      className="object-fill h-full"
+                      alt="Roomimage"
+                    />
+                  </div> */}
                 </div>}
               </ModalBody>
               <ModalFooter className="flex justify-center items-center text-center"></ModalFooter>

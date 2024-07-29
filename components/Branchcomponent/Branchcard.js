@@ -87,7 +87,7 @@ useEffect(() => {
           <p  className="flex items-center text-xs font-semibold gap-2 text-[#205093]"><FaPhoneAlt/>+91-{data.Number}</p>
         </div>
         <div>
-          <Button onPress={()=>handleopen(data._id)} className="bg-white ring-1 h-8 ring-[#025EFF] text-[#025EFF] text-sm font-bold rounded-sm">Manage Details</Button>
+          <Button onPress={()=>handleopen(data._id)} className="bg-white ring-1 h-8 ring-[#025EFF] text-[#025EFF] text-sm font-bold rounded-sm">Edit Details</Button>
         </div>
       </div>
     </div>
@@ -136,7 +136,7 @@ useEffect(() => {
       </Modal>
 
 
-      <Toaster
+      {/* <Toaster
         position="top-center"
         reverseOrder={false}
         gutter={8}
@@ -160,7 +160,7 @@ useEffect(() => {
             },
           },
         }}
-      />
+      /> */}
 
     </>
   );

@@ -129,11 +129,11 @@ const Sidenav = () => {
               }
             ></Tab>
             <Tab
-              key="Tenants"
+              key="Branches"
               title={
-                <div  className="flex items-center  w-44  gap-4">
-                  <IoPeople size={24} />
-                  <span>Tenants</span>
+                <div className="flex items-center  w-44  gap-4">
+                  <FaBuildingColumns size={20} />
+                  <span>Manage Branches</span>
                 </div>
               }
             ></Tab>
@@ -143,6 +143,15 @@ const Sidenav = () => {
                 <div  className="flex items-center  w-44  gap-4">
                   <MdMeetingRoom size={24} />
                   <span>Rooms</span>
+                </div>
+              }
+            ></Tab>
+            <Tab
+              key="Tenants"
+              title={
+                <div  className="flex items-center  w-44  gap-4">
+                  <IoPeople size={24} />
+                  <span>Tenants</span>
                 </div>
               }
             ></Tab>
@@ -165,15 +174,6 @@ const Sidenav = () => {
               }
             ></Tab>
             <Tab
-              key="Maintenance"
-              title={
-                <div className="flex items-center  w-44  gap-4">
-                  <RiHeartAddFill size={24} />
-                  <span>Maintenance</span>
-                </div>
-              }
-            ></Tab>
-            <Tab
               key="Staff"
               title={
                 <div className="flex items-center  w-44  gap-4">
@@ -183,14 +183,15 @@ const Sidenav = () => {
               }
             ></Tab>
             <Tab
-              key="Branches"
+              key="Maintenance"
               title={
                 <div className="flex items-center  w-44  gap-4">
-                  <FaBuildingColumns size={20} />
-                  <span>Manage Branches</span>
+                  <RiHeartAddFill size={24} />
+                  <span>Support</span>
                 </div>
               }
             ></Tab>
+      
             {/* <Tab
               key="Notifications"
               title={

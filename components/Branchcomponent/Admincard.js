@@ -81,7 +81,7 @@ const Admincard = ({admin}) => {
           alt="Profile Picture"
           className="rounded-full mx-auto -mt-12 w-24 h-24"
         />
-        <h2 class="text-lg font-bold mt-2">{admin?.name}</h2>
+        <h2 class="text-lg font-bold mt-2 uppercase">{admin?.name}</h2>
         <p className="text-xs font-bold flex items-center gap-2">
         Access:<span className="text-[#1B9D31]">{admin.permission.join(",")}</span>
         </p>

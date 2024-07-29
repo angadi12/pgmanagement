@@ -78,7 +78,7 @@ const Personaldetails = () => {
       dispatch(fetchAdmins(selectedBranchId));
       setLoading(false);
     } else {
-      toast.error("Failed to create Admin");
+      toast.error(result.message ||"Failed to create Admin");
       setLoading(false);
     }
   };
