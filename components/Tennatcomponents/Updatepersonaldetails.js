@@ -4,8 +4,11 @@ import { Button, Input } from "@nextui-org/react";
 import { setPersonalDetails } from "../../lib/CreatetenantSlice";
 import { setCurrentStep } from "../../lib/CreatetenantSlice";
 import { useSelector, useDispatch } from "react-redux";
+import { fetchSingleTenant } from "../../lib/TennatSlice";
 
-const Personaldetails = () => {
+const isValidObjectId = (id) => /^[0-9a-fA-F]{24}$/.test(id);
+
+const Updatepersonaldetails = () => {
   const dispatch = useDispatch();
   const selectedRoomId = useSelector(
     (state) => state.createTenant.selectedRoomId
@@ -13,7 +16,42 @@ const Personaldetails = () => {
   const storedPersonalDetails = useSelector(
     (state) => state.createTenant.personalDetails
   );
-  const [formData, setFormData] = useState(storedPersonalDetails);
+  const singleTenant = useSelector((state) => state.tenants.singleTenant);
+  console.log(singleTenant);
+  const selectedBranchId = useSelector(
+    (state) => state.branches.selectedBranchId
+  );
+  const selectedTenantId = useSelector(
+    (state) => state.tenants.selectedTenantId
+  );
+
+  const [formData, setFormData] = useState({
+    UserName: singleTenant.UserName || "",
+    UserNumber: singleTenant.UserNumber || "",
+    Address: singleTenant.Address || "",
+    email: singleTenant.email || "",
+    AadharNumber: singleTenant.AadharNumber || "",
+  });
+
+  useEffect(() => {
+    if (isValidObjectId(selectedTenantId)) {
+      dispatch(fetchSingleTenant({ tenantId: selectedTenantId }));
+    } else {
+      console.error("Invalid ObjectId(s) provided");
+    }
+  }, [selectedTenantId]);
+
+  // useEffect(() => {
+  //   if (singleTenant) {
+  //     setFormData({
+  //       UserName: singleTenant.UserName || "",
+  //       UserNumber: singleTenant.UserNumber || "",
+  //       Address: singleTenant.Address || "",
+  //       email: singleTenant.email || "",
+  //       AadharNumber: singleTenant.AadharNumber || "",
+  //     });
+  //   }
+  // }, [singleTenant]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,16 +63,15 @@ const Personaldetails = () => {
       selectedRoomId &&
       formData.UserName &&
       formData.UserNumber &&
-      formData.address &&
+      formData.Address &&
       formData.email &&
-      formData.aadharNumber
+      formData.AadharNumber
     ) {
       dispatch(setPersonalDetails(formData));
       dispatch(setCurrentStep("Room & Duration"));
     }
   };
-
-  console.log(formData);
+console.log(storedPersonalDetails,"updated")
   return (
     <div className="flex flex-col justify-center items-center gap-4">
       <div className="w-full text-start">
@@ -53,27 +90,25 @@ const Personaldetails = () => {
           onChange={handleChange}
         />
         <Input
-          type="tel"
-          maxLength={10}
-          min={10}
+          type="text"
           name="UserNumber"
           variant="bordered"
           radius="sm"
           className="w-full rounded-none"
           size="lg"
           placeholder="Phone Number"
-          value={formData.UserNumber || ""}
+          value={formData.UserNumber}
           onChange={handleChange}
         />
         <Input
           type="text"
-          name="address"
+          name="Address"
           variant="bordered"
           radius="sm"
           className="w-full rounded-none"
           size="lg"
           placeholder="Address"
-          value={formData.address}
+          value={formData.Address}
           onChange={handleChange}
         />
         <Input
@@ -91,15 +126,14 @@ const Personaldetails = () => {
 
       <div className="w-full grid lg:grid-cols-1 grid-cols-1 gap-4 place-content-center justify-between items-start ">
         <Input
-          type="number"
-          
-          name="aadharNumber"
+          type="text"
+          name="AadharNumber"
           variant="bordered"
           radius="sm"
           className="w-full rounded-none"
           size="lg"
           placeholder="Addhar Numbar"
-          value={formData.aadharNumber}
+          value={formData.AadharNumber}
           onChange={handleChange}
         />
       </div>
@@ -118,9 +152,9 @@ const Personaldetails = () => {
             !selectedRoomId &&
             !formData.UserName &&
             !formData.UserNumber &&
-            !formData.address &&
+            !formData.Address &&
             !formData.email &&
-            !formData.aadharNumber
+            !formData.AadharNumber
           }
           onPress={handleNext}
           className="buttongradient text-white rounded-md w-60 uppercase font-semibold"
@@ -132,4 +166,4 @@ const Personaldetails = () => {
   );
 };
 
-export default Personaldetails;
+export default Updatepersonaldetails;

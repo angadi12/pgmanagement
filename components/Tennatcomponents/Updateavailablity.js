@@ -3,21 +3,43 @@ import React, { useEffect, useState } from "react";
 import { Button, Chip, Divider, Input, Tooltip } from "@nextui-org/react";
 import { Select, SelectItem } from "@nextui-org/react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchFloorsByBranch } from "../../lib/TennatSlice";
+import { fetchFloorsByBranch, fetchSingleTenant } from "../../lib/TennatSlice";
 import { fetchRoomsByBranch } from "../../lib/RoomSlice";
 import { GetRoomsbyBranch } from "../../lib/API/Room";
 import { motion } from "framer-motion";
 import { FaBed } from "react-icons/fa6";
-import {setSelectedRoomId} from "../../lib/CreatetenantSlice"
-import { setCurrentStep } from "../../lib/CreatetenantSlice"; 
+import { setSelectedRoomId } from "../../lib/CreatetenantSlice";
+import { setCurrentStep } from "../../lib/CreatetenantSlice";
+import { Getsingletennatbyid } from "@/lib/API/Tennat";
+import {GetRoomsbyroomid} from "../../lib/API/Room"
 
-const Availablity = () => {
+const isValidObjectId = (id) => /^[0-9a-fA-F]{24}$/.test(id);
+
+const Updateavailablity = () => {
   const dispatch = useDispatch();
-  const selectedRoomId = useSelector((state) => state.createTenant.selectedRoomId);
+  const selectedRoomId = useSelector(
+    (state) => state.createTenant.selectedRoomId
+  );
+  const singleTenant = useSelector((state) => state.tenants.singleTenant);
 
-  const [sharing, setSharing] = useState("");
+  console.log(singleTenant,`redux state`)
+  const singleTenantStatus = useSelector(
+    (state) => state.tenants.singleTenantStatus
+  );
+  const singleTenantError = useSelector(
+    (state) => state.tenants.singleTenantError
+  );
+  const selectedTenantId = useSelector(
+    (state) => state.tenants.selectedTenantId
+  );
+  const [tenantData, setTenantData] = useState(null);
+
+
+  const [selectedRoom, setSelectedRoom] = useState(null);
+
+  const [sharing, setSharing] = useState(selectedRoom?.SharingType);
   const [formData, setFormData] = useState({
-    floor: "",
+    floor:selectedRoom?.floor,
   });
   const [availableRooms, setAvailableRooms] = useState([]);
   const [filteredRooms, setFilteredRooms] = useState([]);
@@ -29,14 +51,60 @@ const Availablity = () => {
   const floors = useSelector((state) => state.tenants.floors);
   const [loading, setLoading] = useState(false);
   const [filterError, setFilterError] = useState("");
-  const [selectedRoom, setSelectedRoom] = useState(null);
+  const [loadingRoomDetails, setLoadingRoomDetails] = useState(true);
 
+
+
+  useEffect(() => {
+    if ( isValidObjectId(selectedTenantId)) {
+      dispatch(fetchSingleTenant({tenantId: selectedTenantId }));
+    } else {
+      console.error("Invalid ObjectId(s) provided");
+    }
+  }, [selectedTenantId]);
+
+  useEffect(() => {
+    if (singleTenant) {
+      dispatch(setSelectedRoomId(singleTenant?.room))
+    }
+  }, [singleTenant]);
+
+ 
   useEffect(() => {
     if (selectedBranchId) {
       dispatch(fetchFloorsByBranch(selectedBranchId));
       dispatch(fetchRoomsByBranch(selectedBranchId));
     }
-  }, [dispatch, selectedBranchId]);
+  }, [dispatch, selectedBranchId,selectedRoomId]);
+
+
+  useEffect(() => {
+    setLoadingRoomDetails(true); 
+    if (selectedRoomId) {
+
+      const fetchRoomDetails = async () => {
+        try {
+          const roomDetails = await GetRoomsbyroomid(selectedRoomId);
+          setSelectedRoom(roomDetails.data); 
+          console.log(roomDetails.data,"floor")
+        } catch (error) {
+          console.error("Failed to fetch room details", error);
+        }finally {
+          setLoadingRoomDetails(false); // End loading room details
+        }
+      };
+
+      fetchRoomDetails();
+    }
+  }, [selectedRoomId]);
+
+
+  useEffect(() => {
+    if (selectedRoom) {
+      setSharing(selectedRoom.SharingType);
+      setFormData({ floor: selectedRoom.floor });
+    }
+  }, [selectedRoom]);
 
   const handleSharingChange = (e) => {
     setSharing(e.target.value);
@@ -49,11 +117,9 @@ const Availablity = () => {
 
   const handleRoomSelectChange = (selectedKeys) => {
     const selectedArray = Array.from(selectedKeys);
-    setSelectedRoom(selectedArray[0]);
-    dispatch(setSelectedRoomId(selectedArray[0]))
+    // setSelectedRoom(selectedArray[0]);
+    dispatch(setSelectedRoomId(selectedArray[0]));
   };
-
-  console.log(selectedRoom);
 
   const filterRooms = async () => {
     setFilterError("");
@@ -76,7 +142,6 @@ const Availablity = () => {
         setAvailableRooms([]);
       } else {
         setAvailableRooms(filteredRooms);
-        console.log(filterRooms);
       }
     } catch (error) {
       setFilterError("An error occurred while fetching rooms.");
@@ -87,10 +152,12 @@ const Availablity = () => {
   };
 
   useEffect(() => {
-    if (sharing && formData.floor) {
+    if (selectedRoomId || sharing || formData.floor) {
       filterRooms();
     }
-  }, [sharing, formData.floor]);
+  }, [selectedRoomId,sharing,formData.floor]);
+
+  
 
   const floorOrder = ["First", "Second", "Third", "Fourth"];
 
@@ -100,8 +167,7 @@ const Availablity = () => {
       return acc;
     }, {});
 
-    const floorsCopy = Array.isArray(floors) ? [...floors] : [];
-
+    const floorsCopy = [...floors];
 
     return floorsCopy.sort((a, b) => {
       const aLower = a.toLowerCase().replace("secound", "second");
@@ -123,17 +189,18 @@ const Availablity = () => {
     .filter((room) => room.reaminingBed === 0)
     .map((room) => room._id);
 
-
-    const handlenext=()=>{
-      if(selectedRoomId){
-        dispatch(setCurrentStep("Personal Details"))
-      }
+  const handlenext = () => {
+    if (selectedRoomId) {
+      dispatch(setCurrentStep("Personal Details"));
     }
+  };
 
   return (
-    <div className="flex flex-col justify-center items-center gap-4">
+    <>
+
+   {!selectedRoomId && !selectedRoom ?<div className="flex justify-center items-center w-full h-80"><span className="loader3"></span></div>: <div className="flex flex-col justify-center items-center gap-4">
       <div className="w-full text-start">
-        <p className="text-lg font-semibold">Check Room Availability</p>
+        <p className="text-lg font-semibold">Check Room Availability </p>
       </div>
       <div className="w-full grid lg:grid-cols-3 grid-cols-1 gap-4 place-content-center justify-between items-start">
         <Input
@@ -193,8 +260,9 @@ const Availablity = () => {
           {filterError}
         </motion.p>
       )}
+
       <div className="w-full py-2 grid lg:grid-cols-1 grid-cols-1 gap-4 place-content-start justify-start items-start">
-        {availableRooms.length > 0 && (
+        {(availableRooms.length > 0 || selectedRoomId) && (
           <Select
             size="lg"
             radius="sm"
@@ -203,7 +271,7 @@ const Availablity = () => {
             placeholder="Select Available Room"
             className="w-full"
             disabledKeys={new Set(disabledRoomKeys)}
-            selectedKeys={new Set([selectedRoom])}
+            selectedKeys={new Set([selectedRoomId])}
             onSelectionChange={handleRoomSelectChange}
             items={availableRooms}
             renderValue={(items) => {
@@ -278,12 +346,12 @@ const Availablity = () => {
               >
                 <Button
                   variant="light"
-                  className="flex flex-col h-full w-auto p-1"
+                  className={"flex flex-col h-full w-auto p-1"}
                 >
                   <div
                     className={`h-12 w-12 rounded-md ${
                       room.reaminingBed === 0 ? "bg-[#ED0000]" : "bg-[#1B9D31]"
-                    } text-white flex justify-center items-center ${selectedRoomId==room._id?"ring-4 ring-blue-600":""}  `}
+                    } text-white flex justify-center items-center ${selectedRoom?._id==room._id?"ring-4 ring-blue-600":""}`}
                   >
                     <FaBed size={24} />
                   </div>
@@ -296,12 +364,18 @@ const Availablity = () => {
       </div>
 
       <div className="flex justify-center items-center w-full">
-        <Button onPress={handlenext} isDisabled={!selectedRoomId} className="buttongradient text-white rounded-md w-60 uppercase font-semibold">
+        <Button
+          onPress={handlenext}
+          isDisabled={!selectedRoomId}
+          className="buttongradient text-white rounded-md w-60 uppercase font-semibold"
+        >
           Next
         </Button>
       </div>
-    </div>
+    </div>}
+
+    </>
   );
 };
 
-export default Availablity;
+export default Updateavailablity;

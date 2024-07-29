@@ -1,29 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Tabs, Tab } from "@nextui-org/react";
-import Personaldetails from "@/components/Tennatcomponents/Personaldetails";
-import Roomsanddura from "@/components/Tennatcomponents/Roomsanddura";
-import Availablity from "./Availablity";
 import { useSelector, useDispatch } from "react-redux";
 import { setCurrentStep } from "../../lib/CreatetenantSlice"; 
+import Updatepersonaldetails from "./Updatepersonaldetails";
+import Updateavailablity from "./Updateavailablity";
+import Updateroomsanddura from "./Updateroomsanddura";
+import {fetchSingleTenant } from "../../lib/TennatSlice";
 
-const Createtennat = ({Setopenmodal}) => {
+
+
+const Updatetennat = ({Setopenedit,id}) => {
   const dispatch = useDispatch();
   const currentStep = useSelector((state) => state.createTenant.currentStep);
   const selectedRoomId = useSelector((state) => state.createTenant.selectedRoomId);
   const personalDetails = useSelector(
     (state) => state.createTenant.personalDetails
   );
+ 
+
   const handleTabChange = (key) => {
-    if (key === "Personal Details" && !selectedRoomId ) {
-      // Prevent switching to Personal Details if no room is selected
-      return;
-    }
-    if (key === "Room & Duration" && Object.keys(personalDetails).length==0) {
-      // Prevent switching to Room & Duration if no personal details are provided
-      return;
-    }
     dispatch(setCurrentStep(key));
   };
+
+ 
 
   return (
     <>
@@ -67,12 +66,13 @@ const Createtennat = ({Setopenmodal}) => {
         />
       </Tabs>
       <div className="w-full h-auto">
-        {currentStep === "Personal Details" && <Personaldetails />}
-        {currentStep === "Availability" && <Availablity />}
-        {currentStep === "Room & Duration" && <Roomsanddura Setopenmodal={Setopenmodal} />}
+        {currentStep === "Personal Details" && <Updatepersonaldetails/>}
+        {currentStep === "Availability" && <Updateavailablity id={id} />}
+        {currentStep === "Room & Duration" && <Updateroomsanddura Setopenedit={Setopenedit} />}
       </div>
     </>
   );
 };
 
-export default Createtennat;
+
+export default Updatetennat
