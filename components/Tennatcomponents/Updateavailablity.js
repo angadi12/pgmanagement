@@ -54,6 +54,17 @@ const Updateavailablity = () => {
   const [loadingRoomDetails, setLoadingRoomDetails] = useState(true);
 
 
+  useEffect(() => {
+    setLoadingRoomDetails(true); 
+    const timer = setTimeout(() => {
+      setLoadingRoomDetails(false);
+    }, 3000); 
+
+    return () => clearTimeout(timer); 
+  }, []);
+
+
+
 
   useEffect(() => {
     if ( isValidObjectId(selectedTenantId)) {
@@ -64,7 +75,7 @@ const Updateavailablity = () => {
   }, [selectedTenantId]);
 
   useEffect(() => {
-    if (singleTenant) {
+    if (singleTenant.room) {
       dispatch(setSelectedRoomId(singleTenant?.room[0]))
     }
   }, [singleTenant]);
@@ -79,7 +90,6 @@ const Updateavailablity = () => {
 
 
   useEffect(() => {
-    setLoadingRoomDetails(true); 
     if (selectedRoomId) {
 
       const fetchRoomDetails = async () => {
@@ -90,7 +100,6 @@ const Updateavailablity = () => {
         } catch (error) {
           console.error("Failed to fetch room details", error);
         }finally {
-          setLoadingRoomDetails(false); // End loading room details
         }
       };
 
@@ -198,7 +207,7 @@ const Updateavailablity = () => {
   return (
     <>
 
-   {!selectedRoomId && !selectedRoom ?<div className="flex justify-center items-center w-full h-80"><span className="loader3"></span></div>: <div className="flex flex-col justify-center items-center gap-4">
+   {loadingRoomDetails ?<div className="flex justify-center items-center w-full h-80"><span className="loader3"></span></div>: <div className="flex flex-col justify-center items-center gap-4">
       <div className="w-full text-start">
         <p className="text-lg font-semibold">Check Room Availability </p>
       </div>

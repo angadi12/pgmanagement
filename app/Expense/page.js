@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Table,
   TableHeader,
@@ -17,7 +17,7 @@ import {
   Chip,
   User,
   Pagination,
-  Tooltip
+  Tooltip,
 } from "@nextui-org/react";
 import {
   Modal,
@@ -32,247 +32,65 @@ import { IoEyeSharp } from "react-icons/io5";
 import { RiPencilFill } from "react-icons/ri";
 import { MdDelete } from "react-icons/md";
 import { Tabs, Tab } from "@nextui-org/react";
+import { useSelector, useDispatch } from "react-redux";
 
-import fillter from "../../public/Loginasset/fillter.png"
+import fillter from "../../public/Loginasset/fillter.png";
 import Image from "next/image";
 import Createexpense from "@/components/Expensecomponent/Createexpense";
-// import {VerticalDotsIcon} from "./VerticalDotsIcon";
-// import {SearchIcon} from "./SearchIcon";
-// import {ChevronDownIcon} from "./ChevronDownIcon";
-// import {columns, users, statusOptions} from "./data";
-// import {capitalize} from "./utils";
+import {fetchExpensesByBranch} from "../../lib/ExpenseSlice"
+
 const columns = [
-  {name: "ID", uid: "id", },
-  {name: "Name", uid: "name", },
-  {name: "Category", uid: "Contact", },
-  {name: "Date", uid: "Room", },
-  {name: "Description", uid: "Start"},
-  {name: "Amount", uid: "End"},
-  {name: "Modify", uid: "Modify",},
+  { name: "ID", uid: "_id" },
+  { name: "Name", uid: "name" },
+  { name: "Description", uid: "description" },
+  { name: "Category", uid: "Categoery" },
+  { name: "month", uid: "month" },
+  { name: "Amount", uid: "amount" },
+  { name: "Modify", uid: "Modify" },
 ];
 
 export function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 const statusOptions = [
-  {name: "Available", uid: "Available"},
-  {name: "Full", uid: "Full"},
+  { name: "Available", uid: "Available" },
+  { name: "Full", uid: "Full" },
 ];
 
-const users = [
-  {
-    id: 1,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 2,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 3,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Overdue",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 4,
-  name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "1 Complaints",
-    status: "Overdue",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 5,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "1 Active Complaint",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 6,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Overdue",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 7,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Overdue",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 8,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 9,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 10,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 11,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Overdue",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 12,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 13,
-    name: "Oliver Scott",
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Pending",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 14,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Overdue",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 15,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 16,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Pending",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 17,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 18,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 19,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Pending",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 20,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-];
 
-export {columns, users, statusOptions};
+
+export { columns, statusOptions };
 const statusColorMap = {
   Paid: "success",
   Full: "danger",
   Pending: "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "Contact","Room","Start","End","Complaints", "Modify"];
+const INITIAL_VISIBLE_COLUMNS = [
+  "name",
+ "Categoery",
+  "month",
+  "description",
+  "amount",
+  "Modify",
+];
 
 export default function Expense() {
+  const dispatch = useDispatch();
+  const expenses = useSelector((state) => state.expenses.expenses); 
+  const expensesStatus = useSelector((state) => state.expenses.status);
+
+  const selectedBranchId = useSelector(
+    (state) => state.branches.selectedBranchId
+  );
+  useEffect(() => {
+    if (selectedBranchId) {
+      dispatch(fetchExpensesByBranch(selectedBranchId));
+    }
+  }, [selectedBranchId, dispatch]);
+
+  console.log(expenses)
+
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [selected, setSelected] = React.useState("Expense Details");
 
@@ -289,7 +107,7 @@ export default function Expense() {
   });
   const [page, setPage] = React.useState(1);
 
-  const pages = Math.ceil(users.length / rowsPerPage);
+  const pages = Math.ceil(expenses?.length / rowsPerPage);
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -302,24 +120,25 @@ export default function Expense() {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...users];
+    let filteredUsers = Array.isArray(expenses) ? [...expenses] : [];
+
 
     if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase())
+      filteredUsers = filteredUsers.filter((expense) =>
+        expense.name.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
     if (
       statusFilter !== "all" &&
       Array.from(statusFilter).length !== statusOptions.length
     ) {
-      filteredUsers = filteredUsers.filter((user) =>
-        Array.from(statusFilter).includes(user.status)
+      filteredUsers = filteredUsers.filter((expense) =>
+        Array.from(statusFilter).includes(expense.amount)
       );
     }
 
     return filteredUsers;
-  }, [users, filterValue, statusFilter]);
+  }, [expenses, filterValue, statusFilter]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -338,35 +157,32 @@ export default function Expense() {
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((user, columnKey) => {
-    const cellValue = user[columnKey];
+  const renderCell = React.useCallback((expense, columnKey) => {
+    const cellValue = expense[columnKey];
 
     switch (columnKey) {
       case "name":
-        return (
-         <p>{user.name}</p>
-        );
-      case "role":
+        return <p>{expense.name}</p>;
+      case "Categoery":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
             <p className="text-bold text-tiny capitalize text-default-500">
-              {user.team}
+              {expense.Categoery}
             </p>
           </div>
         );
-      case "status":
-        return (
-          <Chip
-            className="capitalize border-none gap-1  "
-            color={statusColorMap[user.status]}
-            size="sm"
-            variant="flat"
-          >
-            {cellValue}
-          </Chip>
-        );
-        case "Modify":
+      // case "status":
+      //   return (
+      //     <Chip
+      //       className="capitalize border-none gap-1  "
+      //       color={statusColorMap[user.status]}
+      //       size="sm"
+      //       variant="flat"
+      //     >
+      //       {cellValue}
+      //     </Chip>
+      //   );
+      case "Modify":
         return (
           <div className="relative flex items-center gap-4">
             <Tooltip content="Details">
@@ -381,7 +197,7 @@ export default function Expense() {
             </Tooltip>
             <Tooltip color="primary" content="Delete">
               <span className="text-lg text-red-500 cursor-pointer active:opacity-50">
-                <MdDelete  />
+                <MdDelete />
               </span>
             </Tooltip>
           </div>
@@ -447,7 +263,7 @@ export default function Expense() {
                   className="ring-1 ring-gray-300"
                   variant="light"
                 >
-                 <Image src={fillter} className="h-6 w-6"/>
+                  <Image src={fillter} className="h-6 w-6" />
                 </Button>
               </DropdownTrigger>
               <DropdownMenu
@@ -491,18 +307,16 @@ export default function Expense() {
               </DropdownMenu>
             </Dropdown> */}
             <Button
-            onPress={onOpen}
+              onPress={onOpen}
               className="bg-[#205093] text-background"
               endContent={<FaPlus />}
               size="sm"
-            >
-             
-            </Button>
+            ></Button>
           </div>
         </div>
         <div className="flex justify-between items-center">
           <span className="text-default-400 text-small">
-            Total {users.length} users
+            Total {expenses?.length} users
           </span>
           <label className="flex items-center text-default-400 text-small">
             Rows per page:
@@ -524,7 +338,7 @@ export default function Expense() {
     visibleColumns,
     onSearchChange,
     onRowsPerPageChange,
-    users.length,
+    expenses?.length,
     hasSearchFilter,
   ]);
 
@@ -546,10 +360,22 @@ export default function Expense() {
           onChange={setPage}
         />
         <div className="hidden sm:flex w-[30%] justify-end gap-2">
-          <Button className="bg-[#205093] text-white" isDisabled={pages === 1} size="sm" variant="flat" onPress={onPreviousPage}>
+          <Button
+            className="bg-[#205093] text-white"
+            isDisabled={pages === 1}
+            size="sm"
+            variant="flat"
+            onPress={onPreviousPage}
+          >
             Previous
           </Button>
-          <Button className="bg-[#205093] text-white" isDisabled={pages === 1} size="sm" variant="flat" onPress={onNextPage}>
+          <Button
+            className="bg-[#205093] text-white"
+            isDisabled={pages === 1}
+            size="sm"
+            variant="flat"
+            onPress={onNextPage}
+          >
             Next
           </Button>
         </div>
@@ -559,9 +385,11 @@ export default function Expense() {
 
   const classNames = React.useMemo(
     () => ({
-      wrapper: ["h-screen", "max-w-3xl",],
+      wrapper: ["h-screen", "max-w-3xl"],
       th: ["bg-[#205093]", "text-white", "border-b", "border-divider"],
-      td: ["p-4","border-b",
+      td: [
+        "p-4",
+        "border-b",
         // changing the rows border radius
         // first
         "group-data-[first=true]:first:before:rounded-none",
@@ -578,48 +406,53 @@ export default function Expense() {
 
   return (
     <>
-    <Table
-      isCompact
-      className="px-4"
-      removeWrapper
-      aria-label="Example table with custom cells, pagination and sorting"
-      bottomContent={bottomContent}
-      bottomContentPlacement="outside"
-      
-      classNames={classNames}
-      selectedKeys={selectedKeys}
-      // selectionMode="multiple"
-      sortDescriptor={sortDescriptor}
-      topContent={topContent}
-      topContentPlacement="outside"
-      onSelectionChange={setSelectedKeys}
-      onSortChange={setSortDescriptor}
-    >
-      <TableHeader columns={headerColumns}>
-        {(column) => (
-          <TableColumn
-            key={column.uid}
-            align={column.uid === "actions" ? "center" : "start"}
-            allowsSorting={column.sortable}
-          >
-            {column.name}
-          </TableColumn>
-        )}
-      </TableHeader>
-      <TableBody emptyContent={"No users found"} items={sortedItems}>
-        {(item) => (
-          <TableRow key={item.id}>
-            {(columnKey) => (
-              <TableCell>{renderCell(item, columnKey)}</TableCell>
+      {expensesStatus === "loading" ? (
+        <div className="w-full h-full col-span-3 flex justify-center items-center">
+          <span className="loader3 "></span>
+        </div>
+      ) : (
+        <Table
+          isCompact
+          className="px-4"
+          removeWrapper
+          aria-label="Example table with custom cells, pagination and sorting"
+          bottomContent={bottomContent}
+          bottomContentPlacement="outside"
+          classNames={classNames}
+          selectedKeys={selectedKeys}
+          // selectionMode="multiple"
+          sortDescriptor={sortDescriptor}
+          topContent={topContent}
+          topContentPlacement="outside"
+          onSelectionChange={setSelectedKeys}
+          onSortChange={setSortDescriptor}
+        >
+          <TableHeader columns={headerColumns}>
+            {(column) => (
+              <TableColumn
+                key={column.uid}
+                align={column.uid === "actions" ? "center" : "start"}
+                allowsSorting={column.sortable}
+              >
+                {column.name}
+              </TableColumn>
             )}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+          </TableHeader>
+          <TableBody emptyContent={"No users found"} items={sortedItems}>
+            {(item) => (
+              <TableRow key={item._id}>
+                {(columnKey) => (
+                  <TableCell>{renderCell(item, columnKey)}</TableCell>
+                )}
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      )}
 
-
-    <Modal
-      isDismissable={false} isKeyboardDismissDisabled={true}
+      <Modal
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
         backdrop="blur"
         size="4xl"
         isOpen={isOpen}
@@ -649,7 +482,7 @@ export default function Expense() {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col text-center">
-              Create New Expense
+                Create New Expense
               </ModalHeader>
               <ModalBody>
                 <Tabs
@@ -674,25 +507,16 @@ export default function Expense() {
                       </div>
                     }
                   />
-                 
                 </Tabs>
                 <div className="w-full h-auto">
-                {selected ==="Expense Details" && <Createexpense/>}
+                  {selected === "Expense Details" && <Createexpense />}
                 </div>
               </ModalBody>
-              <ModalFooter className="flex justify-center items-center text-center">
-                <Button
-                  className="buttongradient text-white rounded-md w-60 uppercase"
-                  onPress={onClose}
-                >
-                 Create Expense
-                </Button>
-              </ModalFooter>
+              <ModalFooter className="flex justify-center items-center text-center"></ModalFooter>
             </>
           )}
         </ModalContent>
       </Modal>
-
     </>
   );
 }
