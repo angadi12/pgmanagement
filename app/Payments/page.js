@@ -24,10 +24,12 @@ const Payments = () => {
   return (
     <>
     <section className="flex justify-center items-center w-full h-auto flex-col mx-auto p-4">
+    <div className="w-full flex flex-col justify-start items-start sticky top-[4rem] z-10 bg-white py-4">
+
       <div className="w-full px-4 text-start">
         <p className="text-lg font-semibold">Rent Collection</p>
       </div>
-      <div className="w-full flex justify-between items-center px-4 mt-4">
+      <div className="w-full flex justify-between items-center px-4 mt-4 sticky top-24">
         <div>
           <Tabs
             selectedKey={selected}
@@ -36,7 +38,7 @@ const Payments = () => {
             color="primary"
             variant="underlined"
             classNames={{
-              tabList: "gap-6 w-full relative rounded-none p-0 ",
+              tabList: "gap-6 w-full relative rounded-none p-0 z-10",
               cursor: "w-full bg-[#205093]",
               tab: "w-24 px-0 h-10",
               tabContent:
@@ -59,7 +61,7 @@ const Payments = () => {
                 </div>
               }
             />
-            <Tab
+            {/* <Tab
               key="Pending Rent"
               title={
                 <div className="flex items-center space-x-2">
@@ -82,7 +84,7 @@ const Payments = () => {
                   <span>History</span>
                 </div>
               }
-            />
+            /> */}
           </Tabs>
         </div>
         <div className="flex gap-3 justify-end items-end">
@@ -110,223 +112,14 @@ const Payments = () => {
         </div>
       </div>
       <Divider />
+    </div>
+
       <div className="w-full flex flex-col gap-4 justify-start items-start p-4 mx-auto bg-[#F9F9F9] h-auto mt-2 rounded-sm">
-        <div className="flex  justify-between items-center bg-white w-full p-3">
-          <div className="w-full flex gap-4 items-center">
-            <div className="flex justify-center items-center gap-2">
-              <div className=" w-14 h-14 rounded-full  flex justify-center items-center ">
-                <Image src={person} alt="person" />
-              </div>
-              <div>
-                <p className="text-xs font-semibold text-gray-400 ">
-                  #tenant-ID-6754
-                </p>
-                <p className="text-sm font-semibold ">Mithul M</p>
-              </div>
-            </div>
-            <Divider orientation="vertical" className="h-14"/>
-
-            <div className="flex flex-col">
-              <p className="text-xs font-semibold text-gray-400">Room No: <span className="text-black font-semibold">A7</span></p>
-              <p className="text-xs font-semibold text-gray-400">Room Type:<span className="text-black font-semibold">Three Sharing</span></p>
-            </div>
-            <Divider orientation="vertical" className="h-14"/>
-
-            <div>
-            <Chip variant="flat" radius="sm" className="bg-[#D3FFDA] text-[#1B9D31]">Paid</Chip>
-            </div>
-          </div>
-          <div className="flex gap-4 items-center w-60">
-              <div className="flex flex-col justify-between gap-4 items-end">
-
-             <p className="text-xs font-medium text-gray-400">Apr 09, 2024 at 5:30pm</p>
-             <p className="text-lg font-bold">9000/-</p>
-              </div>
-              <div>
-              <GoChevronRight className="text-gray-400"/>
-              </div>
-          </div>
-        </div>
-        <div className="flex justify-between items-center bg-white w-full p-3">
-          <div className="w-full flex gap-4 items-center">
-            <div className="flex justify-center items-center gap-2">
-              <div className=" w-14 h-14 rounded-full  flex justify-center items-center ">
-                <Image src={person} alt="person" />
-              </div>
-              <div>
-                <p className="text-xs font-semibold text-gray-400 ">
-                  #tenant-ID-6754
-                </p>
-                <p className="text-sm font-semibold ">Mithul M</p>
-              </div>
-            </div>
-            <Divider orientation="vertical" className="h-14"/>
-
-            <div className="flex flex-col">
-              <p className="text-xs font-semibold text-gray-400">Room No: <span className="text-black font-semibold">A7</span></p>
-              <p className="text-xs font-semibold text-gray-400">Room Type:<span className="text-black font-semibold">Three Sharing</span></p>
-            </div>
-            <Divider orientation="vertical" className="h-14"/>
-
-            <div>
-            <Chip variant="flat" radius="sm" className="bg-[#D3FFDA] text-[#1B9D31]">Paid</Chip>
-            </div>
-          </div>
-          <div className="flex gap-4 items-center w-60">
-              <div className="flex flex-col justify-between gap-4 items-end">
-
-             <p className="text-xs font-medium text-gray-400">Apr 09, 2024 at 5:30pm</p>
-             <p className="text-lg font-bold">9000/-</p>
-              </div>
-              <div>
-              <GoChevronRight className="text-gray-400"/>
-              </div>
-          </div>
-        </div>
-        <div className="flex justify-between items-center bg-white w-full p-3">
-          <div className="w-full flex gap-4 items-center">
-            <div className="flex justify-center items-center gap-2">
-              <div className=" w-14 h-14 rounded-full  flex justify-center items-center ">
-                <Image src={person} alt="person" />
-              </div>
-              <div>
-                <p className="text-xs font-semibold text-gray-400 ">
-                  #tenant-ID-6754
-                </p>
-                <p className="text-sm font-semibold ">Mithul M</p>
-              </div>
-            </div>
-            <Divider orientation="vertical" className="h-14"/>
-
-            <div className="flex flex-col">
-              <p className="text-xs font-semibold text-gray-400">Room No: <span className="text-black font-semibold">A7</span></p>
-              <p className="text-xs font-semibold text-gray-400">Room Type:<span className="text-black font-semibold">Three Sharing</span></p>
-            </div>
-            <Divider orientation="vertical" className="h-14"/>
-
-            <div>
-            <Chip variant="flat" radius="sm" className="bg-[#D3FFDA] text-[#1B9D31]">Paid</Chip>
-            </div>
-          </div>
-          <div className="flex gap-4 items-center w-60">
-              <div className="flex flex-col justify-between gap-4 items-end">
-
-             <p className="text-xs font-medium text-gray-400">Apr 09, 2024 at 5:30pm</p>
-             <p className="text-lg font-bold">9000/-</p>
-              </div>
-              <div>
-              <GoChevronRight className="text-gray-400"/>
-              </div>
-          </div>
-        </div>
-        <div className="flex justify-between items-center bg-white w-full p-3">
-          <div className="w-full flex gap-4 items-center">
-            <div className="flex justify-center items-center gap-2">
-              <div className=" w-14 h-14 rounded-full  flex justify-center items-center ">
-                <Image src={person} alt="person" />
-              </div>
-              <div>
-                <p className="text-xs font-semibold text-gray-400 ">
-                  #tenant-ID-6754
-                </p>
-                <p className="text-sm font-semibold ">Mithul M</p>
-              </div>
-            </div>
-            <Divider orientation="vertical" className="h-14"/>
-
-            <div className="flex flex-col">
-              <p className="text-xs font-semibold text-gray-400">Room No: <span className="text-black font-semibold">A7</span></p>
-              <p className="text-xs font-semibold text-gray-400">Room Type:<span className="text-black font-semibold">Three Sharing</span></p>
-            </div>
-            <Divider orientation="vertical" className="h-14"/>
-
-            <div>
-            <Chip variant="flat" radius="sm" className="bg-[#D3FFDA] text-[#1B9D31]">Paid</Chip>
-            </div>
-          </div>
-          <div className="flex gap-4 items-center w-60">
-              <div className="flex flex-col justify-between gap-4 items-end">
-
-             <p className="text-xs font-medium text-gray-400">Apr 09, 2024 at 5:30pm</p>
-             <p className="text-lg font-bold">9000/-</p>
-              </div>
-              <div>
-              <GoChevronRight className="text-gray-400"/>
-              </div>
-          </div>
-        </div>
-        <div className="flex justify-between items-center bg-white w-full p-3">
-          <div className="w-full flex gap-4 items-center">
-            <div className="flex justify-center items-center gap-2">
-              <div className=" w-14 h-14 rounded-full  flex justify-center items-center ">
-                <Image src={person} alt="person" />
-              </div>
-              <div>
-                <p className="text-xs font-semibold text-gray-400 ">
-                  #tenant-ID-6754
-                </p>
-                <p className="text-sm font-semibold ">Mithul M</p>
-              </div>
-            </div>
-            <Divider orientation="vertical" className="h-14"/>
-
-            <div className="flex flex-col">
-              <p className="text-xs font-semibold text-gray-400">Room No: <span className="text-black font-semibold">A7</span></p>
-              <p className="text-xs font-semibold text-gray-400">Room Type:<span className="text-black font-semibold">Three Sharing</span></p>
-            </div>
-            <Divider orientation="vertical" className="h-14"/>
-
-            <div>
-            <Chip variant="flat" radius="sm" className="bg-[#D3FFDA] text-[#1B9D31]">Paid</Chip>
-            </div>
-          </div>
-          <div className="flex gap-4 items-center w-60">
-              <div className="flex flex-col justify-between gap-4 items-end">
-
-             <p className="text-xs font-medium text-gray-400">Apr 09, 2024 at 5:30pm</p>
-             <p className="text-lg font-bold">9000/-</p>
-              </div>
-              <div>
-              <GoChevronRight className="text-gray-400"/>
-              </div>
-          </div>
-        </div>
-        <div className="flex justify-between items-center bg-white w-full p-3">
-          <div className="w-full flex gap-4 items-center">
-            <div className="flex justify-center items-center gap-2">
-              <div className=" w-14 h-14 rounded-full  flex justify-center items-center ">
-                <Image src={person} alt="person" />
-              </div>
-              <div>
-                <p className="text-xs font-semibold text-gray-400 ">
-                  #tenant-ID-6754
-                </p>
-                <p className="text-sm font-semibold ">Mithul M</p>
-              </div>
-            </div>
-            <Divider orientation="vertical" className="h-14"/>
-
-            <div className="flex flex-col">
-              <p className="text-xs font-semibold text-gray-400">Room No: <span className="text-black font-semibold">A7</span></p>
-              <p className="text-xs font-semibold text-gray-400">Room Type:<span className="text-black font-semibold">Three Sharing</span></p>
-            </div>
-            <Divider orientation="vertical" className="h-14"/>
-
-            <div>
-            <Chip variant="flat" radius="sm" className="bg-[#D3FFDA] text-[#1B9D31]">Paid</Chip>
-            </div>
-          </div>
-          <div className="flex gap-4 items-center w-60">
-              <div className="flex flex-col justify-between gap-4 items-end">
-
-             <p className="text-xs font-medium text-gray-400">Apr 09, 2024 at 5:30pm</p>
-             <p className="text-lg font-bold">9000/-</p>
-              </div>
-              <div>
-              <GoChevronRight className="text-gray-400"/>
-              </div>
-          </div>
-        </div>
+       
+        
+        
+      
+       
       </div>
     </section>
 
@@ -395,12 +188,7 @@ const Payments = () => {
                 </div>
               </ModalBody>
               <ModalFooter className="flex justify-center items-center text-center">
-                <Button
-                  className="buttongradient text-white rounded-md w-60 uppercase"
-                  onPress={onClose}
-                >
-                 Submit & Mark as Paid
-                </Button>
+                
               </ModalFooter>
             </>
           )}
