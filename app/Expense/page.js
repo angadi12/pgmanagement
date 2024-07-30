@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -38,6 +38,7 @@ import fillter from "../../public/Loginasset/fillter.png";
 import Image from "next/image";
 import Createexpense from "@/components/Expensecomponent/Createexpense";
 import {fetchExpensesByBranch} from "../../lib/ExpenseSlice"
+import Updateexpense from "@/components/Expensecomponent/Updateexpense";
 
 const columns = [
   { name: "ID", uid: "_id" },
@@ -92,7 +93,9 @@ export default function Expense() {
   console.log(expenses)
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [openupdate,Setopenupdate]=useState(false)
   const [selected, setSelected] = React.useState("Expense Details");
+  const [expanseid,Setexpanseid]=useState("")
 
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
@@ -185,13 +188,13 @@ export default function Expense() {
       case "Modify":
         return (
           <div className="relative flex items-center gap-4">
-            <Tooltip content="Details">
+            {/* <Tooltip content="Details">
               <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                 <IoEyeSharp />
               </span>
-            </Tooltip>
+            </Tooltip> */}
             <Tooltip content="Edit">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <span onClick={()=>{Setopenupdate(true),Setexpanseid(expense._id)}} className="text-lg text-[#205093] cursor-pointer active:opacity-50">
                 <RiPencilFill />
               </span>
             </Tooltip>
@@ -255,7 +258,7 @@ export default function Expense() {
             onValueChange={onSearchChange}
           />
           <div className="flex gap-3">
-            <Dropdown>
+            {/* <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
                 <Button
                   endContent={""}
@@ -280,7 +283,7 @@ export default function Expense() {
                   </DropdownItem>
                 ))}
               </DropdownMenu>
-            </Dropdown>
+            </Dropdown> */}
             {/* <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
                 <Button
@@ -450,6 +453,8 @@ export default function Expense() {
         </Table>
       )}
 
+
+{/* create */}
       <Modal
         isDismissable={false}
         isKeyboardDismissDisabled={true}
@@ -510,6 +515,76 @@ export default function Expense() {
                 </Tabs>
                 <div className="w-full h-auto">
                   {selected === "Expense Details" && <Createexpense />}
+                </div>
+              </ModalBody>
+              <ModalFooter className="flex justify-center items-center text-center"></ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+
+
+    {/* Update   */}
+      <Modal
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
+        backdrop="blur"
+        size="4xl"
+        isOpen={openupdate}
+        onOpenChange={Setopenupdate}
+        motionProps={{
+          variants: {
+            enter: {
+              y: 0,
+              opacity: 1,
+              transition: {
+                duration: 0.3,
+                ease: "easeOut",
+              },
+            },
+            exit: {
+              y: -20,
+              opacity: 0,
+              transition: {
+                duration: 0.2,
+                ease: "easeIn",
+              },
+            },
+          },
+        }}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col text-center">
+                Update  Expense Details
+              </ModalHeader>
+              <ModalBody>
+                <Tabs
+                  selectedKey={selected}
+                  onSelectionChange={setSelected}
+                  aria-label="Options"
+                  color="primary"
+                  variant="underlined"
+                  classNames={{
+                    tabList: "gap-6 w-full relative rounded-none p-0 ",
+                    cursor: "w-full bg-[#205093]",
+                    tab: "w-auto px-0 h-10",
+                    tabContent:
+                      "group-data-[selected=true]:text-[#205093] font-semibold",
+                  }}
+                >
+                  <Tab
+                    key="Expense Details"
+                    title={
+                      <div className="flex items-center space-x-2">
+                        <span>Expense Details</span>
+                      </div>
+                    }
+                  />
+                </Tabs>
+                <div className="w-full h-auto">
+                  {selected === "Expense Details" && <Updateexpense id={expanseid} Setopenupdate={Setopenupdate}/>}
                 </div>
               </ModalBody>
               <ModalFooter className="flex justify-center items-center text-center"></ModalFooter>

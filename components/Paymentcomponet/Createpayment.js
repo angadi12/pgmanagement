@@ -57,10 +57,10 @@ const CreatePayment = () => {
     setLoading(true);
 
     const data = {
-      // UserId: selectedKey,
-      // lastdate: formatDate(lastDate),
-       "UserId":"To/5554566668",
-       "lastdate":"08/31/2024"
+      UserId: selectedKey,
+      lastdate: formatDate(lastDate),
+      LastDueDate:lastDate,
+      branch:selectedBranchId
     };
 
     try {
@@ -105,10 +105,10 @@ const CreatePayment = () => {
     setLoadingdetails(true)
     
     const payload={
-      "UserId":"To/5554566668",
-      "Amount":payment,
-      "LastDueDate":"08/31/2024",
-      "branch":selectedBranchId
+      UserId: selectedKey,
+      Amount:payment,
+      LastDueDate:formatDate(lastDate),
+      branch:selectedBranchId
   }
     try {
       const Result = await CreatPaymentapi(payload);
@@ -134,8 +134,8 @@ const CreatePayment = () => {
       <div className="w-full text-start">
         <p className="text-lg font-semibold">Fill Payment Details </p>
       </div>
-      <div className="w-full grid lg:grid-cols-3 grid-cols-1 gap-4 place-content-center justify-between items-center">
-        <Autocomplete
+      <div className="w-full grid lg:grid-cols-1 grid-cols-1 gap-4 place-content-center justify-between items-center">
+      <Autocomplete
           variant="bordered"
           radius="sm"
           className="w-full rounded-none"
@@ -160,6 +160,11 @@ const CreatePayment = () => {
             </AutocompleteItem>
           )}
         </Autocomplete>
+
+     </div>
+
+      <div className="w-full grid lg:grid-cols-2 grid-cols-1 gap-4 place-content-center justify-between items-center">
+       
 
         <DatePicker
           size="lg"
@@ -221,7 +226,7 @@ const CreatePayment = () => {
         />
       </div>
       <div className="flex flex-col justify-center items-center w-full gap-4">
-        <div className="flex flex-col justify-center items-center gap-2 border-2 border-dashed border-[#205093] rounded-lg w-72 h-24">
+        {/* <div className="flex flex-col justify-center items-center gap-2 border-2 border-dashed border-[#205093] rounded-lg w-72 h-24">
           <IoCloudUploadOutline size={40} className="text-[#205093]" />
           <p className="text-xs font-semibold text-gray-400">
             (Png, Jpg, Pdf only)
@@ -231,7 +236,7 @@ const CreatePayment = () => {
           <p className="text-[#205093] underline text-sm font-bold">
             +Upload Receipt
           </p>
-        </div>
+        </div> */}
 
         <Button
           className="buttongradient text-white rounded-md w-60 uppercase"
