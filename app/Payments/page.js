@@ -32,6 +32,7 @@ const Payments = () => {
   const [selectedtab, setSelectedtab] = React.useState("Payment Details");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [Openupdate, Setopenupdate] = useState(false);
+  const [paymentid,Setpaymentid]=useState("")
 
   useEffect(() => {
     if (selectedBranchId) {
@@ -140,9 +141,9 @@ const Payments = () => {
             </div>
           ) : (
             <>
-              {payments.length > 0 ? (
+              {payments?.length > 0 ? (
                 <>
-               {payments.map((pay,key)=>(
+               {payments?.map((pay,key)=>(
                 <div key={key} className="flex  justify-between items-center bg-white w-full p-3">
                   <div className="w-full flex gap-4 items-center">
                     <div className="flex justify-center items-center gap-2">
@@ -187,11 +188,11 @@ const Payments = () => {
                       <p className="text-xs font-medium text-gray-400">
                         Apr 09, 2024 at 5:30pm
                       </p>
-                      <p className="text-lg font-bold">9000/-</p>
+                      <p className="text-lg font-bold">{pay.Amount}/-</p>
                     </div>
                     <div>
                       <Button
-                        onPress={() => Setopenupdate(true)}
+                        onPress={() => {Setopenupdate(true),Setpaymentid(pay._id)}}
                         variant="light"
                         size="sm"
                         className="flex  items-center gap-1 text-tiny font-bold uppercase underline text-[#205093]"
@@ -344,7 +345,7 @@ const Payments = () => {
                 </Tabs>
                 <div className="w-full h-auto">
                   {selectedtab === "Payment Details" && (
-                    <Updatepayment Setopenupdate={Setopenupdate} />
+                    <Updatepayment id={paymentid} Setopenupdate={Setopenupdate} />
                   )}
                 </div>
               </ModalBody>

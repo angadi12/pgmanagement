@@ -412,7 +412,7 @@ export default function Rooms() {
         </div>
       </div>
     );
-  }, [selectedKeys, rooms.length, page, pages, hasSearchFilter]);
+  }, [selectedKeys, rooms?.length, page, pages, hasSearchFilter]);
 
   const classNames = React.useMemo(
     () => ({

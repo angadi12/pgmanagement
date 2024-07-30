@@ -577,7 +577,7 @@ export default function Tennat() {
         </div>
         <div className="flex justify-between items-center">
           <span className="text-default-400 text-small">
-            Total {tenants.length} Tenants
+            Total {tenants?.length} Tenants
           </span>
           <label className="flex items-center text-default-400 text-small">
             Rows per page:
@@ -599,7 +599,7 @@ export default function Tennat() {
     visibleColumns,
     onSearchChange,
     onRowsPerPageChange,
-    tenants.length,
+    tenants?.length,
     hasSearchFilter,
   ]);
 
@@ -642,7 +642,7 @@ export default function Tennat() {
         </div>
       </div>
     );
-  }, [selectedKeys, tenants.length, page, pages, hasSearchFilter]);
+  }, [selectedKeys, tenants?.length, page, pages, hasSearchFilter]);
 
   const classNames = React.useMemo(
     () => ({
