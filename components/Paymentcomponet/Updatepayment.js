@@ -18,7 +18,7 @@ const formatDate = (date) => {
   return `${month}/${day}/${year}`;
 };
 
-const CreatePayment = () => {
+const Updatepayment = () => {
   const [lastDate, setLastDate] = useState(
     parseDate(new Date().toISOString().split("T")[0])
   );
@@ -132,7 +132,7 @@ const CreatePayment = () => {
     <>
     <div className="flex flex-col justify-center items-center gap-3">
       <div className="w-full text-start">
-        <p className="text-lg font-semibold">Fill Payment Details </p>
+        <p className="text-lg font-semibold">Update Payment Details </p>
       </div>
       <div className="w-full grid lg:grid-cols-1 grid-cols-1 gap-4 place-content-center justify-between items-center">
       <Autocomplete
@@ -277,4 +277,5 @@ const CreatePayment = () => {
   );
 };
 
-export default CreatePayment;
+
+export default Updatepayment
