@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Table,
   TableHeader,
@@ -26,19 +26,22 @@ import { MdDelete } from "react-icons/md";
 
 import fillter from "../../public/Loginasset/fillter.png"
 import Image from "next/image";
-// import {VerticalDotsIcon} from "./VerticalDotsIcon";
-// import {SearchIcon} from "./SearchIcon";
-// import {ChevronDownIcon} from "./ChevronDownIcon";
-// import {columns, users, statusOptions} from "./data";
-// import {capitalize} from "./utils";
+import { useSelector, useDispatch } from "react-redux";
+import {fetchStaffByBranch} from "../../lib/StaffSlice"
+
+
+
+
 const columns = [
   {name: "ID", uid: "id", },
   {name: "Name", uid: "name", },
-  {name: "Staff_ID", uid: "Contact", },
-  {name: "Contact No.", uid: "Room", },
+  // {name: "Staff_ID", uid: "Contact", },
+  {name: "Contact No.", uid: "Number", },
+  {name: "Salary", uid: "mothlysalary",},
   {name: "Category", uid: "Start"},
   {name: "Active Complaints", uid: "End"},
-  {name: "Salary Status", uid: "Modify",},
+  { name: "ACTIONS", uid: "actions" },
+
 ];
 
 export function capitalize(str) {
@@ -49,220 +52,34 @@ const statusOptions = [
   {name: "Full", uid: "Full"},
 ];
 
-const users = [
-  {
-    id: 1,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 2,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 3,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Overdue",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 4,
-  name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "1 Complaints",
-    status: "Overdue",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 5,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "1 Active Complaint",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 6,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Overdue",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 7,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Overdue",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 8,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 9,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 10,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 11,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Overdue",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 12,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 13,
-    name: "Oliver Scott",
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Pending",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 14,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Overdue",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 15,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 16,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Pending",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 17,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 18,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 19,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Pending",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 20,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-];
 
-export {columns, users, statusOptions};
+
+export {columns, statusOptions};
 const statusColorMap = {
   Paid: "success",
   Full: "danger",
   Pending: "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "Contact","Room","Start","End","Complaints", "Modify"];
+const INITIAL_VISIBLE_COLUMNS = ["name", "Number","mothlysalary","Start","End","Complaints", "actions"];
 
 export default function Salarystatus() {
+  const dispatch = useDispatch();
+  const selectedBranchId = useSelector(
+    (state) => state.branches.selectedBranchId
+  );
+  const staffByBranch = useSelector((state) => state.staff.staffByBranch);
+  const loadingStaff = useSelector((state) => state.staff.loadingStaff);
+
+
+
+  useEffect(() => {
+    if (selectedBranchId) {
+      dispatch(fetchStaffByBranch(selectedBranchId));
+    }
+  }, [selectedBranchId, dispatch]);
+
+
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
@@ -276,7 +93,7 @@ export default function Salarystatus() {
   });
   const [page, setPage] = React.useState(1);
 
-  const pages = Math.ceil(users.length / rowsPerPage);
+  const pages = Math.ceil(staffByBranch?.length / rowsPerPage);
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -289,11 +106,12 @@ export default function Salarystatus() {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...users];
+    let filteredUsers = Array.isArray(staffByBranch) ? [...staffByBranch] : [];
+
 
     if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase())
+      filteredUsers = filteredUsers.filter((staff) =>
+        staff.name.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
     if (
@@ -306,7 +124,7 @@ export default function Salarystatus() {
     }
 
     return filteredUsers;
-  }, [users, filterValue, statusFilter]);
+  }, [staffByBranch, filterValue, statusFilter]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -325,24 +143,68 @@ export default function Salarystatus() {
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((user, columnKey) => {
-    const cellValue = user[columnKey];
+  const renderCell = React.useCallback((staff, columnKey) => {
+    const cellValue = staff[columnKey];
 
     switch (columnKey) {
       case "name":
         return (
-         <p>{user.name}</p>
+         <p>{staff.name}</p>
         );
-      case "role":
+      case "Number":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
             <p className="text-bold text-tiny capitalize text-default-500">
-              {user.team}
+              {staff.Number}
             </p>
           </div>
         );
-      case "status":
+      case "Number":
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold  capitalize text-default-500">
+              {staff.Number}
+            </p>
+          </div>
+        );
+      case "Number":
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold  capitalize text-default-500">
+              {staff.mothlysalary}
+            </p>
+          </div>
+        );
+        case "actions":
+          return (
+            <div className="relative flex items-center gap-4">
+              <Tooltip content="Details">
+                <span
+                  // onClick={() =>{ Setopenview(true),Setselectedroomid(room._id)}}
+                  className="text-lg text-default-400 cursor-pointer active:opacity-50"
+                >
+                  <IoEyeSharp />
+                </span>
+              </Tooltip>
+              <Tooltip content="Edit">
+                <span
+                  // onClick={() => {Setopenedit(true),Setselectedroomid(room._id)}}
+                  className="text-lg text-default-400 cursor-pointer active:opacity-50"
+                >
+                  <RiPencilFill />
+                </span>
+              </Tooltip>
+              <Tooltip color="danger" content="Delete">
+                <span
+                  // onClick={() => Setopendelete(true)}
+                  className="text-lg text-red-500 cursor-pointer active:opacity-50"
+                >
+                  <MdDelete />
+                </span>
+              </Tooltip>
+            </div>
+          );
+     
         return (
           <Chip
             className="capitalize border-none gap-1  "
@@ -353,19 +215,19 @@ export default function Salarystatus() {
             {cellValue}
           </Chip>
         );
-        case "Modify":
-        return (
-          <div className="relative flex items-center gap-4">
-            <Chip
-            className="capitalize border-none gap-1  "
-            color={statusColorMap[user.status]}
-            size="sm"
-            variant="flat"
-          >
-           Paid
-          </Chip>
-          </div>
-        );
+        // case "Modify":
+        // return (
+        //   // <div className="relative flex items-center gap-4">
+        //   //   <Chip
+        //   //   className="capitalize border-none gap-1  "
+        //   //   color={statusColorMap[staff.mothlysalary]}
+        //   //   size="sm"
+        //   //   variant="flat"
+        //   // >
+        //   //  Paid
+        //   // </Chip>
+        //   // </div>
+        // );
       default:
         return cellValue;
     }
@@ -481,7 +343,7 @@ export default function Salarystatus() {
         </div>
         <div className="flex justify-between items-center">
           <span className="text-default-400 text-small">
-            Total {users.length} users
+            Total {staffByBranch?.length} users
           </span>
           <label className="flex items-center text-default-400 text-small">
             Rows per page:
@@ -503,7 +365,7 @@ export default function Salarystatus() {
     visibleColumns,
     onSearchChange,
     onRowsPerPageChange,
-    users.length,
+    staffByBranch?.length,
     hasSearchFilter,
   ]);
 
@@ -556,9 +418,15 @@ export default function Salarystatus() {
   );
 
   return (
-    <Table
+
+    <>
+
+   {loadingStaff?
+    <div className="w-full h-[60vh] col-span-3 flex justify-center items-center">
+          <span className="loader3 "></span>
+        </div>: <Table
       isCompact
-      className=""
+      className="px-4"
       removeWrapper
       aria-label="Example table with custom cells, pagination and sorting"
       bottomContent={bottomContent}
@@ -584,14 +452,16 @@ export default function Salarystatus() {
       </TableHeader>
       <TableBody emptyContent={"No users found"} items={sortedItems}>
         {(item) => (
-          <TableRow key={item.id}>
+          <TableRow key={item._id}>
             {(columnKey) => (
               <TableCell>{renderCell(item, columnKey)}</TableCell>
             )}
           </TableRow>
         )}
       </TableBody>
-    </Table>
+    </Table>}
+
+    </>
   );
 }
 

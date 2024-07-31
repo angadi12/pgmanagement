@@ -1,5 +1,5 @@
 import { Button } from "@nextui-org/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { FaPlus } from "react-icons/fa6";
 import {
   CircularProgress,
@@ -9,114 +9,48 @@ import {
   Chip,
 } from "@nextui-org/react";
 import { Avatar, AvatarGroup } from "@nextui-org/react";
+import Categorycard from "./Categorycard";
+import { fetchAllCategories } from "@/lib/StaffSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Allstaff = () => {
+  const dispatch = useDispatch();
+  const categories = useSelector((state) => state.staff.categories);
+  const loading = useSelector((state) => state.staff.loading);
+  const error = useSelector((state) => state.staff.error);
+
+  useEffect(() => {
+    dispatch(fetchAllCategories());
+  }, [dispatch]);
+
   return (
-    <main className="w-full flex justify-between items-start gap-4">
-      <div className="flex w-full justify-center items-start ">
-        <div className="w-full grid grid-cols-3 gap-5 justify-center place-content-center items-start">
-          <div className="boxshadow  rounded-lg flex justify-between items-center gap-2 py-4 h-44 w-50 flex-col">
-            <div>
-              <p className="font-semibold">Security</p>
-            </div>
-            <div className="flex flex-col justify-center items-center gap-2">
-            <div className="bg-[#205093] h-14 flex justify-center items-center px-4 rounded-full">
+    <main className="w-full h-auto flex justify-between items-start gap-4 px-4">
+      <div className="flex w-full h-auto justify-center items-start ">
+      
+        {loading ? (
+            <div className="w-full h-[60vh] flex justify-center items-center"><span className="loader3"></span></div>
+          ) : error ? (
+            <p className="w-full h-full flex justify-center items-center">Fialed to fetch Categories refresh the page</p>
+          ) : (
+         
+            <div className="w-full grid grid-cols-3 gap-5 justify-center place-content-center items-start pb-4">
 
-<AvatarGroup isBordered max={3} total={10}>
-  <Avatar src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
-  <Avatar src="https://i.pravatar.cc/150?u=a04258a2462d826712d" />
-  <Avatar src="https://i.pravatar.cc/150?u=a042581f4e29026704d" />
-  <Avatar src="https://i.pravatar.cc/150?u=a04258114e29026302d" />
-  <Avatar src="https://i.pravatar.cc/150?u=a04258114e29026702d" />
-  <Avatar src="https://i.pravatar.cc/150?u=a04258114e29026708c" />
-</AvatarGroup>
-</div>
-              <p className="text-xs font-bold text-gray-400">7 Staffs</p>
-            </div>
-          </div>
-          <div className="boxshadow  rounded-lg flex justify-between items-center gap-2 py-4 h-44 w-50 flex-col">
-            <div>
-              <p className="font-semibold">Security</p>
-            </div>
-            <div className="flex flex-col justify-center items-center gap-2">
-            <div className="bg-[#205093] h-14 flex justify-center items-center px-4 rounded-full">
+             {
+              categories.map((value,id)=>(
+                <Categorycard data={value} key={id} />
+              ))
+             }
+             </div>
+         
+          )}
+         
+         
 
-<AvatarGroup isBordered max={3} total={10}>
-  <Avatar src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
-  <Avatar src="https://i.pravatar.cc/150?u=a04258a2462d826712d" />
-  <Avatar src="https://i.pravatar.cc/150?u=a042581f4e29026704d" />
-  <Avatar src="https://i.pravatar.cc/150?u=a04258114e29026302d" />
-  <Avatar src="https://i.pravatar.cc/150?u=a04258114e29026702d" />
-  <Avatar src="https://i.pravatar.cc/150?u=a04258114e29026708c" />
-</AvatarGroup>
-</div>
-              <p className="text-xs font-bold text-gray-400">7 Staffs</p>
-            </div>
-          </div>
-          <div className="boxshadow  rounded-lg flex justify-between items-center gap-2 py-4 h-44 w-50 flex-col">
-            <div>
-              <p className="font-semibold">Security</p>
-            </div>
-            <div className="flex flex-col justify-center items-center gap-2">
-            <div className="bg-[#205093] h-14 flex justify-center items-center px-4 rounded-full">
-
-<AvatarGroup isBordered max={3} total={10}>
-  <Avatar src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
-  <Avatar src="https://i.pravatar.cc/150?u=a04258a2462d826712d" />
-  <Avatar src="https://i.pravatar.cc/150?u=a042581f4e29026704d" />
-  <Avatar src="https://i.pravatar.cc/150?u=a04258114e29026302d" />
-  <Avatar src="https://i.pravatar.cc/150?u=a04258114e29026702d" />
-  <Avatar src="https://i.pravatar.cc/150?u=a04258114e29026708c" />
-</AvatarGroup>
-</div>
-              <p className="text-xs font-bold text-gray-400">7 Staffs</p>
-            </div>
-          </div>
-          <div className="boxshadow  rounded-lg flex justify-between items-center gap-2 py-4 h-44 w-50 flex-col">
-            <div>
-              <p className="font-semibold">Security</p>
-            </div>
-            <div className="flex flex-col justify-center items-center gap-2">
-              <div className="bg-[#205093] h-14 flex justify-center items-center px-4 rounded-full">
-
-              <AvatarGroup isBordered max={3} total={10}>
-                <Avatar src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
-                <Avatar src="https://i.pravatar.cc/150?u=a04258a2462d826712d" />
-                <Avatar src="https://i.pravatar.cc/150?u=a042581f4e29026704d" />
-                <Avatar src="https://i.pravatar.cc/150?u=a04258114e29026302d" />
-                <Avatar src="https://i.pravatar.cc/150?u=a04258114e29026702d" />
-                <Avatar src="https://i.pravatar.cc/150?u=a04258114e29026708c" />
-              </AvatarGroup>
-              </div>
-              <p className="text-xs font-bold text-gray-400">7 Staffs</p>
-            </div>
-          </div>
-          <div className="boxshadow  rounded-lg flex justify-between items-center gap-2 py-4 h-44 w-50 flex-col">
-            <div>
-              <p className="font-semibold">Security</p>
-            </div>
-            <div className="flex flex-col justify-center items-center gap-2">
-            <div className="bg-[#205093] h-14 flex justify-center items-center px-4 rounded-full">
-
-<AvatarGroup isBordered max={3} total={10}>
-  <Avatar src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
-  <Avatar src="https://i.pravatar.cc/150?u=a04258a2462d826712d" />
-  <Avatar src="https://i.pravatar.cc/150?u=a042581f4e29026704d" />
-  <Avatar src="https://i.pravatar.cc/150?u=a04258114e29026302d" />
-  <Avatar src="https://i.pravatar.cc/150?u=a04258114e29026702d" />
-  <Avatar src="https://i.pravatar.cc/150?u=a04258114e29026708c" />
-</AvatarGroup>
-</div>
-              <p className="text-xs font-bold text-gray-400">7 Staffs</p>
-            </div>
-          </div>
-
-          <Button className="border-2 border-dashed border-[#205093] bg-white  rounded-lg flex justify-center items-center gap-2 py-4  h-44 w-50 flex-col">
+          {/* <Button className="border-2 border-dashed border-[#205093] bg-white  rounded-lg flex justify-center items-center gap-2 py-4  h-44 w-50 flex-col">
             <FaPlus size={40} className="text-[#205093]" />
-          </Button>
-        </div>
+          </Button> */}
       </div>
-      <div className="w-2/4 flex-col  flex justify-center items-center gap-4">
+     {(!loading && !error) && <div className="w-2/4 flex-col sticky  top-48  flex justify-center items-center gap-4">
         <Card className="w-72 h-72 border-none boxshadow">
           <CardBody className="justify-center items-center pb-0">
             <CircularProgress
@@ -146,7 +80,7 @@ const Allstaff = () => {
         <Button className="rounded-md bg-[#205093] text-white font-semibold">
           Send Feedback forms to Staffs
         </Button>
-      </div>
+      </div>}
     </main>
   );
 };
