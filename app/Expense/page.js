@@ -441,7 +441,7 @@ export default function Expense() {
               </TableColumn>
             )}
           </TableHeader>
-          <TableBody emptyContent={"No users found"} items={sortedItems}>
+          <TableBody emptyContent={"No Expanse data"} items={sortedItems}>
             {(item) => (
               <TableRow key={item._id}>
                 {(columnKey) => (
@@ -514,7 +514,7 @@ export default function Expense() {
                   />
                 </Tabs>
                 <div className="w-full h-auto">
-                  {selected === "Expense Details" && <Createexpense />}
+                  {selected === "Expense Details" && <Createexpense onOpenChange={onOpenChange}/>}
                 </div>
               </ModalBody>
               <ModalFooter className="flex justify-center items-center text-center"></ModalFooter>

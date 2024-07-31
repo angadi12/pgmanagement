@@ -49,6 +49,7 @@ const Staff = () => {
   const [loadingadd, Setloadingadd] = useState(false);
   const [isOpendropdown, setIsOpendropdown] = React.useState(false);
 
+
   const handleAddCategory = async () => {
     if (!selectedCategory) return toast.error("Select Category");
     Setloadingadd(true);
@@ -198,6 +199,8 @@ const Staff = () => {
         </div>
       </section>
 
+
+{/* Create */}
       <Modal
         isDismissable={false}
         isKeyboardDismissDisabled={true}
@@ -265,7 +268,7 @@ const Staff = () => {
                   /> */}
                 </Tabs>
                 <div className="w-full h-auto">
-                  {selectedtab === "Personal Details" && <Personaldetails />}
+                  {selectedtab === "Personal Details" && <Personaldetails onOpenChange={onOpenChange} />}
                 </div>
               </ModalBody>
               <ModalFooter className="flex justify-center items-center text-center">
@@ -274,6 +277,9 @@ const Staff = () => {
           )}
         </ModalContent>
       </Modal>
+
+
+
 
       <Toaster
         position="top-center"

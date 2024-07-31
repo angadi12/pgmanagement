@@ -5,10 +5,11 @@ import { Createstaffapi } from "../../lib/API/Staff";
 import { useDispatch, useSelector } from "react-redux";
 import {fetchAllCategories} from "../../lib/StaffSlice"
 import toast, { Toaster } from "react-hot-toast";
+import {fetchStaffByBranch} from "../../lib/StaffSlice"
 
 
 
-const Personaldetails = () => {
+const Personaldetails = ({onOpenChange}) => {
   const dispatch = useDispatch();
   const selectedBranchId = useSelector(
     (state) => state.branches.selectedBranchId
@@ -75,7 +76,6 @@ const [loading ,Setloading]=useState(false)
       const result = await Createstaffapi(data);
       if (result.status) {
         toast.success("Staff created successfully");
-        // Clear the form
         setFormData({
           firstName: "",
           lastName: "",
@@ -88,6 +88,8 @@ const [loading ,Setloading]=useState(false)
           category: "",
         });
         Setloading(false)
+        dispatch(fetchStaffByBranch(selectedBranchId))
+        onOpenChange()
       } else {
         toast.error("Failed to create staff");
         Setloading(false)
