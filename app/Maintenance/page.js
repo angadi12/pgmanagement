@@ -1,6 +1,6 @@
 "use client";
 import { Button, Divider, Input, Textarea } from "@nextui-org/react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { Tabs, Tab, Chip } from "@nextui-org/react";
 import electricity2 from "../../public/Loginasset/electricity2.png";
@@ -8,7 +8,7 @@ import water from "../../public/Loginasset/water2.png";
 import internet from "../../public/Loginasset/wifi2.png";
 import Furniture from "../../public/Loginasset/Furniture.png";
 import Maintanance from "../../public/Loginasset/Maintanance.png";
-import { FaWifi } from "react-icons/fa";
+import toast, { Toaster } from "react-hot-toast";
 
 import Image from "next/image";
 import { GoChevronRight } from "react-icons/go";
@@ -26,6 +26,7 @@ import {
   ModalFooter,
   useDisclosure,
 } from "@nextui-org/react";
+import {ResolveTicketapi} from "../../lib/API/Support"
 
 const categoryImages = {
   Electricity: electricity2,
@@ -52,6 +53,11 @@ const Maintenance = () => {
   const selectedBranchId = useSelector(
     (state) => state.branches.selectedBranchId
   ); // Assuming you have branch state
+const [tickectid,Setticketid]=useState("")
+const [comment,Setcomment]=useState("")
+const [loading,Setloading]=useState(false)
+const [error,Seterror]=useState(false)
+
 
   useEffect(() => {
     if (selectedBranchId) {
@@ -67,7 +73,34 @@ const Maintenance = () => {
     }
   }, [selected, dispatch, selectedBranchId]);
 
-  console.log(tickets);
+  const handleResolveTicket = async () => {
+    if(!comment){
+     return Seterror(true)
+    }
+    Setloading(true)
+    try {
+      const payload = {
+        remark: comment,
+      };
+    const result=  await ResolveTicketapi(payload,tickectid);
+    if(result.status){
+      dispatch(fetchTicketsByBranch(selectedBranchId));
+      Setloading(false)
+      onOpenChange(false);
+      Seterror(false)
+
+    }
+
+    } catch (error) {
+      console.error("Failed to resolve ticket:", error);
+      Setloading(false)
+
+    }finally{
+      Setloading(false)
+      Seterror(false)
+
+    }
+  };
 
   const renderTickets = () => {
     if (status === "loading") {
@@ -145,7 +178,7 @@ const Maintenance = () => {
 
               <div className="flex justify-end items-end">
                 <div className="flex items-center gap-4">
-                  {ticket.remark == "Done" ? (
+                  {ticket.remark ? (
                     <Button size="sm" className="text-[#1B9D31] bg-[#D3FFDA]">
                       Solved
                     </Button>
@@ -155,7 +188,7 @@ const Maintenance = () => {
                   ) : (
                     <Button size="sm" variant="light" className="">
                       <FaEdit
-                        onClick={onOpen}
+                        onClick={()=>{Setticketid(ticket._id),onOpen()}}
                         className="text-[#205093]"
                         size={20}
                       />
@@ -286,32 +319,63 @@ const Maintenance = () => {
                 Resolve Tickets
               </ModalHeader>
               <ModalBody>
-                <Textarea
+               <Textarea
                   isRequired
+                  isInvalid={error}
                   label="Add Comments"
                   labelPlacement="outside"
                   placeholder="Comments....."
-                  className="w-full "
+                  className="w-full"
+                  errorMessage="Please add comment"
+                  value={comment}
+                  onChange={(e) => Setcomment(e.target.value)}
                 />
               </ModalBody>
               <ModalFooter>
                 <Button
                   className="bg-white ring-1 ring-[#205093] font-medium text-[#205093] rounded-md"
-                  onPress={onClose}
+                  onPress={()=>{Seterror(false),onClose()}}
                 >
                   Close
                 </Button>
                 <Button
                   className="bg-[#205093] text-white rounded-md"
-                  onPress={onClose}
+                  onPress={handleResolveTicket}
                 >
-                  Mark as Done
+                {loading?<span className="loader2"></span>:  "Mark as Done"}
                 </Button>
               </ModalFooter>
             </>
           )}
         </ModalContent>
       </Modal>
+
+
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+        gutter={8}
+        containerClassName=""
+        containerStyle={{}}
+        toastOptions={{
+          // Define default options
+          className: "",
+          duration: 5000,
+          style: {
+            background: "linear-gradient(90deg, #222C68 0%, #1D5B9E 100%)",
+            color: "#fff",
+          },
+
+          // Default options for specific types
+          success: {
+            duration: 3000,
+            theme: {
+              primary: "green",
+              secondary: "black",
+            },
+          },
+        }}
+      />
     </>
   );
 };
