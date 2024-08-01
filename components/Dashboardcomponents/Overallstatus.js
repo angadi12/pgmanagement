@@ -39,18 +39,18 @@ const Overallstatus = () => {
             <p className="text-sm font-bold">Overall Status</p>
             <p className="text-sm font-bold text-[#16C133]">Live</p>
           </div>
-          <div className="grid grid-cols-3 gap-6 justify-around items-center mx-auto w-full">
-            <Card className="w-full h-36 flex flex-col justify-center items-center rounded-md boxshadow p-4">
+          <div className="grid md:grid-cols-3 lg:grid-cols-3 grid-cols-1 md:gap-6 lg:gap-6 gap-2 justify-around items-center mx-auto w-full ">
+            <Card className="boxshadow  rounded-lg flex md:justify-center lg:justify-center justify-between md:items-center lg:items-center items-start gap-2 py-4 px-4 md:px-0 lg:px-0 md:h-36 lg:h-36 h-24 md:flex-col lg:flex-col">
               <Skeleton className="w-14 h-14 rounded-full" />
               <Skeleton className="w-12 h-2 mt-2" />
               <Skeleton className="w-3/4 h-2 mt-1" />
             </Card>
-            <Card className="w-full h-36 flex flex-col justify-center items-center boxshadow rounded-md p-4">
+            <Card className="boxshadow  rounded-lg flex md:justify-center lg:justify-center justify-between md:items-center lg:items-center items-start gap-2 py-4 px-4 md:px-0 lg:px-0 md:h-36 lg:h-36 h-24 md:flex-col lg:flex-col">
               <Skeleton className="w-14 h-14 rounded-full" />
               <Skeleton className="w-12 h-2 mt-2" />
               <Skeleton className="w-3/4 h-2 mt-1" />
             </Card>
-            <Card className="w-full h-36 flex flex-col justify-center items-center boxshadow rounded-md p-4">
+            <Card className="boxshadow  rounded-lg flex md:justify-center lg:justify-center justify-between md:items-center lg:items-center items-start gap-2 py-4 px-4 md:px-0 lg:px-0 md:h-36 lg:h-36 h-24 md:flex-col lg:flex-col">
               <Skeleton className="w-14 h-14 rounded-full" />
               <Skeleton className="w-12 h-2 mt-2" />
               <Skeleton className="w-3/4 h-2 mt-1" />
@@ -63,8 +63,8 @@ const Overallstatus = () => {
             <p className="text-sm font-bold">Overall Status</p>
             <p className="text-sm font-bold text-[#16C133] flex items-center gap-1"><FaCircle size={5} className="animate-ping duration-1000 text-red-600"/>Live</p>
           </div>
-          <div className="grid grid-cols-3 gap-6 justify-around items-center mx-auto w-full ">
-            <div className="boxshadow  rounded-lg flex justify-center items-center gap-2 py-4 h-36 flex-col">
+          <div className="grid md:grid-cols-3 lg:grid-cols-3 grid-cols-1 md:gap-6 lg:gap-6 gap-2 justify-around items-center mx-auto w-full ">
+            <div className="boxshadow  rounded-lg flex md:justify-center lg:justify-center justify-between md:items-center lg:items-center items-start gap-2 py-4 px-4 md:px-0 lg:px-0 md:h-36 lg:h-36 md:flex-col lg:flex-col">
               <div className="h-14 w-14 rounded-full bg-[#205093] text-white flex justify-center items-center">
                 <IoPeople size={24} />
               </div>
@@ -75,7 +75,7 @@ const Overallstatus = () => {
                 </p>
               </div>
             </div>
-            <div className="boxshadow rounded-lg flex justify-center items-center gap-2 py-4 h-36 flex-col">
+            <div className="boxshadow  rounded-lg flex md:justify-center lg:justify-center justify-between md:items-center lg:items-center items-start gap-2 py-4 px-4 md:px-0 lg:px-0 md:h-36 lg:h-36 md:flex-col lg:flex-col">
               <div className="h-14 w-14 rounded-full bg-[#1B9D31] text-white flex justify-center items-center">
                 <FaBed size={24} />
               </div>
@@ -86,7 +86,7 @@ const Overallstatus = () => {
                 </p>
               </div>
             </div>
-            <div className="boxshadow rounded-lg flex justify-center items-center gap-2 py-4 h-36 flex-col">
+            <div className="boxshadow  rounded-lg flex md:justify-center lg:justify-center justify-between md:items-center lg:items-center items-start gap-2 py-4 px-4 md:px-0 lg:px-0 md:h-36 lg:h-36 md:flex-col lg:flex-col">
               <div className="h-14 w-14 rounded-full bg-[#FFA200] text-white flex justify-center items-center">
                 <IoIosWarning size={24} />
               </div>
@@ -106,7 +106,7 @@ const Overallstatus = () => {
                     <p className="font-bold text-xs">12</p>
                   </div>
                 </div>
-                <p className="text-xs font-semibold text-[#8B8B8B]">
+                <p className="md:text-xs lg:text-xs text-tiny font-semibold text-[#8B8B8B]">
                   Complaints Received
                 </p>
               </div>

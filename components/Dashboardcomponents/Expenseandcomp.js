@@ -30,7 +30,7 @@ const Expenseandcomp = () => {
           <p className="text-sm font-bold">Expense Breakdown</p>
           <p className="text-sm font-bold ">Active Complaints</p>
         </div>
-        <div className="grid grid-cols-2 gap-6 justify-center place-content-center items-start mx-auto w-full h-full ">
+        <div className="grid md:grid-cols-2 lg:grid-cols-2 grid-cols-1 gap-6 justify-center place-content-center items-start mx-auto w-full h-full ">
           <div className=" flex flex-col gap-6 justify-between   w-full h-full rounded-lg">
             <div>
               <Expensebreak />
