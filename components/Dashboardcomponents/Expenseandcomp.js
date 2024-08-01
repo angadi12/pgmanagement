@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import electricity from "../../public/Loginasset/electricity.png";
 import Circle from "../../public/Loginasset/Circle.png";
 import wifi from "../../public/Loginasset/wifi.png";
@@ -6,8 +6,23 @@ import water from "../../public/Loginasset/water.png";
 import Expensebreak from "../Chartcomponent/Expensebreak";
 import Image from "next/image";
 import { FaCircle } from "react-icons/fa6";
+import ExpenseandcompSkeleton from "./ExpenseandcompSkeleton ";
 
 const Expenseandcomp = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate an API call
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+  }, []);
+
+  if (loading) {
+    return <ExpenseandcompSkeleton/>;
+  }
+
+
   return (
     <div className="flex w-full justify-center items-start  h-full">
       <div className="flex flex-col gap-4 justify-start items-start w-full h-full">

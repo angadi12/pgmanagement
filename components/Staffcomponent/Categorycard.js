@@ -3,6 +3,8 @@ import React from 'react'
 import { Avatar, AvatarGroup } from "@nextui-org/react";
 
 const Categorycard = ({data}) => {
+
+  
   return (
     <div className="boxshadow  rounded-lg flex justify-between items-center gap-2 py-4 h-44 w-50 flex-col">
     <div>

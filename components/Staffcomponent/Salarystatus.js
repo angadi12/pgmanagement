@@ -270,104 +270,29 @@ export default function Salarystatus() {
     }
   }, []);
 
-  const topContent = React.useMemo(() => {
+  const  topContent = React.useMemo(() => {
     return (
-      <div className="flex flex-col  gap-4 mt-4 px-2">
-        <div>
-          <p className="text-lg font-semibold">Your Expenses</p>
-        </div>
-        <div className="flex gap-3 justify-end items-end">
+      <div className="flex flex-col  gap-4 mt-2 px-2">
+      
+        <div className="flex gap-3 justify-start items-start">
           <Input
             isClearable
             classNames={{
               base: "w-full sm:max-w-[44%]",
-              inputWrapper: "border-1",
+              inputWrapper: "border-1.5",
             }}
             placeholder="Search by name..."
             size="sm"
             startContent={""}
             value={filterValue}
+            color="primary"
             variant="bordered"
             onClear={() => setFilterValue("")}
             onValueChange={onSearchChange}
           />
-          <div className="flex gap-3">
-            <Dropdown>
-              <DropdownTrigger className="hidden sm:flex">
-                <Button
-                  endContent={""}
-                  size="sm"
-                  className="ring-1 ring-gray-300"
-                  variant="light"
-                >
-                 <Image src={fillter} className="h-6 w-6"/>
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label="Table Columns"
-                closeOnSelect={false}
-                selectedKeys={statusFilter}
-                selectionMode="multiple"
-                onSelectionChange={setStatusFilter}
-              >
-                {statusOptions.map((status) => (
-                  <DropdownItem key={status.uid} className="capitalize">
-                    {capitalize(status.name)}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
-            {/* <Dropdown>
-              <DropdownTrigger className="hidden sm:flex">
-                <Button
-                  endContent={""}
-                  size="sm"
-                  variant="flat"
-                >
-                  Columns
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label="Table Columns"
-                closeOnSelect={false}
-                selectedKeys={visibleColumns}
-                selectionMode="multiple"
-                onSelectionChange={setVisibleColumns}
-              >
-                {columns.map((column) => (
-                  <DropdownItem key={column.uid} className="capitalize">
-                    {capitalize(column.name)}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown> */}
-            <Button
-              className="bg-[#205093] text-background"
-              endContent={<FaPlus />}
-              size="sm"
-            >
-             
-            </Button>
-          </div>
+        
         </div>
-        <div className="flex justify-between items-center">
-          <span className="text-default-400 text-small">
-            Total {staffByBranch?.length} users
-          </span>
-          <label className="flex items-center text-default-400 text-small">
-            Rows per page:
-            <select
-              className="bg-transparent outline-none text-default-400 text-small"
-              onChange={onRowsPerPageChange}
-            >
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="15">15</option>
-            </select>
-          </label>
-        </div>
+        
       </div>
     );
   }, [
@@ -476,6 +401,8 @@ export default function Salarystatus() {
       bottomContentPlacement="outside"
       classNames={classNames}
       selectedKeys={selectedKeys}
+      topContent={topContent}
+
       // selectionMode="multiple"
       sortDescriptor={sortDescriptor}
       topContentPlacement="outside"

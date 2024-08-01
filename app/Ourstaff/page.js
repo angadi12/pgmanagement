@@ -13,7 +13,7 @@ import Personaldetails from "@/components/Staffcomponent/Personaldetails";
 import { Addcategory } from "../../lib/API/Staff";
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllCategories } from "@/lib/StaffSlice";
+import { fetchAllCategories ,setSearchQuery } from "@/lib/StaffSlice";
 
 import {
   Modal,
@@ -48,6 +48,7 @@ const Staff = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [loadingadd, Setloadingadd] = useState(false);
   const [isOpendropdown, setIsOpendropdown] = React.useState(false);
+  const searchQuery = useSelector((state) => state.staff.searchQuery);
 
 
   const handleAddCategory = async () => {
@@ -69,6 +70,17 @@ const Staff = () => {
       Setloadingadd(false);
     }
   };
+
+  // const handleSearchChange = (e) => {
+  //   dispatch(setSearchQuery(e.target.value));
+  // };
+  const handleSearchChange = (event) => {
+    const query = event.target.value;
+    if (selected === "Manage Staffs") {
+      dispatch(setSearchQuery(query));
+    } 
+  };
+
 
   return (
     <>
@@ -128,7 +140,7 @@ const Staff = () => {
               </Tabs>
             </div>
             <div className="flex gap-3 justify-end items-center pb-2">
-              <Input
+             {selected === "Manage Staffs" && <Input
                 isClearable
                 radius="sm"
                 color="primary"
@@ -140,9 +152,10 @@ const Staff = () => {
                 size="md"
                 startContent={""}
                 variant="bordered"
-                // onClear={() => setFilterValue("")}
-                // onValueChange={onSearchChange}
-              />
+                value={searchQuery}
+                onClear={() => dispatch(setSearchQuery(''))}
+                onChange={handleSearchChange}
+              />}
               <div className="flex justify-center items-center gap-3">
                 {selected === "Manage Staffs" ? (
                   <>

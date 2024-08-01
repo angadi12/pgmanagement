@@ -19,9 +19,16 @@ const Allstaff = () => {
   const loading = useSelector((state) => state.staff.loading);
   const error = useSelector((state) => state.staff.error);
 
+  const searchQuery = useSelector((state) => state.staff.searchQuery);
+
+
   useEffect(() => {
     dispatch(fetchAllCategories());
   }, [dispatch]);
+
+  const filteredCategories = categories.filter((category) =>
+    category.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <main className="w-full h-auto flex justify-between items-start gap-4 px-4">
@@ -32,15 +39,18 @@ const Allstaff = () => {
           ) : error ? (
             <p className="w-full h-full flex justify-center items-center">Fialed to fetch Categories refresh the page</p>
           ) : (
-         
-            <div className="w-full grid grid-cols-3 gap-5 justify-center place-content-center items-start pb-4">
+         <>
+
+           {filteredCategories.length>0? <div className="w-full grid grid-cols-3 gap-5 justify-center place-content-center items-start pb-4">
 
              {
-              categories.map((value,id)=>(
+              filteredCategories.map((value,id)=>(
                 <Categorycard data={value} key={id} />
               ))
              }
-             </div>
+             </div>:<div className="w-full flex justify-center items-center h-[40vh]">No Search Found</div>}
+
+         </>
          
           )}
          
