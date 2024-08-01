@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Logo from "../../public/Loginasset/Logo.png";
 import Image from "next/image";
-import { Tabs, Tab, Card, CardBody, Button } from "@nextui-org/react";
+import { Tabs, Tab, Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@nextui-org/react";
 import { MdDashboard } from "react-icons/md";
 import { IoPeople } from "react-icons/io5";
 import { MdMeetingRoom } from "react-icons/md";
@@ -15,12 +15,14 @@ import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { IoIosPeople } from "react-icons/io";
 import { FaBuildingColumns } from "react-icons/fa6";
+import Cookies from "js-cookie"; 
 
 const Sidenav = () => {
   const router = useRouter();
   const pathname = usePathname();
 
   const [selected, setSelected] = useState("Dashboard");
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
 
   useEffect(() => {
@@ -89,7 +91,14 @@ const Sidenav = () => {
     }
   };
 
+  const handleLogout = () => {
+    Cookies.remove('token');
+    router.push("/Signin");
+  };
+
   return (
+
+    <>
     <div
       style={{ position: "sticky", top: 0 }}
       className=" h-[100vh]  backgroundlayer w-60 lg:flex md:flex  hidden flex-col justify-between"
@@ -206,12 +215,49 @@ const Sidenav = () => {
       </div>
 
       <div className="flex justify-start items-start w-full h-auto mb-4 px-4 ">
-        <Button className="flex items-center  w-full justify-start bg-transparent  gap-4 text-white font-semibold">
+        <Button onPress={onOpen} className="flex items-center  w-full justify-start bg-transparent  gap-4 text-white font-semibold">
           <FiLogIn size={24} />
           <span>Logout</span>
         </Button>
       </div>
     </div>
+
+    <Modal
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
+        backdrop="blur"
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col text-center">
+                Confirm Logout
+              </ModalHeader>
+              <ModalBody>
+                <p>Are you sure you want to logout?</p>
+              </ModalBody>
+              <ModalFooter className="flex justify-center items-center text-center">
+                <Button
+                  onPress={() => {
+                    handleLogout();
+                    onClose();
+                  }}
+                  className="bg-[#205093] rounded-sm text-background"
+                >
+                  Yes
+                </Button>
+                <Button size="md" onPress={onClose} className="bg-white ring-1 rounded-sm ring-[#205093] text-[#205093]">
+                  No
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+
+    </>
   );
 };
 

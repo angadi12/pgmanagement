@@ -152,22 +152,28 @@ const Payments = () => {
                       </div>
                       <div>
                         <p className="text-xs font-semibold text-gray-400 ">
-                          #tenant-ID-6754
+                          {pay.UserId}
                         </p>
-                        <p className="text-sm font-semibold ">Mithul M</p>
+                        {/* <p className="text-sm font-semibold ">Mithul M</p> */}
                       </div>
                     </div>
                     <Divider orientation="vertical" className="h-14" />
 
                     <div className="flex flex-col">
-                      <p className="text-xs font-semibold text-gray-400">
+                      {/* <p className="text-xs font-semibold text-gray-400">
                         Room No:{" "}
                         <span className="text-black font-semibold">A7</span>
+                      </p> */}
+                      <p className="text-xs font-semibold text-gray-400">
+                      Maintaince:&nbsp;
+                        <span className="text-black font-semibold">
+                        {pay.Maintaince}
+                        </span>
                       </p>
                       <p className="text-xs font-semibold text-gray-400">
-                        Room Type:
+                      Security:&nbsp;
                         <span className="text-black font-semibold">
-                          Three Sharing
+                        {pay.Security}
                         </span>
                       </p>
                     </div>
@@ -186,7 +192,7 @@ const Payments = () => {
                   <div className="flex gap-4 items-center w-96">
                     <div className="flex flex-col justify-between gap-4 items-end border-r-1 border-gray-300 px-2">
                       <p className="text-xs font-medium text-gray-400">
-                        Apr 09, 2024 at 5:30pm
+                      {pay.PayemntDate}
                       </p>
                       <p className="text-lg font-bold">{pay.Amount}/-</p>
                     </div>

@@ -20,6 +20,15 @@ import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBranches, setSelectedBranch } from "../../lib/BranchSlice";
 import { BsBuildingsFill } from "react-icons/bs";
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+  useDisclosure
+} from "@nextui-org/react";
 
 export default function Navbarr() {
   const router = useRouter();
@@ -29,9 +38,11 @@ export default function Navbarr() {
     (state) => state.branches.selectedBranchId
   );
   const [selectedKey, setSelectedKey] = useState(selectedBranchId);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    dispatch(fetchBranches());
+    dispatch(fetchBranches()).then(() => setIsLoading(false));
   }, [dispatch]);
 
   useEffect(() => {
@@ -40,6 +51,13 @@ export default function Navbarr() {
       dispatch(setSelectedBranch(branches[0]?._id));
     }
   }, [branches, selectedKey, dispatch]);
+
+
+  useEffect(() => {
+    if (!isLoading && branches?.length === 0) {
+      onOpen();
+    }
+  }, [isLoading, branches, onOpen]);
 
   const handleBranchSelect = (key) => {
     setSelectedKey(key);
@@ -50,6 +68,8 @@ export default function Navbarr() {
     router.push("/Notifications");
   };
   return (
+
+    <>
     <Navbar isBordered maxWidth="full">
       <NavbarContent justify="start">
         <NavbarBrand className="mr-4">
@@ -122,5 +142,33 @@ export default function Navbarr() {
         </Dropdown>
       </NavbarContent>
     </Navbar>
+
+    <Modal
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
+        backdrop="blur"
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col text-center">
+                No Branches Found
+              </ModalHeader>
+              <ModalBody>
+                <p>Please select a branch to proceed.</p>
+              </ModalBody>
+              <ModalFooter className="flex justify-center items-center text-center">
+                <Button onPress={onClose} className="bg-[#205093] text-background">
+                  OK
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+
+    </>
   );
 }

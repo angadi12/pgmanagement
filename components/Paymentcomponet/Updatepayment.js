@@ -171,7 +171,7 @@ const Updatepayment = ({ id, Setopenupdate }) => {
             <p className="text-lg font-semibold">Update Payment Details </p>
           </div>
           <div className="w-full grid lg:grid-cols-1 grid-cols-1 gap-4 place-content-center justify-between items-center">
-            <Autocomplete
+           { tenants?.length>0 &&<Autocomplete
               variant="bordered"
               isDisabled
               radius="sm"
@@ -190,13 +190,13 @@ const Updatepayment = ({ id, Setopenupdate }) => {
                 <AutocompleteItem
                   color="primary"
                   variant="flat"
-                  key={item.UserId}
+                  key={item?.UserId}
                   className="capitalize"
                 >
-                  {item.UserName}
+                  {item?.UserName}
                 </AutocompleteItem>
               )}
-            </Autocomplete>
+            </Autocomplete>}
           </div>
 
           <div className="w-full grid lg:grid-cols-2 grid-cols-1 gap-4 place-content-center justify-between items-center">

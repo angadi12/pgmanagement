@@ -6,6 +6,7 @@ import Cookies from "js-cookie";
 import { CreateExpanseapi } from "../../lib/API/Expense";
 import { useSelector, useDispatch } from "react-redux";
 import toast, { Toaster } from "react-hot-toast";
+import {fetchExpensesByBranch} from "../../lib/ExpenseSlice"
 
 export const animals = [
   { key: "Matainence", label: "Matainence" },
@@ -20,7 +21,7 @@ const formatDate = (date) => {
   return `${month}/${day}/${year}`;
 };
 
-const Createexpense = () => {
+const Createexpense = ({onOpenChange}) => {
   const dispatch = useDispatch();
   const selectedBranchId = useSelector(
     (state) => state.branches.selectedBranchId
@@ -90,8 +91,9 @@ const Createexpense = () => {
     try {
       const result = await CreateExpanseapi(payload);
       if(result.status){
-        toast.success("Expense has been Created")
+        dispatch(fetchExpensesByBranch(selectedBranchId))
         setLoading(false);
+        onOpenChange()
       }else{
         toast.error("Failed to create expanse")
         setLoading(false);

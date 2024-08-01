@@ -17,6 +17,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
+import Revenuskel from "./Revenuskel"
+import { useEffect, useState } from "react"
 
 const chartData = [
   { month: "January", Income: 186, Expense: 80 },
@@ -39,6 +41,19 @@ const chartConfig = {
 } 
 
 export function Revenueovr() {
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate an API call
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+  }, []);
+
+  if (loading) {
+    return <Revenuskel/>;
+  }
   return (
     <Card className="pt-4">
       <CardContent >

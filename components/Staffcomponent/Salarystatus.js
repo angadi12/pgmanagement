@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -23,22 +23,40 @@ import { FaPlus } from "react-icons/fa6";
 import { IoEyeSharp } from "react-icons/io5";
 import { RiPencilFill } from "react-icons/ri";
 import { MdDelete } from "react-icons/md";
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+  Divider,
+  CircularProgress,
+  CardBody,
+  CardFooter,
+  Card,
+} from "@nextui-org/react";
 
 import fillter from "../../public/Loginasset/fillter.png"
 import Image from "next/image";
-// import {VerticalDotsIcon} from "./VerticalDotsIcon";
-// import {SearchIcon} from "./SearchIcon";
-// import {ChevronDownIcon} from "./ChevronDownIcon";
-// import {columns, users, statusOptions} from "./data";
-// import {capitalize} from "./utils";
+import { useSelector, useDispatch } from "react-redux";
+import {fetchStaffByBranch} from "../../lib/StaffSlice"
+import tennatpic from "../../public/Loginasset/tennatpic.png"
+import Updatestaff from "./Updatestaff";
+import {GetStaffbyid} from "../../lib/API/Staff"
+
+
+
+
 const columns = [
   {name: "ID", uid: "id", },
   {name: "Name", uid: "name", },
-  {name: "Staff_ID", uid: "Contact", },
-  {name: "Contact No.", uid: "Room", },
-  {name: "Category", uid: "Start"},
-  {name: "Active Complaints", uid: "End"},
-  {name: "Salary Status", uid: "Modify",},
+  {name: "Contact No.", uid: "Number", },
+  {name: "Salary", uid: "mothlysalary",},
+  {name: "Category", uid: "Category"},
+  // {name: "Salary Status", uid: "salary"},
+  { name: "ACTIONS", uid: "actions" },
+
 ];
 
 export function capitalize(str) {
@@ -49,220 +67,34 @@ const statusOptions = [
   {name: "Full", uid: "Full"},
 ];
 
-const users = [
-  {
-    id: 1,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 2,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 3,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Overdue",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 4,
-  name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "1 Complaints",
-    status: "Overdue",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 5,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "1 Active Complaint",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 6,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Overdue",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 7,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Overdue",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 8,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 9,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 10,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "No Active Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 11,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Overdue",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 12,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 13,
-    name: "Oliver Scott",
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Pending",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 14,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Overdue",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 15,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 16,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Pending",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 17,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 18,
-    name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 19,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Pending",
-    Room: "29",
-    Contact:"1234567890"
-  },
-  {
-    id: 20,
-   name: "Pavan Alimkar",
-    End: "12/12/24",
-    Start: "12/12/24",
-    Complaints: "Complaints",
-    status: "Paid",
-    Room: "29",
-    Contact:"1234567890"
-  },
-];
 
-export {columns, users, statusOptions};
+
+export {columns, statusOptions};
 const statusColorMap = {
   Paid: "success",
   Full: "danger",
   Pending: "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "Contact","Room","Start","End","Complaints", "Modify"];
+const INITIAL_VISIBLE_COLUMNS = ["name", "Number","mothlysalary","Category","actions"];
 
 export default function Salarystatus() {
+  const dispatch = useDispatch();
+  const selectedBranchId = useSelector(
+    (state) => state.branches.selectedBranchId
+  );
+  const staffByBranch = useSelector((state) => state.staff.staffByBranch);
+  const loadingStaff = useSelector((state) => state.staff.loadingStaff);
+
+
+
+  useEffect(() => {
+    if (selectedBranchId) {
+      dispatch(fetchStaffByBranch(selectedBranchId));
+    }
+  }, [selectedBranchId, dispatch]);
+
+
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
@@ -274,9 +106,20 @@ export default function Salarystatus() {
     column: "age",
     direction: "ascending",
   });
+  const [openview,Setopenview]=useState(false)
+  const [opendelete,Setopendelete]=useState(false)
+  const [openedit,Setopenedit]=useState(false)
+  const[loadingstaffdata,Setloadingstaffdata]=useState(true)
+  const[selectedstaffid,Setselectedstaffid]=useState("")
+  const [staffdata,Setstaffdata]=useState()
+
+
+
+
+
   const [page, setPage] = React.useState(1);
 
-  const pages = Math.ceil(users.length / rowsPerPage);
+  const pages = Math.ceil(staffByBranch?.length / rowsPerPage);
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -289,11 +132,12 @@ export default function Salarystatus() {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...users];
+    let filteredUsers = Array.isArray(staffByBranch) ? [...staffByBranch] : [];
+
 
     if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase())
+      filteredUsers = filteredUsers.filter((staff) =>
+        staff.name.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
     if (
@@ -306,7 +150,7 @@ export default function Salarystatus() {
     }
 
     return filteredUsers;
-  }, [users, filterValue, statusFilter]);
+  }, [staffByBranch, filterValue, statusFilter]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -325,47 +169,76 @@ export default function Salarystatus() {
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((user, columnKey) => {
-    const cellValue = user[columnKey];
+  const renderCell = React.useCallback((staff, columnKey) => {
+    const cellValue = staff[columnKey];
 
     switch (columnKey) {
       case "name":
         return (
-         <p>{user.name}</p>
+         <p>{staff.name}</p>
         );
-      case "role":
+      case "Number":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
-            <p className="text-bold text-tiny capitalize text-default-500">
-              {user.team}
+            <p className="text-bold  capitalize ">
+              {staff.Number}
             </p>
           </div>
         );
-      case "status":
+      
+      case "Number":
         return (
-          <Chip
-            className="capitalize border-none gap-1  "
-            color={statusColorMap[user.status]}
-            size="sm"
-            variant="flat"
-          >
-            {cellValue}
-          </Chip>
-        );
-        case "Modify":
-        return (
-          <div className="relative flex items-center gap-4">
-            <Chip
-            className="capitalize border-none gap-1  "
-            color={statusColorMap[user.status]}
-            size="sm"
-            variant="flat"
-          >
-           Paid
-          </Chip>
+          <div className="flex flex-col">
+            <p className="text-bold  capitalize text-default-500">
+              {staff.mothlysalary}
+            </p>
           </div>
         );
+      case "Category":
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold  capitalize text-default-500">
+              {staff.Category?.name}
+            </p>
+          </div>
+        );
+      case "Category":
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold  capitalize text-default-500">
+              {staff.Category?.name}
+            </p>
+          </div>
+        );
+        case "actions":
+          return (
+            <div className="relative right-0 left-0 flex justify-center items-end gap-4">
+              <Tooltip content="Details">
+                <span
+                  onClick={() =>{ Setopenview(true),Setselectedstaffid(staff._id)}}
+                  className="text-lg text-default-400 cursor-pointer active:opacity-50"
+                >
+                  <IoEyeSharp />
+                </span>
+              </Tooltip>
+              <Tooltip content="Edit">
+                <span
+                  onClick={() => {Setopenedit(true),Setselectedstaffid(staff._id)}}
+                  className="text-lg text-default-400 cursor-pointer active:opacity-50"
+                >
+                  <RiPencilFill />
+                </span>
+              </Tooltip>
+              <Tooltip color="danger" content="Delete">
+                <span
+                  onClick={() => Setopendelete(true)}
+                  className="text-lg text-red-500 cursor-pointer active:opacity-50"
+                >
+                  <MdDelete />
+                </span>
+              </Tooltip>
+            </div>
+          );
       default:
         return cellValue;
     }
@@ -397,104 +270,29 @@ export default function Salarystatus() {
     }
   }, []);
 
-  const topContent = React.useMemo(() => {
+  const  topContent = React.useMemo(() => {
     return (
-      <div className="flex flex-col  gap-4 mt-4 px-2">
-        <div>
-          <p className="text-lg font-semibold">Your Expenses</p>
-        </div>
-        <div className="flex gap-3 justify-end items-end">
+      <div className="flex flex-col  gap-4 mt-2 px-2">
+      
+        <div className="flex gap-3 justify-start items-start">
           <Input
             isClearable
             classNames={{
               base: "w-full sm:max-w-[44%]",
-              inputWrapper: "border-1",
+              inputWrapper: "border-1.5",
             }}
             placeholder="Search by name..."
             size="sm"
             startContent={""}
             value={filterValue}
+            color="primary"
             variant="bordered"
             onClear={() => setFilterValue("")}
             onValueChange={onSearchChange}
           />
-          <div className="flex gap-3">
-            <Dropdown>
-              <DropdownTrigger className="hidden sm:flex">
-                <Button
-                  endContent={""}
-                  size="sm"
-                  className="ring-1 ring-gray-300"
-                  variant="light"
-                >
-                 <Image src={fillter} className="h-6 w-6"/>
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label="Table Columns"
-                closeOnSelect={false}
-                selectedKeys={statusFilter}
-                selectionMode="multiple"
-                onSelectionChange={setStatusFilter}
-              >
-                {statusOptions.map((status) => (
-                  <DropdownItem key={status.uid} className="capitalize">
-                    {capitalize(status.name)}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
-            {/* <Dropdown>
-              <DropdownTrigger className="hidden sm:flex">
-                <Button
-                  endContent={""}
-                  size="sm"
-                  variant="flat"
-                >
-                  Columns
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label="Table Columns"
-                closeOnSelect={false}
-                selectedKeys={visibleColumns}
-                selectionMode="multiple"
-                onSelectionChange={setVisibleColumns}
-              >
-                {columns.map((column) => (
-                  <DropdownItem key={column.uid} className="capitalize">
-                    {capitalize(column.name)}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown> */}
-            <Button
-              className="bg-[#205093] text-background"
-              endContent={<FaPlus />}
-              size="sm"
-            >
-             
-            </Button>
-          </div>
+        
         </div>
-        <div className="flex justify-between items-center">
-          <span className="text-default-400 text-small">
-            Total {users.length} users
-          </span>
-          <label className="flex items-center text-default-400 text-small">
-            Rows per page:
-            <select
-              className="bg-transparent outline-none text-default-400 text-small"
-              onChange={onRowsPerPageChange}
-            >
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="15">15</option>
-            </select>
-          </label>
-        </div>
+        
       </div>
     );
   }, [
@@ -503,7 +301,7 @@ export default function Salarystatus() {
     visibleColumns,
     onSearchChange,
     onRowsPerPageChange,
-    users.length,
+    staffByBranch?.length,
     hasSearchFilter,
   ]);
 
@@ -555,16 +353,56 @@ export default function Salarystatus() {
     []
   );
 
+  const fetchStaffDetails = async () => {
+    Setloadingstaffdata(true);
+
+    try {
+      const result = await GetStaffbyid(selectedstaffid);
+      if (result.status) {
+        Setstaffdata(result.data)
+        Setloadingstaffdata(false);
+      } else {
+        Setloadingstaffdata(false);
+      }
+    } catch (error) {
+      console.error(
+        "An error occurred while fetching the staff details",
+        error
+      );
+      Setloadingstaffdata(false);
+    } finally {
+      Setloadingstaffdata(false);
+    }
+  };
+
+  useEffect(() => {
+    if(selectedstaffid){
+      fetchStaffDetails()
+
+    }
+  }, [selectedstaffid])
+
+
+
+
   return (
-    <Table
+
+    <>
+
+   {loadingStaff?
+    <div className="w-full h-[60vh] col-span-3 flex justify-center items-center">
+          <span className="loader3 "></span>
+        </div>: <Table
       isCompact
-      className=""
+      className="px-4"
       removeWrapper
       aria-label="Example table with custom cells, pagination and sorting"
       bottomContent={bottomContent}
       bottomContentPlacement="outside"
       classNames={classNames}
       selectedKeys={selectedKeys}
+      topContent={topContent}
+
       // selectionMode="multiple"
       sortDescriptor={sortDescriptor}
       topContentPlacement="outside"
@@ -582,16 +420,239 @@ export default function Salarystatus() {
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody emptyContent={"No users found"} items={sortedItems}>
+      <TableBody emptyContent={"No Staff found"} items={sortedItems}>
         {(item) => (
-          <TableRow key={item.id}>
+          <TableRow key={item._id}>
             {(columnKey) => (
               <TableCell>{renderCell(item, columnKey)}</TableCell>
             )}
           </TableRow>
         )}
       </TableBody>
-    </Table>
+    </Table>}
+
+
+    {/* view */}
+<Modal
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
+        backdrop="blur"
+        size="5xl"
+        isOpen={openview}
+        onOpenChange={Setopenview}
+        motionProps={{
+          variants: {
+            enter: {
+              y: 0,
+              opacity: 1,
+              transition: {
+                duration: 0.3,
+                ease: "easeOut",
+              },
+            },
+            exit: {
+              y: -20,
+              opacity: 0,
+              transition: {
+                duration: 0.2,
+                ease: "easeIn",
+              },
+            },
+          },
+        }}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col text-center">
+              </ModalHeader>
+              <ModalBody>
+              {loadingstaffdata ?
+                <div className="flex justify-center items-center h-60 gap-4 w-full">
+                  <span className="loader3"></span>
+                </div> :  <div className="flex justify-evenly items-center h-60 gap-4 w-full">
+                  <div>
+                    <Image
+                      src={tennatpic}
+                      className="object-fill h-full"
+                      alt="Roomimage"
+                    />
+                  </div>
+                  <div className="flex flex-col justify-between items-start h-full py-4">
+                    <div className="flex flex-col justify-start items-start text-sm font-semibold">
+                      <p>Name : {staffdata.name}</p>
+                      <p className="flex flex-col justify-start items-start text-sm font-bold text-gray-500">
+                      {/* {roomdata.roomName} */}
+                      </p>
+                    </div>
+                    <div className="flex flex-col justify-start items-start text-sm font-semibold">
+                      <p>Last 3 months payment</p>
+                      {/* {
+                        roomdata.Users.map((name,id)=>(
+                          <p key={id} className="text-sm text-gray-500">{name.UserName}</p>
+                        ))
+                      } */}
+                    </div>
+                  </div>
+                  <Divider orientation="vertical" />
+                  <div className="flex flex-col justify-between items-start h-full py-4">
+                    <div className="flex flex-col flex-wrap gap-2 justify-start items-start text-sm font-semibold">
+                      <p>Staff Details</p>
+                      <p className="flex flex-col justify-start items-start text-xs text-gray-500 ">
+                      <p>Name : {staffdata.name}</p>
+                      </p>
+                      <p className="flex flex-col justify-start items-start text-xs text-gray-500">
+                      Mob.: {staffdata?.Number}
+                      </p>
+                      <p className="flex flex-col justify-start items-start text-xs text-gray-500">
+                      Salary:{staffdata?.mothlysalary}
+                      </p>
+                    </div>
+                    <div className="flex flex-col gap-2 justify-start items-start text-xs ">
+                      <p className="flex   items-center gap-2 text-sm font-semibold">last payament <span className="text-green-600">12000/-</span></p>
+                      <p className="flex  items-center gap-2 text-sm font-semibold">Salary Status:  <span className={"text-green-600"}>Paid</span></p>
+                    </div>
+                  </div>
+                  <Divider orientation="vertical" />
+                  <div className=" flex-col  flex justify-center items-center gap-4">
+                    <Card className=" border-none shadow-none">
+                      <CardBody className="justify-center items-center pb-0">
+                        <CircularProgress
+                          classNames={{
+                            svg: "w-40 h-40 drop-shadow-md",
+                            indicator: "stroke-[#205093]",
+                            track: "stroke-[#205093]/10",
+                            value: "text-3xl font-semibold text-[#205093]",
+                          }}
+                          value={70}
+                          strokeWidth={4}
+                          showValueLabel={true}
+                        />
+                      </CardBody>
+                      <CardFooter className="justify-center items-center pt-0 mt-4">
+                        <Chip
+                          classNames={{
+                            base: "border-1 border-[#205093]/30",
+                            content:
+                              "text-[#205093]/90 text-small font-semibold",
+                          }}
+                          variant="bordered"
+                        >
+                         Staff Attendance
+                        </Chip>
+                      </CardFooter>
+                    </Card>
+                  </div>
+                  {/* <div>
+                    <Image
+                      src={Roomimage}
+                      className="object-fill h-full"
+                      alt="Roomimage"
+                    />
+                  </div> */}
+                </div>}
+              </ModalBody>
+              <ModalFooter className="flex justify-center items-center text-center"></ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+
+{/* Delete */}
+      <Modal
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
+        backdrop="blur"
+        size="xl"
+        isOpen={opendelete}
+        onOpenChange={Setopendelete}
+        motionProps={{
+          variants: {
+            enter: {
+              y: 0,
+              opacity: 1,
+              transition: {
+                duration: 0.3,
+                ease: "easeOut",
+              },
+            },
+            exit: {
+              y: -20,
+              opacity: 0,
+              transition: {
+                duration: 0.2,
+                ease: "easeIn",
+              },
+            },
+          },
+        }}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col text-center">
+                Confirm Delete
+              </ModalHeader>
+              <ModalBody>
+                <div className="flex w-full justify-start items-start">
+                  <p>Do you want to delete Room ?</p>
+                </div>
+              </ModalBody>
+              <ModalFooter className="flex justify-end items-end ">
+                <Button onPress={onClose} color="primary" variant="solid">Cancel</Button>
+                <Button color="danger" variant="solid">Delete</Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+
+   {/* edit    */}
+
+   <Modal
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
+        backdrop="blur"
+        size="4xl"
+        isOpen={openedit}
+        onOpenChange={Setopenedit}
+        motionProps={{
+          variants: {
+            enter: {
+              y: 0,
+              opacity: 1,
+              transition: {
+                duration: 0.3,
+                ease: "easeOut",
+              },
+            },
+            exit: {
+              y: -20,
+              opacity: 0,
+              transition: {
+                duration: 0.2,
+                ease: "easeIn",
+              },
+            },
+          },
+        }}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col text-center">
+                Upadte Staff Details
+              </ModalHeader>
+              <ModalBody>
+                <Updatestaff id={selectedstaffid} Setopenedit={Setopenedit}/>
+              </ModalBody>
+              <ModalFooter className="flex justify-center items-center text-center"></ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+
+    </>
   );
 }
 
