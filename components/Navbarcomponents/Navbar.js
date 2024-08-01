@@ -29,6 +29,7 @@ import {
   Button,
   useDisclosure
 } from "@nextui-org/react";
+import { IoMenu } from "react-icons/io5";
 
 export default function Navbarr() {
   const router = useRouter();
@@ -72,9 +73,13 @@ export default function Navbarr() {
     <>
     <Navbar isBordered maxWidth="full">
       <NavbarContent justify="start">
-        <NavbarBrand className="mr-4">
+        <NavbarBrand className="mr-4 hidden md:flex lg:flex">
           <p>Hello Admin!</p>
         </NavbarBrand>
+        <NavbarBrand className="-ml-4 block md:hidden lg:hidden">
+        <IoMenu size={24}/>
+        </NavbarBrand>
+
       </NavbarContent>
 
       <NavbarContent as="div" className="items-center" justify="end">
@@ -122,7 +127,7 @@ export default function Navbarr() {
               isBordered
               radius="md"
               as="button"
-              className="transition-transform"
+              className="transition-transform hidden md:flex lg:flex"
               color="primary"
               name="Pavan Alimkar"
               size="sm"
