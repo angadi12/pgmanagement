@@ -125,9 +125,9 @@ const Payments = () => {
                 <Button
                   onPress={onOpen}
                   className="bg-[#205093] text-background"
-                  endContent={<FaPlus />}
+                
                   size="sm"
-                ></Button>
+                ><FaPlus /></Button>
               </div>
             </div>
           </div>
