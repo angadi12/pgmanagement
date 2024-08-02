@@ -102,11 +102,12 @@ const Updateroomsanddura = ({ Setopenedit }) => {
         console.error("Error parsing date:", error);
       }
       // setStartDate(parseDate(isoStartDate, getLocalTimeZone()));
-      setPaidAmount(singleTenant.Payment[0].Amount);
-      setSecurity(singleTenant.Payment[0].Security);
-      setMaintenance(singleTenant.Payment[0].Maintaince);
-      setNumberOfMonths(singleTenant.Payment[0].NumberOfmonth);
-      SetdueAmount(singleTenant.Payment[0].DueAmount)
+      setPaidAmount(singleTenant.Payment[0]?.Amount);
+      setSecurity(singleTenant.Payment[0]?.Security);
+      setMaintenance(singleTenant.Payment[0]?.Maintaince);
+      // setNumberOfMonths(singleTenant.Payment[0]?.NumberOfmonth);
+      setNumberOfMonths(singleTenant?.NumberOfmonth);
+      SetdueAmount(singleTenant.Payment[0]?.DueAmount)
       
     }
   }, [singleTenant,rooms, selectedRoomId]);
@@ -124,8 +125,8 @@ const Updateroomsanddura = ({ Setopenedit }) => {
     setLoading(true);
 
     const data = {
-      UserName: personalDetails.UserName,
-      UserNumber: personalDetails.UserNumber,
+      UserName: personalDetails?.UserName,
+      UserNumber: personalDetails?.UserNumber,
       StartDate: formatDate(startDate),
       room: selectedRoomId,
       Amount: paidAmount,
@@ -235,7 +236,7 @@ const Updateroomsanddura = ({ Setopenedit }) => {
             size="lg"
           />
           <Input
-            type="text"
+            type="number"
             name="Paidamount"
             variant="bordered"
             label="Amount paid by Tenant"

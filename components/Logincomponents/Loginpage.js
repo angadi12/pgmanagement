@@ -4,9 +4,7 @@ import Image from "next/image";
 import Logo from "../../public/Loginasset/Logo.png";
 import { FaUser } from "react-icons/fa";
 import { IoMdLock } from "react-icons/io";
-import { BiSolidBuildingHouse } from "react-icons/bi";
-import { IoChevronDownOutline } from "react-icons/io5";
-import { IoChevronUp } from "react-icons/io5";
+
 import { Superadminlogin } from "@/lib/API/Auth";
 import { Adminlogin } from "@/lib/API/Auth";
 import toast, { Toaster } from "react-hot-toast";
@@ -23,7 +21,7 @@ import {
   Checkbox,
   Button,
 } from "@nextui-org/react";
-import {  useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 const Loginpage = () => {
   const router = useRouter();
@@ -96,7 +94,7 @@ const Loginpage = () => {
     }
     return null;
   };
-  
+
   const handleSubmit = async () => {
     const errors = validate();
     if (errors) {
@@ -131,7 +129,7 @@ const Loginpage = () => {
         } else {
           localStorage.removeItem("rememberedEmail");
         }
-        router.push('/');
+        router.push("/");
       } else {
         toast.error(result.message || "An error occurred during login");
       }
