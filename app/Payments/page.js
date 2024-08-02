@@ -108,7 +108,7 @@ const Payments = () => {
               </Tabs>
             </div>
             <div className="flex gap-3 justify-end items-end">
-              <Input
+              {/* <Input
                 isClearable
                 classNames={{
                   base: "w-full sm:max-w-[60%]",
@@ -120,7 +120,7 @@ const Payments = () => {
                 variant="bordered"
                 // onClear={() => setFilterValue("")}
                 // onValueChange={onSearchChange}
-              />
+              /> */}
               <div className="flex gap-3">
                 <Button
                   onPress={onOpen}

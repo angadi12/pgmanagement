@@ -26,11 +26,11 @@ const Updatepersonaldetails = () => {
   );
 
   const [formData, setFormData] = useState({
-    UserName: singleTenant.UserName || "",
-    UserNumber: singleTenant.UserNumber || "",
-    Address: singleTenant.Address || "",
-    email: singleTenant.email || "",
-    AadharNumber: singleTenant.AadharNumber || "",
+    UserName: singleTenant?.UserName || "",
+    UserNumber: singleTenant?.UserNumber || "",
+    Address: singleTenant?.Address || "",
+    email: singleTenant?.email || "",
+    AadharNumber: singleTenant?.AadharNumber || "",
   });
 
   useEffect(() => {

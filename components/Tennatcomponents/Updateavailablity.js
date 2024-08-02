@@ -75,7 +75,7 @@ const Updateavailablity = () => {
   }, [selectedTenantId]);
 
   useEffect(() => {
-    if (singleTenant.room) {
+    if (singleTenant?.room) {
       dispatch(setSelectedRoomId(singleTenant?.room[0]))
     }
   }, [singleTenant]);

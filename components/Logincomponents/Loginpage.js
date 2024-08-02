@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Logo from "../../public/Loginasset/Logo.png";
+import background from "../../public/Loginasset/background.JPEG";
 import { FaUser } from "react-icons/fa";
 import { IoMdLock } from "react-icons/io";
 import { BiSolidBuildingHouse } from "react-icons/bi";
