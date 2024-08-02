@@ -186,9 +186,9 @@ const [error,Seterror]=useState(false)
                     ticket.status === "resolved" ? (
                     ""
                   ) : (
-                    <Button size="sm" variant="light" className="">
+                    <Button                         onPress={()=>{Setticketid(ticket._id),onOpen()}}
+ size="sm" variant="light" className="">
                       <FaEdit
-                        onClick={()=>{Setticketid(ticket._id),onOpen()}}
                         className="text-[#205093]"
                         size={20}
                       />
