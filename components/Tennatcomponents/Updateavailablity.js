@@ -354,6 +354,7 @@ const Updateavailablity = () => {
                 }
               >
                 <Button
+                isIconOnly 
                   variant="light"
                   className={"flex flex-col h-full w-auto p-1"}
                 >

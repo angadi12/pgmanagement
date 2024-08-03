@@ -22,9 +22,13 @@ import {
   Button,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import { setUser } from '../../lib/AuthSlice';
+import { useDispatch } from 'react-redux';
+import { fetchUserDetails } from "@/lib/AuthSlice";
 
 const Loginpage = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState("");
@@ -36,6 +40,7 @@ const Loginpage = () => {
   const [errors, setErrors] = useState({});
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [userdata,Setuserdata]=useState()
 
   useEffect(() => {
     const rememberedEmail = localStorage.getItem("rememberedEmail");
@@ -113,12 +118,20 @@ const Loginpage = () => {
           Password: superAdminPassword,
         };
         result = await Superadminlogin(data);
+       if(result.data){
+        dispatch(setUser(result.data));
+        Setuserdata(result.data)
+      }
       } else {
         data = {
           Email: adminEmail,
           Password: adminPassword,
         };
         result = await Adminlogin(data);
+        if(result.data){
+          dispatch(setUser(result.data));
+          Setuserdata(result.data)
+        }
       }
 
       if (result.status) {
@@ -139,6 +152,7 @@ const Loginpage = () => {
       setLoading(false);
     }
   };
+
 
   return (
     <>

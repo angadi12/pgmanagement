@@ -174,7 +174,7 @@ const Branches = () => {
                   />
                 </Tabs>
                 <div className="w-full h-auto">
-                  {selectedtab === "Branch Details" && <Createbranch />}
+                  {selectedtab === "Branch Details" && <Createbranch onOpenChange={onOpenChange} />}
                 </div>
               </ModalBody>
               <ModalFooter className="flex justify-center items-center text-center">
