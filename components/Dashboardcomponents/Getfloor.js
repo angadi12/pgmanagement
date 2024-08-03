@@ -30,7 +30,7 @@ const Getfloor = () => {
 
   useEffect(() => {
     if (floors.length > 0) {
-      setSelectedFloor(floors[0]); 
+      setSelectedFloor(floors[0]);
     }
   }, [floors]);
 
@@ -40,7 +40,6 @@ const Getfloor = () => {
       setLoading(false);
     }, 2000);
   }, [selectedFloor]);
-
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -65,7 +64,7 @@ const Getfloor = () => {
 
   return (
     <>
-      {status==="loading" || loading ? (
+      {status === "loading" || loading ? (
         <GetfloorSkeleton />
       ) : (
         <div className="flex flex-col gap-2 justify-start items-start w-full h-full mt-2">
@@ -122,32 +121,35 @@ const Getfloor = () => {
                     status = "On hold";
                   }
 
-                  return (                  
-                      <Tooltip
-                        content={
-                          <div className="px-1 py-2">
-                            <div className="text-xs font-bold text-green-700">
-                              Available Bed:
-                              <span className="text-red-400 ml-2">
-                                {detail.reaminingBed}
-                              </span>
-                            </div>
-                            <div className="text-tiny">
-                              No of sharing {detail.SharingType}
-                            </div>
-                          </div>
-                        }
-                      >
-                      <Button isIconOnly  variant="light" className=" rounded-md">
-                      <div
+                  return (
+                    <Tooltip
                       key={index}
-                      className={`h-12 w-12 rounded-md ${bedColor} text-white flex justify-center items-center`}
+                      content={
+                        <div className="px-1 py-2">
+                          <div className="text-xs font-bold text-green-700">
+                            Available Bed:
+                            <span className="text-red-400 ml-2">
+                              {detail.reaminingBed}
+                            </span>
+                          </div>
+                          <div className="text-tiny">
+                            No of sharing {detail.SharingType}
+                          </div>
+                        </div>
+                      }
                     >
-
-                        <FaBed size={24} />
-                    </div>
+                      <Button
+                        isIconOnly
+                        variant="light"
+                        className=" rounded-md"
+                      >
+                        <div
+                          className={`h-12 w-12 rounded-md ${bedColor} text-white flex justify-center items-center`}
+                        >
+                          <FaBed size={24} />
+                        </div>
                       </Button>
-                      </Tooltip>
+                    </Tooltip>
                   );
                 })}
               </div>
