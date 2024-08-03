@@ -242,14 +242,14 @@ export default function Rooms() {
                 <RiPencilFill />
               </span>
             </Tooltip>
-            <Tooltip color="danger" content="Delete">
+            {/* <Tooltip color="danger" content="Delete">
               <span
                 onClick={() => Setopendelete(true)}
                 className="text-lg text-red-500 cursor-pointer active:opacity-50"
               >
                 <MdDelete />
               </span>
-            </Tooltip>
+            </Tooltip> */}
           </div>
         );
       default:

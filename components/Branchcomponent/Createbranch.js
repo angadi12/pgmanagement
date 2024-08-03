@@ -5,7 +5,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { useSelector,useDispatch } from "react-redux";
 import { createBranch,fetchBranches } from "@/lib/BranchSlice";
 
-const Createbranch = ({ onClose, onRefresh }) => {
+const Createbranch = ({ onOpenChange, onRefresh }) => {
   const branches = useSelector((state) => state.branches.branches);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
@@ -57,6 +57,7 @@ const Createbranch = ({ onClose, onRefresh }) => {
     const result = await Createbranchapi(formData);
     if (result.status) {
       toast.success("Branch created successfully");
+      onOpenChange()
     dispatch(fetchBranches());
     setLoading(false)
     } else {
@@ -120,14 +121,14 @@ const Createbranch = ({ onClose, onRefresh }) => {
           value={formData.code}
           onChange={handleChange}
         />
-        <div className="w-full text-start flex justify-start items-center gap-2 py-2 lg:col-span-2">
+        {/* <div className="w-full text-start flex justify-start items-center gap-2 py-2 lg:col-span-2">
           <p className="text-[#205093] text-sm font-bold underline cursor-pointer">
             +Upload Building Image
           </p>
           <span className="text-xs text-gray-400 no-underline">
             (PNG, JPG only)
           </span>
-        </div>
+        </div> */}
       </div>
         <div className="flex justify-center items-center w-full">
         <Button onPress={handleSubmit} className="buttongradient text-white rounded-md w-60 uppercase font-semibold">

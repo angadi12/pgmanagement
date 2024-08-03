@@ -131,13 +131,13 @@ const Tennattable = () => {
   const [page, setPage] = useState(1);
   const rowsPerPage = 5;
 
-  const pages = Math.ceil(tenants.length / rowsPerPage);
+  const pages = Math.ceil(tenants?.length / rowsPerPage);
 
   const items = useMemo(() => {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
 
-    return tenants.slice(start, end);
+    return tenants?.slice(start, end);
   }, [page, tenants]);
   return (
     <>
@@ -188,7 +188,7 @@ const Tennattable = () => {
                 </TableHeader>
                 <TableBody items={items}>
                   {(item) => (
-                    <TableRow key={item._id}>
+                    <TableRow key={item?._id}>
                       {(columnKey) => (
                         <TableCell className="text-tiny">{getKeyValue(item, columnKey)}</TableCell>
                       )}
