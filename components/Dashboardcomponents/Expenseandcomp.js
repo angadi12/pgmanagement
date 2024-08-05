@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react";
-import electricity from "../../public/Loginasset/electricity.png";
-import Circle from "../../public/Loginasset/Circle.png";
-import wifi from "../../public/Loginasset/wifi.png";
-import water from "../../public/Loginasset/water.png";
-import Expensebreak from "../Chartcomponent/Expensebreak";
-import Image from "next/image";
 import { FaCircle } from "react-icons/fa6";
 import ExpenseandcompSkeleton from "./ExpenseandcompSkeleton ";
+import Activecomplaint from "./Activecomplaint";
+import Expensebreak from "../Chartcomponent/Expensebreak";
 
 const Expenseandcomp = () => {
   const [loading, setLoading] = useState(true);
@@ -31,7 +27,7 @@ const Expenseandcomp = () => {
           <p className="text-sm font-bold ">Active Complaints</p>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-2 grid-cols-1 gap-6 justify-center place-content-center items-start mx-auto w-full h-full ">
-          <div className=" flex flex-col gap-6 justify-between   w-full h-full rounded-lg">
+          <div className=" flex flex-col  justify-between gap-6  w-full h-full rounded-lg">
             <div>
               <Expensebreak />
             </div>
@@ -63,7 +59,8 @@ const Expenseandcomp = () => {
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-1 gap-5 justify-around items-start  w-full h-full  rounded-lg">
+          <Activecomplaint/>
+          {/* <div className="grid grid-cols-1 gap-5 justify-around items-start  w-full h-full  rounded-lg">
             <div className="w-full h-auto py-3 bg-[#FFA100]  rounded-md ring-1 ring-gray-200 flex justify-around items-center px-4">
               <div className=" w-14 h-14 rounded-full relative flex justify-center items-center ">
                 <Image src={Circle} alt="cicle" />
@@ -100,7 +97,7 @@ const Expenseandcomp = () => {
                 <p className="text-xs font-medium text-white">Internet Issue</p>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

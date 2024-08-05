@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Creattennatmapi } from "@/lib/API/Tennat";
 import toast, { Toaster } from "react-hot-toast";
 import { fetchTenantsByBranch } from "@/lib/TennatSlice";
-import  {setCurrentStep} from "../../lib/CreatetenantSlice"
+import  {setCurrentStep,clearPersonalDetails} from "../../lib/CreatetenantSlice"
 
 const formatDate = (date) => {
   const d = new Date(date);
@@ -89,7 +89,9 @@ const Roomsanddura = ({Setopenmodal}) => {
         toast.success("Tenant created successfully")
         dispatch(fetchTenantsByBranch(selectedBranchId));
         Setopenmodal(false)
+        dispatch(clearPersonalDetails())
         dispatch(setCurrentStep("Availability"))
+
       } else {
         toast.error(result.message)
         setError(result.message);

@@ -21,11 +21,11 @@ const ExpenseandcompSkeleton = () => {
               <Skeleton className="h-4 w-full rounded-lg" />
             </div>
           </div>
-          <div className="grid grid-cols-1 gap-5 justify-around items-start w-full h-full rounded-lg">
+          {/* <div className="grid grid-cols-1 gap-5 justify-around items-start w-full h-full rounded-lg">
             <Skeleton className="h-16 w-full rounded-lg" />
             <Skeleton className="h-16 w-full rounded-lg" />
             <Skeleton className="h-16 w-full rounded-lg" />
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

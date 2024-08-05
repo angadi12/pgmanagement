@@ -18,6 +18,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+
+
 const chartData = [
   { browser: "ElectricityBill", visitors: 275, fill: "#FFA100" },
   { browser: "GasBill", visitors: 200, fill: "#9747FF" },

@@ -100,7 +100,7 @@ const Createbranch = ({ onOpenChange, onRefresh }) => {
           onChange={handleChange}
         />
         <Input
-          type="text"
+          type="tel"
           name="Number"
           variant="bordered"
           radius="sm"

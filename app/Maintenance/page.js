@@ -26,7 +26,7 @@ import {
   ModalFooter,
   useDisclosure,
 } from "@nextui-org/react";
-import {ResolveTicketapi} from "../../lib/API/Support"
+import { ResolveTicketapi } from "../../lib/API/Support";
 
 const categoryImages = {
   Electricity: electricity2,
@@ -53,11 +53,10 @@ const Maintenance = () => {
   const selectedBranchId = useSelector(
     (state) => state.branches.selectedBranchId
   ); // Assuming you have branch state
-const [tickectid,Setticketid]=useState("")
-const [comment,Setcomment]=useState("")
-const [loading,Setloading]=useState(false)
-const [error,Seterror]=useState(false)
-
+  const [tickectid, Setticketid] = useState("");
+  const [comment, Setcomment] = useState("");
+  const [loading, Setloading] = useState(false);
+  const [error, Seterror] = useState(false);
 
   useEffect(() => {
     if (selectedBranchId) {
@@ -74,31 +73,27 @@ const [error,Seterror]=useState(false)
   }, [selected, dispatch, selectedBranchId]);
 
   const handleResolveTicket = async () => {
-    if(!comment){
-     return Seterror(true)
+    if (!comment) {
+      return Seterror(true);
     }
-    Setloading(true)
+    Setloading(true);
     try {
       const payload = {
         remark: comment,
       };
-    const result=  await ResolveTicketapi(payload,tickectid);
-    if(result.status){
-      dispatch(fetchTicketsByBranch(selectedBranchId));
-      Setloading(false)
-      onOpenChange(false);
-      Seterror(false)
-
-    }
-
+      const result = await ResolveTicketapi(payload, tickectid);
+      if (result.status) {
+        dispatch(fetchTicketsByBranch(selectedBranchId));
+        Setloading(false);
+        onOpenChange(false);
+        Seterror(false);
+      }
     } catch (error) {
       console.error("Failed to resolve ticket:", error);
-      Setloading(false)
-
-    }finally{
-      Setloading(false)
-      Seterror(false)
-
+      Setloading(false);
+    } finally {
+      Setloading(false);
+      Seterror(false);
     }
   };
 
@@ -186,12 +181,15 @@ const [error,Seterror]=useState(false)
                     ticket.status === "resolved" ? (
                     ""
                   ) : (
-                    <Button                         onPress={()=>{Setticketid(ticket._id),onOpen()}}
- size="sm" variant="light" className="">
-                      <FaEdit
-                        className="text-[#205093]"
-                        size={20}
-                      />
+                    <Button
+                      onPress={() => {
+                        Setticketid(ticket._id), onOpen();
+                      }}
+                      size="sm"
+                      variant="light"
+                      className=""
+                    >
+                      <FaEdit className="text-[#205093]" size={20} />
                     </Button>
                   )}
 
@@ -222,67 +220,65 @@ const [error,Seterror]=useState(false)
   return (
     <>
       <section className="flex justify-center items-center w-full h-auto flex-col mx-auto p-4">
-
-      <div className="w-full py-2 sticky top-[4.1rem] bg-white z-10">
-        <div className="w-full  text-start">
-          <p className="text-lg font-semibold">Maintenance and Support</p>
-        </div>
-        <div className="w-full flex justify-between items-center  mt-4">
-          <div>
-            <Tabs
-              selectedKey={selected}
-              onSelectionChange={setSelected}
-              aria-label="Options"
-              color="primary"
-              variant="underlined"
-              classNames={{
-                tabList: "gap-6 w-full relative rounded-none p-0 ",
-                cursor: "w-full bg-[#205093]",
-                tab: "w-auto px-0 h-10",
-                tabContent:
-                  "group-data-[selected=true]:text-[#205093] font-semibold",
-              }}
-            >
-              <Tab
-                key="All Complaints"
-                title={
-                  <div className="flex items-center space-x-2">
-                    <span>All Complaints</span>
-                  </div>
-                }
-              />
-              <Tab
-                key="Active Complaints"
-                title={
-                  <div className="flex items-center space-x-2">
-                    <span>Active Complaints</span>
-                  </div>
-                }
-              />
-              <Tab
-                key="Resolved Complaints"
-                title={
-                  <div className="flex items-center space-x-2">
-                    <span>Resolved Complaints</span>
-                  </div>
-                }
-              />
-              <Tab
-                key="Closed Complaints"
-                title={
-                  <div className="flex items-center space-x-2">
-                    <span>Closed Complaints</span>
-                  </div>
-                }
-              />
-            </Tabs>
+        <div className="w-full py-2 sticky top-[4.1rem] bg-white z-10">
+          <div className="w-full  text-start">
+            <p className="text-lg font-semibold">Maintenance and Support</p>
           </div>
-          <div className="flex gap-3 justify-end items-end">
-            {/* Search input and other elements can go here */}
+          <div className="w-full flex justify-between items-center  mt-4">
+            <div>
+              <Tabs
+                selectedKey={selected}
+                onSelectionChange={setSelected}
+                aria-label="Options"
+                color="primary"
+                variant="underlined"
+                classNames={{
+                  tabList: "gap-6 w-full relative rounded-none p-0 ",
+                  cursor: "w-full bg-[#205093]",
+                  tab: "w-auto px-0 h-10",
+                  tabContent:
+                    "group-data-[selected=true]:text-[#205093] font-semibold",
+                }}
+              >
+                <Tab
+                  key="All Complaints"
+                  title={
+                    <div className="flex items-center space-x-2">
+                      <span>All Complaints</span>
+                    </div>
+                  }
+                />
+                <Tab
+                  key="Active Complaints"
+                  title={
+                    <div className="flex items-center space-x-2">
+                      <span>Active Complaints</span>
+                    </div>
+                  }
+                />
+                <Tab
+                  key="Resolved Complaints"
+                  title={
+                    <div className="flex items-center space-x-2">
+                      <span>Resolved Complaints</span>
+                    </div>
+                  }
+                />
+                <Tab
+                  key="Closed Complaints"
+                  title={
+                    <div className="flex items-center space-x-2">
+                      <span>Closed Complaints</span>
+                    </div>
+                  }
+                />
+              </Tabs>
+            </div>
+            <div className="flex gap-3 justify-end items-end">
+              {/* Search input and other elements can go here */}
+            </div>
           </div>
         </div>
-
-      </div>
         <Divider />
         {renderTickets()}
       </section>
@@ -319,7 +315,7 @@ const [error,Seterror]=useState(false)
                 Resolve Tickets
               </ModalHeader>
               <ModalBody>
-               <Textarea
+                <Textarea
                   isRequired
                   isInvalid={error}
                   label="Add Comments"
@@ -334,7 +330,9 @@ const [error,Seterror]=useState(false)
               <ModalFooter>
                 <Button
                   className="bg-white ring-1 ring-[#205093] font-medium text-[#205093] rounded-md"
-                  onPress={()=>{Seterror(false),onClose()}}
+                  onPress={() => {
+                    Seterror(false), onClose();
+                  }}
                 >
                   Close
                 </Button>
@@ -342,14 +340,13 @@ const [error,Seterror]=useState(false)
                   className="bg-[#205093] text-white rounded-md"
                   onPress={handleResolveTicket}
                 >
-                {loading?<span className="loader2"></span>:  "Mark as Done"}
+                  {loading ? <span className="loader2"></span> : "Mark as Done"}
                 </Button>
               </ModalFooter>
             </>
           )}
         </ModalContent>
       </Modal>
-
 
       <Toaster
         position="top-center"

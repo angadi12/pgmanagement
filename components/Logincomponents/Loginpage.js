@@ -6,10 +6,11 @@ import { FaUser } from "react-icons/fa";
 import { IoMdLock } from "react-icons/io";
 
 import { Superadminlogin } from "@/lib/API/Auth";
-import { Adminlogin } from "@/lib/API/Auth";
+import { Adminlogin, } from "@/lib/API/Auth";
 import toast, { Toaster } from "react-hot-toast";
 import Cookies from "js-cookie";
 import { Tabs, Tab } from "@nextui-org/react";
+
 
 import {
   Card,

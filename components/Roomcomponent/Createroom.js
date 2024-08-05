@@ -226,6 +226,9 @@ const Createroom = () => {
             }
           >
             <SelectItem color="primary" variant="flat" key="First">
+              Ground
+            </SelectItem>
+            <SelectItem color="primary" variant="flat" key="First">
               First
             </SelectItem>
             <SelectItem color="primary" variant="flat" key="Secound">
@@ -236,6 +239,12 @@ const Createroom = () => {
             </SelectItem>
             <SelectItem color="primary" variant="flat" key="Fourth">
               Fourth
+            </SelectItem>
+            <SelectItem color="primary" variant="flat" key="Fourth">
+              Fifth
+            </SelectItem>
+            <SelectItem color="primary" variant="flat" key="Fourth">
+              Sixth
             </SelectItem>
           </Select>
         </div>
