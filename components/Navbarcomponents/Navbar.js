@@ -30,6 +30,8 @@ import {
   useDisclosure
 } from "@nextui-org/react";
 import { IoMenu } from "react-icons/io5";
+import { fetchNotificationByBranch } from "@/lib/NotificationSlice";
+
 
 export default function Navbarr() {
   const router = useRouter();
@@ -38,6 +40,10 @@ export default function Navbarr() {
   const selectedBranchId = useSelector(
     (state) => state.branches.selectedBranchId
   );
+  const notifications = useSelector(
+    (state) => state.notifications.notifications
+  );
+
   const [selectedKey, setSelectedKey] = useState(selectedBranchId);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoading, setIsLoading] = useState(true);
@@ -53,6 +59,11 @@ export default function Navbarr() {
     }
   }, [branches, selectedKey, dispatch]);
 
+  useEffect(() => {
+    if (selectedBranchId) {
+      dispatch(fetchNotificationByBranch(selectedBranchId));
+    }
+  }, [selectedBranchId, dispatch]);
 
   useEffect(() => {
     if (!isLoading && branches?.length === 0) {
@@ -112,7 +123,7 @@ export default function Navbarr() {
           )}
         </Autocomplete>}
 
-        <Badge onClick={routetonoti} content="" color="primary">
+        <Badge onClick={routetonoti} content={notifications?.length} color="primary">
           <Image
             onClick={routetonoti}
             className="object-contain h-10 w-10 cursor-pointer"
@@ -129,7 +140,7 @@ export default function Navbarr() {
               as="button"
               className="transition-transform hidden md:flex lg:flex"
               color="primary"
-              name="Pavan Alimkar"
+             
               size="sm"
             />
           </DropdownTrigger>

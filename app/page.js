@@ -16,7 +16,7 @@ export default function Home() {
         <Tennattable />
       </div>
 
-      <div className="w-full grid md:grid-cols-2 lg:grid-cols-2 grid-cols-1 gap-6 justify-center place-content-center mx-auto h-full">
+      <div className="w-full grid md:grid-cols-2 lg:grid-cols-2 grid-cols-1 gap-6 justify-center place-content-center items-stretch mx-auto h-full">
         <Revenueoverview />
         <Expenseandcomp />
       </div>

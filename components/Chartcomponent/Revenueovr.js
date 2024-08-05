@@ -19,15 +19,20 @@ import {
 } from "@/components/ui/chart"
 import Revenuskel from "./Revenuskel"
 import { useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchDashboardData,
+  fetchDashboardEarnings,
+} from "../../lib/DashboardSlice";
 
-const chartData = [
-  { month: "January", Income: 186, Expense: 80 },
-  { month: "February", Income: 305, Expense: 200 },
-  { month: "March", Income: 237, Expense: 120 },
-  { month: "April", Income: 73, Expense: 190 },
-  { month: "May", Income: 209, Expense: 130 },
-  { month: "June", Income: 214, Expense: 140 },
-]
+// const chartData = [
+//   { month: "January", Income: 186, Expense: 80 },
+//   { month: "February", Income: 305, Expense: 200 },
+//   { month: "March", Income: 237, Expense: 120 },
+//   { month: "April", Income: 73, Expense: 190 },
+//   { month: "May", Income: 209, Expense: 130 },
+//   { month: "June", Income: 214, Expense: 140 },
+// ]
 
 const chartConfig = {
   desktop: {
@@ -41,15 +46,24 @@ const chartConfig = {
 } 
 
 export function Revenueovr() {
+  const dispatch = useDispatch();
+  const { data, earnings, loading, error } = useSelector(
+    (state) => state.dashboard
+  );
 
-  const [loading, setLoading] = useState(true);
+  const selectedBranchId = useSelector(
+    (state) => state.branches.selectedBranchId
+  );
 
   useEffect(() => {
-    // Simulate an API call
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-  }, []);
+    dispatch(fetchDashboardEarnings());
+  }, [dispatch,selectedBranchId]);
+
+  // if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
+
+  const chartData = [...earnings]
+
 
   if (loading) {
     return <Revenuskel/>;

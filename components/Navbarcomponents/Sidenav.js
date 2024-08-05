@@ -26,10 +26,10 @@ import { useRouter } from "next/navigation";
 import { IoIosPeople } from "react-icons/io";
 import { FaBuildingColumns } from "react-icons/fa6";
 import Cookies from "js-cookie";
-import {GetAdminbyid} from "../../lib/API/Auth"
+import {GetAdminbyid,GetSuperAdminbyid} from "../../lib/API/Auth"
 import { useSelector,useDispatch } from 'react-redux';
 import jwt_decode from "jwt-decode";
-import { fetchUserDetails } from "@/lib/AuthSlice";
+import {  setUser} from "@/lib/AuthSlice";
 
 const Sidenav = () => {
   const router = useRouter();
@@ -37,20 +37,36 @@ const Sidenav = () => {
 
   const [selected, setSelected] = useState("Dashboard");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  // const role = useSelector((state) => state.auth.role);
 
   const dispatch = useDispatch();
   const { user, loading, error } = useSelector((state) => state.auth);
 
+  
   // useEffect(() => {
   //   const token = Cookies.get("token");
   //   if (token) {
-  //     const decoded = jwt_decode(token);
-  //     const userId = decoded.id;
-  //     dispatch(fetchUserDetails({ role, id: userId }));
-  //   }
-  // }, [dispatch, role]);
+  //     const decodedToken = jwt_decode(token);
+  //     const { role, userId } = decodedToken;
 
+  //     const fetchUserDetails = async () => {
+  //       try {
+  //         let userDetails;
+  //         if (role === "owner") {
+  //           userDetails = await GetSuperAdminbyid(userId);
+  //         } else if (role === "admin") {
+  //           userDetails = await GetAdminbyid(userId);
+  //         }
+  //         if (userDetails) {
+  //           dispatch(setUser(userDetails?.data));
+  //         }
+  //       } catch (error) {
+  //         console.error("Error fetching user details:", error);
+  //       }
+  //     };
+
+  //     fetchUserDetails();
+  //   }
+  // }, []);
 
   useEffect(() => {
     switch (pathname) {

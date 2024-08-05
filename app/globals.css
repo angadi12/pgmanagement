@@ -49,6 +49,16 @@
     box-sizing: border-box;
     animation: rotation 2s linear infinite;
   }
+  .loader4 {
+    width: 24px;
+    height: 24px;
+    border: 5px dotted#222C68;
+    border-radius: 50%;
+    display: inline-block;
+    position: relative;
+    box-sizing: border-box;
+    animation: rotation 2s linear infinite;
+  }
   
   @keyframes rotation {
     0% {
