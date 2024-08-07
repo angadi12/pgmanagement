@@ -4,6 +4,7 @@ import { Button, Input } from "@nextui-org/react";
 import { setPersonalDetails } from "../../lib/CreatetenantSlice";
 import { setCurrentStep } from "../../lib/CreatetenantSlice";
 import { useSelector, useDispatch } from "react-redux";
+import toast, { Toaster } from "react-hot-toast";
 
 const Personaldetails = () => {
   const dispatch = useDispatch();
@@ -21,21 +22,33 @@ const Personaldetails = () => {
   };
 
   const handleNext = () => {
-    if (
-      selectedRoomId &&
-      formData.UserName &&
-      formData.UserNumber &&
-      formData.address &&
-      formData.email &&
-      formData.aadharNumber
-    ) {
-      dispatch(setPersonalDetails(formData));
-      dispatch(setCurrentStep("Room & Duration"));
+    if (!selectedRoomId) {
+      return toast.error("Room not selected");
     }
+    if (!formData.UserName) {
+      return toast.error("Full Name is required");
+    }
+    if (!formData.UserNumber || formData.UserNumber.length !== 10) {
+      return toast.error("Phone Number should be 10 digits");
+    }
+    if (!formData.address) {
+      return toast.error("Address is required");
+    }
+    if (!formData.email) {
+      return toast.error("Email is required");
+    }
+    if (!formData.aadharNumber || formData.aadharNumber.length !== 12) {
+      return toast.error("Aadhar Number should be 12 digits");
+    }
+
+    dispatch(setPersonalDetails(formData));
+    dispatch(setCurrentStep("Room & Duration"));
   };
+
 
   console.log(formData);
   return (
+    <>
     <div className="flex flex-col justify-center items-center gap-4">
       <div className="w-full text-start">
         <p className="text-lg font-semibold">Fill Tenant Details</p>
@@ -129,6 +142,35 @@ const Personaldetails = () => {
         </Button>
       </div>
     </div>
+
+    <Toaster
+        position="top-center"
+        reverseOrder={false}
+        gutter={8}
+        containerClassName=""
+        containerStyle={{}}
+        toastOptions={{
+          // Define default options
+          className: "",
+          duration: 1000,
+          style: {
+            background: "linear-gradient(90deg, #222C68 0%, #1D5B9E 100%)",
+            color: "#fff",
+           
+          },
+
+          // Default options for specific types
+          success: {
+            duration: 1000,
+            theme: {
+              primary: "green",
+              secondary: "black",
+            },
+          },
+        }}
+      />
+
+    </>
   );
 };
 

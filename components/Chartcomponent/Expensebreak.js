@@ -18,14 +18,10 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-
-
-const chartData = [
-  { browser: "ElectricityBill", visitors: 275, fill: "#FFA100" },
-  { browser: "GasBill", visitors: 200, fill: "#9747FF" },
-  { browser: "WaterBill", visitors: 287, fill: "#0096FF" },
-  { browser: "InternetBill", visitors: 173, fill: "#ED6300" },
-];
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchDashboardExpense } from "../../lib/DashboardSlice";
+import { Skeleton } from "@nextui-org/react";
 
 const chartConfig = {
   visitors: {
@@ -50,9 +46,36 @@ const chartConfig = {
 };
 
 export function Expensebreak() {
+  const dispatch = useDispatch();
+  const { expense, loading, error } = useSelector((state) => state.dashboard);
+
+  const selectedBranchId = useSelector(
+    (state) => state.branches.selectedBranchId
+  );
+
+  // useEffect(() => {
+  //   dispatch(fetchDashboardExpense());
+  // }, [dispatch, selectedBranchId]);
+
+  const chartData = expense?.map((item, index) => {
+    return {
+      browser: item.name,
+      visitors: item.totalAmount,
+      fill: chartConfig[item.name] ? chartConfig[item.name].color : "#ccc", // Default color if not defined
+    };
+  });
+
   const totalVisitors = React.useMemo(() => {
     return chartData.reduce((acc, curr) => acc + curr.visitors, 0);
   }, []);
+
+  if (loading)
+    return (
+      <div>
+        <Skeleton className="h-40 w-full rounded-lg" />
+      </div>
+    );
+  if (error) return <p>Error: {error}</p>;
 
   return (
     <Card className="flex flex-col h-full">
@@ -61,52 +84,57 @@ export function Expensebreak() {
           config={chartConfig}
           className="mx-auto aspect-square h-full"
         >
-          <PieChart>
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
-            <Pie
-              data={chartData}
-              dataKey="visitors"
-              nameKey="browser"
-              innerRadius={60}
-              strokeWidth={2}
-            >
-              <Label
-                content={({ viewBox }) => {
-                  if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                    return (
-                      <text
-                        x={viewBox.cx}
-                        y={viewBox.cy}
-                        textAnchor="middle"
-                        dominantBaseline="middle"
-                      >
-                        <tspan
+          {!expense || expense.length === 0 ? (
+            <p className="flex justify-center items-center p-5">
+              No data available
+            </p>
+          ) : (
+            <PieChart>
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent hideLabel />}
+              />
+              <Pie
+                data={chartData}
+                dataKey="visitors"
+                nameKey="browser"
+                innerRadius={60}
+                strokeWidth={2}
+              >
+                <Label
+                  content={({ viewBox }) => {
+                    if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                      return (
+                        <text
                           x={viewBox.cx}
                           y={viewBox.cy}
-                          className="fill-foreground text-3xl font-bold"
+                          textAnchor="middle"
+                          dominantBaseline="middle"
                         >
-                          {totalVisitors.toLocaleString()}
-                        </tspan>
-                        <tspan
-                          x={viewBox.cx}
-                          y={(viewBox.cy || 0) + 24}
-                          className="fill-muted-foreground text-xs"
-                        >
-                          Increase
-                        </tspan>
-                      </text>
-                    );
-                  }
-                }}
-              />
-            </Pie>
-          </PieChart>
+                          <tspan
+                            x={viewBox.cx}
+                            y={viewBox.cy}
+                            className="fill-foreground text-3xl font-bold"
+                          >
+                            {totalVisitors.toLocaleString()}
+                          </tspan>
+                          <tspan
+                            x={viewBox.cx}
+                            y={(viewBox.cy || 0) + 24}
+                            className="fill-muted-foreground text-xs"
+                          >
+                            Increase
+                          </tspan>
+                        </text>
+                      );
+                    }
+                  }}
+                />
+              </Pie>
+            </PieChart>
+          )}
         </ChartContainer>
       </CardContent>
-    
     </Card>
   );
 }

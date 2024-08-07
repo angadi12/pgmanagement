@@ -31,6 +31,7 @@ import {
 } from "@nextui-org/react";
 import { IoMenu } from "react-icons/io5";
 import { fetchNotificationByBranch } from "@/lib/NotificationSlice";
+import Cookies from "js-cookie";
 
 
 export default function Navbarr() {
@@ -47,6 +48,7 @@ export default function Navbarr() {
   const [selectedKey, setSelectedKey] = useState(selectedBranchId);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoading, setIsLoading] = useState(true);
+  const [isdelete, Setisdelete] = useState(false);
 
   useEffect(() => {
     dispatch(fetchBranches()).then(() => setIsLoading(false));
@@ -78,6 +80,12 @@ export default function Navbarr() {
 
   const routetonoti = () => {
     router.push("/Notifications");
+  };
+
+
+  const handleLogout = () => {
+    Cookies.remove("token");
+    router.push("/Signin");
   };
   return (
 
@@ -147,11 +155,10 @@ export default function Navbarr() {
           <DropdownMenu aria-label="Profile Actions" variant="flat">
             <DropdownItem key="profile" className="h-14 gap-2">
               <p className="font-semibold">Signed in as</p>
-              <p className="font-semibold">Santosh@example.com</p>
-            </DropdownItem>
-            <DropdownItem key="settings">My Settings</DropdownItem>
+              <p className="font-semibold">Admin</p>
+            </DropdownItem>        
 
-            <DropdownItem key="logout" color="primary">
+            <DropdownItem onPress={()=>Setisdelete(true)} key="logout" color="primary">
               Log Out
             </DropdownItem>
           </DropdownMenu>
@@ -178,6 +185,46 @@ export default function Navbarr() {
               <ModalFooter className="flex justify-center items-center text-center">
                 <Button onPress={onClose} className="bg-[#205093] text-background">
                   OK
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+
+      
+      <Modal
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
+        backdrop="blur"
+        isOpen={isdelete}
+        onOpenChange={Setisdelete}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col text-center">
+                Confirm Logout
+              </ModalHeader>
+              <ModalBody>
+                <p>Are you sure you want to logout?</p>
+              </ModalBody>
+              <ModalFooter className="flex justify-center items-center text-center">
+                <Button
+                  onPress={() => {
+                    handleLogout();
+                    onClose();
+                  }}
+                  className="bg-[#205093] rounded-sm text-background"
+                >
+                  Yes
+                </Button>
+                <Button
+                  size="md"
+                  onPress={()=>Setisdelete(false)}
+                  className="bg-white ring-1 rounded-sm ring-[#205093] text-[#205093]"
+                >
+                  No
                 </Button>
               </ModalFooter>
             </>
