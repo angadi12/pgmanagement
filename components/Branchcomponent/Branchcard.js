@@ -1,5 +1,5 @@
 'use client'
-import { Button } from "@nextui-org/react";
+import { Button, Skeleton } from "@nextui-org/react";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import pglogo from "../../public/Loginasset/pglogo.png"
@@ -35,11 +35,16 @@ useEffect(() => {
         const result = await Getbranchdetailsbyid(data._id);
         if (result.status) {
           setBranchDetails(result.data);
+          setLoadingDetails(false);
+
         } else {
           toast.error(result.message || "Failed to fetch branch details");
+          setLoadingDetails(false);
+
         }
       } catch (error) {
         toast.error("An error occurred while fetching branch details");
+        setLoadingDetails(false);
       } finally {
         setLoadingDetails(false);
       }
@@ -72,7 +77,11 @@ useEffect(() => {
             <p className="flex items-center justify-start gap-2 text-xs text-gray-500"><FaLocationDot/>{data.Address}</p>
           </div>
         </div>
-
+{loadingDetails?
+        <div className="flex justify-start items-center w-full gap-4 ">
+          <Skeleton className="h-4 w-16 rounded-sm"></Skeleton>
+          <Skeleton className="h-4 w-16 rounded-sm"></Skeleton>
+        </div>:
         <div className="flex justify-start items-center w-full gap-4 ">
           <div className="bg-[#E8EAF1] flex items-center gap-2 justify-center p-1 rounded-md">
             <p className="flex items-center text-xs font-semibold gap-2"><IoPeople/>{branchDetails?.admins}&nbsp;Admins</p>
@@ -81,6 +90,8 @@ useEffect(() => {
             <p className="flex items-center text-xs font-semibold gap-2"><FaBed/>{branchDetails?.user}&nbsp;Tenants</p>
           </div>
         </div>
+        
+        }
       </div>
       <div className="h-full justify-between items-start flex flex-col">
         <div className="flex justify-start items-center ">

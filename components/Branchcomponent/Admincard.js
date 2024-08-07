@@ -16,21 +16,19 @@ import {
   Switch
 } from "@nextui-org/react";
 import { Tabs, Tab, Chip } from "@nextui-org/react";
-import Personaldetails from './Personaldetails';
-import Allocverify from './Allocverify';
-import Userandpass from './Userandpass';
 import Updateadmindetails from "./Updateadmindetails";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setAdminId, clearSelectedAdmin } from "@/lib/AdminSlice";
-import {Updateadminstatusapi} from "../../lib/API/Admin"
-import { fetchAdmins } from '@/lib/AdminSlice';
+import { Updateadminstatusapi, GetAdminbyid } from "../../lib/API/Admin";
+import Admincardskeleton from "./Admincardskeleton";
 
-const Admincard = ({admin}) => {
+const Admincard = ({ admin }) => {
   const [selectedtab2, setSelectedtab2] = React.useState("Personal Details");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [Open, SetOpen, ] = useState(false);
+  const [Open, SetOpen] = useState(false);
   const [isSelected, setIsSelected] = React.useState(admin?.activate);
-  const selectedBranchId = useSelector((state) => state.branches.selectedBranchId); 
+  const [loading, setLoading] = useState(false);
+  const [adminDetails, setAdminDetails] = useState(admin);
 
   const dispatch = useDispatch();
 
@@ -50,42 +48,62 @@ const Admincard = ({admin}) => {
     }
   }, [Open, dispatch]);
 
-
   const handleToggle = async (id) => {
+    const newStatus = !isSelected;
+    setIsSelected(newStatus);  
+
     try {
+      setLoading(true);
       const response = await Updateadminstatusapi(id);
 
       if (response.statuscode === 200) {
-        dispatch(fetchAdmins(selectedBranchId));
-        
+        const updatedAdmin = await GetAdminbyid(id);
+        if (updatedAdmin.statuscode === 200) {
+          setAdminDetails(updatedAdmin.data);  
+        } else {
+          console.error("Error fetching updated admin details:", updatedAdmin.message);
+        }
       } else {
+        setIsSelected(!newStatus);
         console.error("Error updating activation status:", response.message);
-      
       }
     } catch (error) {
+      setIsSelected(!newStatus);
       console.error("Error updating activation status:", error);
-      
+    } finally {
+      setLoading(false);
     }
   };
 
+  if (loading) {
+    return <Admincardskeleton />;
+  }
 
   return (
     <>
       <div className="w-full boxshadow relative h-full rounded-md flex flex-col justify-center items-center ">
-       <div className="absolute top-2 right-0">
-       <Switch size="sm" isSelected={admin?.activate} onValueChange={()=>handleToggle(admin._id)}>
-      </Switch> 
-       </div>
+        <div className="absolute top-2 right-0">
+          <Switch 
+            size="sm" 
+            isSelected={isSelected} 
+            onValueChange={() => handleToggle(admin._id)} 
+          />
+        </div>
         <Image
           src={adminpic}
           alt="Profile Picture"
           className="rounded-full mx-auto -mt-12 w-24 h-24"
         />
-        <h2 class="text-lg font-bold mt-2 uppercase">{admin?.name}</h2>
+        <h2 className="text-lg font-bold mt-2 uppercase">{adminDetails?.name}</h2>
         <p className="text-xs font-bold flex items-center gap-2">
-        Access:<span className="text-[#1B9D31]">{admin.permission.join(",")}</span>
+          Access:<span className="text-[#1B9D31]">{adminDetails.permission.join(",")}</span>
         </p>
-        <div className="py-2">{admin.activate? <Chip size="sm" color="success" className="text-white">Activate</Chip>: <Chip className="text-white" size="sm" color="danger">Deactivate</Chip>}</div>
+        <div className="py-2">
+          {isSelected 
+            ? <Chip size="sm" color="success" className="text-white">Activate</Chip>
+            : <Chip className="text-white" size="sm" color="danger">Deactivate</Chip>
+          }
+        </div>
         <div className="bg-[#F0F0F0] p-4 flex flex-col justify-center items-center w-full h-full mt-2 gap-4">
           <div className=" flex justify-between gap-4  items-center w-full">
             <div>
@@ -95,7 +113,7 @@ const Admincard = ({admin}) => {
               </p>
             </div>
             <span className="text-xs font-semibold text-gray-400 text-end">
-             {admin?.Email}
+              {adminDetails?.Email}
             </span>
           </div>
           <div className=" flex justify-between gap-4  items-center w-full">
@@ -106,7 +124,7 @@ const Admincard = ({admin}) => {
               </p>
             </div>
             <span className="text-[0.7rem] font-semibold text-gray-400 text-end">
-              +91{admin?.Number}
+              +91{adminDetails?.Number}
             </span>
           </div>
           <div className=" flex justify-between gap-4  items-center w-full">
@@ -159,7 +177,7 @@ const Admincard = ({admin}) => {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col text-center">
-              View / Edit Admin
+                View / Edit Admin
               </ModalHeader>
               <ModalBody>
                 <Tabs
@@ -202,7 +220,7 @@ const Admincard = ({admin}) => {
                   /> */}
                 </Tabs>
                 <div className="w-full h-auto">
-                  {selectedtab2 === "Personal Details" && <Updateadmindetails/>}
+                  {selectedtab2 === "Personal Details" && <Updateadmindetails />}
                   {/* {selectedtab2 === "Allocation & Verification" && (
                     <Allocverify />
                   )}
