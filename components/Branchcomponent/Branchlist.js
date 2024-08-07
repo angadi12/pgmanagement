@@ -50,6 +50,13 @@ const Branchlist = () => {
     dispatch(fetchBranches());
   };
 
+
+  if(filteredBranches === undefined) {
+   return <div className="w-full  h-[60vh] flex justify-center items-center p-3 rounded-md">
+      <p>Error while fetching branch details</p>
+    </div>
+  }
+
   return (
     <>
       {status === "loading" ? (
@@ -61,11 +68,6 @@ const Branchlist = () => {
           {status === "succeeded" && filteredBranches?.length === 0 && (
             <div className="w-full boxshadow h-40 flex justify-center items-center p-3 rounded-md">
               <p>No branches Found</p>
-            </div>
-          )}
-          { filteredBranches === undefined && (
-            <div className="w-full boxshadow h-40 flex justify-center items-center p-3 rounded-md">
-              <p>Error while fetching branch details</p>
             </div>
           )}
           {filteredBranches?.map(
