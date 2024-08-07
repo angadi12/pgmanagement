@@ -1,14 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { DatePicker, Button } from "@nextui-org/react";
+import { DatePicker, Button, Input } from "@nextui-org/react";
 import { parseDate, getLocalTimeZone } from "@internationalized/date";
-import { Input } from "@nextui-org/react";
 import { useSelector, useDispatch } from "react-redux";
 import { UpadteTenantapi } from "@/lib/API/Tennat";
 import toast, { Toaster } from "react-hot-toast";
 import { fetchTenantsByBranch, fetchSingleTenant } from "@/lib/TennatSlice";
 import { fetchRoomsByBranch } from "@/lib/RoomSlice";
-import { clearPersonalDetails,setCurrentStep } from "@/lib/CreatetenantSlice"; 
+import { clearPersonalDetails, setCurrentStep } from "@/lib/CreatetenantSlice";
 
 const isValidObjectId = (id) => /^[0-9a-fA-F]{24}$/.test(id);
 
@@ -25,62 +24,34 @@ const convertToISODate = (dateString) => {
   return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
 };
 
-
 const Updateroomsanddura = ({ Setopenedit }) => {
-  const [startDate, setStartDate] = useState(
-    parseDate(new Date().toISOString().split("T")[0])
-  );
-  const [endDate, setEndDate] = useState(
-    parseDate(new Date().toISOString().split("T")[0])
-  );
+  const [startDate, setStartDate] = useState(parseDate(new Date().toISOString().split("T")[0]));
+  const [endDate, setEndDate] = useState(parseDate(new Date().toISOString().split("T")[0]));
   const [roomPrice, setRoomPrice] = useState("");
   const [paidAmount, setPaidAmount] = useState(0);
   const [security, setSecurity] = useState(0);
   const [maintenance, setMaintenance] = useState(0);
-  const [dueAmount,SetdueAmount]=useState(0)
+  const [dueAmount, setDueAmount] = useState(0);
   const [totalRent, setTotalRent] = useState(0);
+  const [numberOfMonths, setNumberOfMonths] = useState(1);
 
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const singleTenant = useSelector((state) => state.tenants.singleTenant);
-  const [numberOfMonths, setNumberOfMonths] = useState(1);
-  const selectedRoomId = useSelector(
-    (state) => state.createTenant.selectedRoomId
-  );
+  const selectedRoomId = useSelector((state) => state.createTenant.selectedRoomId);
   const rooms = useSelector((state) => state.rooms.rooms);
-  const roomDetails = rooms.find((room) => room._id === selectedRoomId);
-  const personalDetails = useSelector(
-    (state) => state.createTenant.personalDetails
-  );
-  const selectedBranchId = useSelector(
-    (state) => state.branches.selectedBranchId
-  );
-  const selectedTenantId = useSelector(
-    (state) => state.tenants.selectedTenantId
-  );
+  const selectedBranchId = useSelector((state) => state.branches.selectedBranchId);
+  const selectedTenantId = useSelector((state) => state.tenants.selectedTenantId);
+  const personalDetails = useSelector((state) => state.createTenant.personalDetails);
 
-  useEffect(() => {
-    if (roomPrice) {
-      calculateTotalRent(roomPrice, numberOfMonths);
-    }
-  }, [roomPrice, numberOfMonths]);
-  
-  const calculateTotalRent = (price, months) => {
-    const total = price * months;
-    console.log(total,"total")
-    setTotalRent(total);
-    SetdueAmount(total - paidAmount);
-  };
-  
- 
   useEffect(() => {
     if (isValidObjectId(selectedTenantId)) {
       dispatch(fetchSingleTenant({ tenantId: selectedTenantId }));
     } else {
       console.error("Invalid ObjectId(s) provided");
     }
-  }, [selectedTenantId]);
+  }, [selectedTenantId, dispatch]);
 
   useEffect(() => {
     if (selectedBranchId) {
@@ -88,33 +59,46 @@ const Updateroomsanddura = ({ Setopenedit }) => {
     }
   }, [selectedBranchId, dispatch]);
 
-
   useEffect(() => {
-    console.log("rooms:", rooms);
-    console.log("selectedRoomId:", selectedRoomId);
-    const roomDetails = rooms.find((room) => room._id === selectedRoomId);
-    setRoomPrice(roomDetails.Price);
-    if (singleTenant) {
+    if (singleTenant && rooms) {
+      const roomDetails = rooms.find((room) => room._id === selectedRoomId);
+      setRoomPrice(roomDetails.Price);
       const isoStartDate = convertToISODate(singleTenant.StartDate);
-      try {
-        setStartDate(parseDate(isoStartDate));
-      } catch (error) {
-        console.error("Error parsing date:", error);
-      }
-      // setStartDate(parseDate(isoStartDate, getLocalTimeZone()));
+      const isoLastDate = convertToISODate(singleTenant.LastDate);
+      setStartDate(parseDate(isoStartDate));
+      setEndDate(parseDate(isoLastDate));
       setPaidAmount(singleTenant.Payment[0]?.Amount);
       setSecurity(singleTenant.Payment[0]?.Security);
       setMaintenance(singleTenant.Payment[0]?.Maintaince);
-      // setNumberOfMonths(singleTenant.Payment[0]?.NumberOfmonth);
       setNumberOfMonths(singleTenant?.NumberOfmonth);
-      SetdueAmount(singleTenant.Payment[0]?.DueAmount)
-      
+      setDueAmount(singleTenant.Payment[0]?.DueAmount);
     }
-  }, [singleTenant,rooms, selectedRoomId]);
+  }, [singleTenant, rooms, selectedRoomId]);
 
- 
-  
+  useEffect(() => {
+    if (roomPrice && numberOfMonths) {
+      const total = roomPrice * numberOfMonths;
+      setTotalRent(total);
+      setDueAmount(total - paidAmount);
+    }
+  }, [roomPrice, numberOfMonths, paidAmount]);
 
+  useEffect(() => {
+    if (startDate && endDate) {
+      const start = new Date(startDate.toString());
+      const end = new Date(endDate.toString());
+      const months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+      setNumberOfMonths(months);
+    }
+  }, [startDate, endDate]);
+
+  useEffect(() => {
+    if (startDate && numberOfMonths > 0) {
+      const start = new Date(startDate.toString());
+      const newEndDate = new Date(start.setMonth(start.getMonth() + numberOfMonths));
+      setEndDate(parseDate(newEndDate.toISOString().split('T')[0]));
+    }
+  }, [startDate, numberOfMonths]);
 
   const handleUpdateTenant = async () => {
     if (!startDate || !endDate || !paidAmount) {
@@ -127,12 +111,15 @@ const Updateroomsanddura = ({ Setopenedit }) => {
     const data = {
       UserName: personalDetails?.UserName,
       UserNumber: personalDetails?.UserNumber,
+      AadharNumber: personalDetails?.aadharNumber,
+      Address: personalDetails?.address,
       StartDate: formatDate(startDate),
+      LastDate: formatDate(endDate),
       room: selectedRoomId,
       Amount: paidAmount,
       Maintaince: maintenance,
       Security: security,
-      DueAmount:dueAmount,
+      DueAmount: dueAmount,
       NumberOfmonth: numberOfMonths,
       branch: selectedBranchId,
     };
@@ -142,15 +129,15 @@ const Updateroomsanddura = ({ Setopenedit }) => {
       if (result.status) {
         toast.success("Tenant Updated successfully");
         dispatch(fetchTenantsByBranch(selectedBranchId));
-        dispatch(clearPersonalDetails())
+        dispatch(clearPersonalDetails());
         Setopenedit(false);
-        dispatch(setCurrentStep('Availability')); 
-
+        dispatch(setCurrentStep('Availability'));
       } else {
         toast.error(result.message);
         setError(result.message);
       }
     } catch (error) {
+      setError("An error occurred. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -162,10 +149,9 @@ const Updateroomsanddura = ({ Setopenedit }) => {
       toast.error("Paid amount cannot be greater than total rent.");
     } else {
       setPaidAmount(value);
-      SetdueAmount(totalRent - value);
+      setDueAmount(totalRent - value);
     }
   };
-
   return (
     <>
       <div className="flex flex-col justify-center items-center gap-4">
@@ -182,6 +168,16 @@ const Updateroomsanddura = ({ Setopenedit }) => {
             className="w-full"
             value={startDate}
             onChange={setStartDate}
+          />
+          <DatePicker
+            size="lg"
+            radius="sm"
+            variant="bordered"
+            label="Start Date"
+            labelPlacement="outside"
+            className="w-full"
+            value={endDate}
+            onChange={setEndDate}
           />
           <Input
             type="number"
@@ -222,7 +218,7 @@ const Updateroomsanddura = ({ Setopenedit }) => {
             value={maintenance}
             onChange={(e) => setMaintenance(parseInt(e.target.value, 10))}
           />
-          <Input
+          {/* <Input
             type="text"
             name="Roomprice"
             label="Room Rent"
@@ -234,7 +230,7 @@ const Updateroomsanddura = ({ Setopenedit }) => {
             radius="sm"
             className="w-full rounded-none"
             size="lg"
-          />
+          /> */}
           <Input
             type="number"
             name="Paidamount"
@@ -249,13 +245,12 @@ const Updateroomsanddura = ({ Setopenedit }) => {
             onChange={handlePaidAmountChange}
           />
         </div>
-        <div className="w-full flex flex-col py-2 justify-end items-end ">
-          <div className="flex flex-col justify-start items-start gap-4">
-            {/* <div >
-         <p>Room Price : {roomDetails?.Price}</p>
-         <p>Total Paid : {paidAmount}</p>
-
-         </div> */}
+        <div className="w-full flex  py-2 justify-end items-end ">
+          <div className="flex  justify-start items-start gap-4">
+            <div >
+         <Button  className=" text-white buttongradient  rounded-md">Room Rent : {roomPrice}</Button>
+        
+         </div>
 
             <Button className=" text-white bg-red-500 rounded-md">
               Overdue : {dueAmount}

@@ -29,7 +29,7 @@ const Getfloor = () => {
   }, [selectedBranchId, dispatch]);
 
   useEffect(() => {
-    if (floors.length > 0) {
+    if (floors?.length > 0) {
       setSelectedFloor(floors[0]);
     }
   }, [floors]);

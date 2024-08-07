@@ -62,7 +62,8 @@ export function Revenueovr() {
   // if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
-  const chartData = [...earnings]
+  const chartData = Array.isArray(earnings) ? [...earnings] : [];
+
 
 
   if (loading) {

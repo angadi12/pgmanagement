@@ -27,7 +27,7 @@ const Notifications = () => {
   const [selected, setSelected] = React.useState("All Notifications");
   const [selectedtab, setSelectedtab] = React.useState("Notice");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [loading, setLoading] = useState(false);
+  const [loadingNotification, setLoadingNotification] = useState(null);
   const dispatch = useDispatch();
   const selectedBranchId = useSelector(
     (state) => state.branches.selectedBranchId
@@ -45,7 +45,7 @@ const Notifications = () => {
 
 
   const deleteNotification = async (id) => {
-    setLoading(true);
+    setLoadingNotification(id);
     try {
       const result = await Deletenotification(id);
       if (result.status) {
@@ -53,11 +53,13 @@ const Notifications = () => {
         dispatch(fetchNotificationByBranch(selectedBranchId));
       } else {
         toast.error("Failed to delete notification");
+        setLoadingNotification(null);
       }
     } catch (error) {
       toast.error("Error occurred while deleting notification");
+      setLoadingNotification(null);
     } finally {
-      setLoading(false);
+      setLoadingNotification(null);
     }
   };
   return (
@@ -143,8 +145,11 @@ const Notifications = () => {
                   </div>
                   <div className="flex gap-4 items-center ">
                   <Button onPress={()=>deleteNotification(noti._id)} isIconOnly variant="light" className="">
-                   { loading?<span className="loader4"></span>:<MdDelete size={24} className="text-red-400" />}
-
+                  {loadingNotification === noti._id ? (
+                            <span className="loader4"></span>
+                          ) : (
+                            <MdDelete size={24} className="text-red-400" />
+                          )}
                   </Button>
                   </div>
                 

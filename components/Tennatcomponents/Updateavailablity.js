@@ -176,7 +176,7 @@ const Updateavailablity = () => {
       return acc;
     }, {});
 
-    const floorsCopy = [...floors];
+    const floorsCopy = Array.isArray(floors) ? [...floors] : [];
 
     return floorsCopy.sort((a, b) => {
       const aLower = a.toLowerCase().replace("secound", "second");

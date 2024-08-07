@@ -45,7 +45,7 @@ const Activecomplaint = () => {
 
   return (
     <div className="grid grid-cols-1 gap-5 justify-around items-start w-full h-full rounded-lg">
-      {tickets.map((ticket) => {
+      {tickets.Slice(0,3).map((ticket) => {
         const categoryImage = categoryImages[ticket.Categoery] || null;
         const categoryColor = categoryColors[ticket.Categoery] || '#7B00D0';
 

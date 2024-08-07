@@ -1,103 +1,86 @@
-import React, { useEffect, useState } from "react";
-import { FaCircle } from "react-icons/fa6";
+import React, { useEffect } from "react";
+import { FaCircle } from "react-icons/fa";
 import ExpenseandcompSkeleton from "./ExpenseandcompSkeleton ";
 import Activecomplaint from "./Activecomplaint";
 import Expensebreak from "../Chartcomponent/Expensebreak";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchDashboardExpense } from "@/lib/DashboardSlice";
+
+const chartConfig = {
+  ElectricityBill: {
+    color: "#FFA100",
+  },
+  GasBill: {
+    color: "#9747FF",
+  },
+  WaterBill: {
+    color: "#0096FF",
+  },
+  InternetBill: {
+    color: "#ED6300",
+  },
+};
 
 const Expenseandcomp = () => {
-  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+  const { expense, loading, error } = useSelector((state) => state.dashboard);
+
+  const selectedBranchId = useSelector(
+    (state) => state.branches.selectedBranchId
+  );
 
   useEffect(() => {
-    // Simulate an API call
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-  }, []);
+    dispatch(fetchDashboardExpense());
+  }, [dispatch, selectedBranchId]);
 
   if (loading) {
-    return <ExpenseandcompSkeleton/>;
+    return <ExpenseandcompSkeleton />;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
   }
 
 
+
+
+
+  // Render the expense items dynamically
+  const expenseItems = expense?.map((item) => {
+    const color = chartConfig[item.name]?.color || "#ccc";
+    return (
+
+      <>
+     <div className="flex flex-col justify-start items-start" key={item.name}>
+        <p className="flex gap-1 items-center text-xs">
+          <FaCircle className="text-[color]" style={{ color: color }} /> {item.name}
+        </p>
+        <p className="text-[color]" style={{ color: color }}>{`Rs/- ${item.totalAmount}`}</p>
+      </div>
+
+      </>
+    );
+  });
+
   return (
-    <div className="flex w-full justify-center items-start  h-full">
+    <div className="flex w-full justify-center items-start h-full">
       <div className="flex flex-col gap-4 justify-start items-start w-full h-full">
-        <div className="w-full flex justify-between items-center  ">
+        <div className="w-full flex justify-between items-center">
           <p className="text-sm font-bold">Expense Breakdown</p>
-          <p className="text-sm font-bold ">Active Complaints</p>
+          <p className="text-sm font-bold">Active Complaints</p>
         </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-2 grid-cols-1 gap-6 justify-center place-content-center items-start mx-auto w-full h-full ">
-          <div className=" flex flex-col  justify-between gap-6  w-full h-full rounded-lg">
+        <div className="grid md:grid-cols-2 lg:grid-cols-2 grid-cols-1 gap-6 justify-center place-content-center items-start mx-auto w-full h-full">
+          <div className="flex flex-col justify-between gap-6 w-full h-full rounded-lg">
             <div>
               <Expensebreak />
             </div>
-            <div className="w-full h-full grid px-4 py-2 grid-cols-2 justify-center place-content-center items-center mx-auto  rounded-md ring-1 ring-gray-200">
-              <div className="flex flex-col justify-start items-start w-full">
-                <p className="flex gap-1 items-center text-xs ">
-                  <FaCircle className="text-[#0096FF]" /> Water Bill
-                </p>
-                <p className="text-[#0096FF] text-[0.5rem]">Rs/- 3000</p>
-              </div>
-              <div className="flex flex-col justify-start items-start">
-                <p className="flex gap-1 items-center text-xs ">
-                  <FaCircle className="text-[#FFA100]" />
-                  Electricity Bill
-                </p>
-                <p className="text-[#FFA100] text-[0.5rem]">Rs/- 3000</p>
-              </div>
-              <div className="flex flex-col justify-start items-start">
-                <p className="flex gap-1 items-center text-xs ">
-                  <FaCircle className="text-[#ED6300]" /> Internet Bill
-                </p>
-                <p className="text-[##ED6300] text-[0.5rem]">Rs/- 3000</p>
-              </div>
-              <div className="flex flex-col justify-start items-start">
-                <p className="flex gap-1 items-center text-xs ">
-                  <FaCircle className="text-[#9747FF]" /> Gas Bill
-                </p>
-                <p className="text-[#9747FF] text-[0.5rem]">Rs/- 3000</p>
-              </div>
-            </div>
+           { !expense || expense?.length === 0?  <div  className="w-full h-full grid  py-2 grid-cols-1 justify-center place-content-center items-center mx-auto rounded-md ring-1 ring-gray-200">
+        <p className="text-xs font-semibold w-full h-16 text-center flex justify-center items-center">No data available</p>
+      </div>:<div className="w-full h-full grid px-4 py-2 grid-cols-2 justify-center place-content-center items-center mx-auto rounded-md ring-1 ring-gray-200">
+              {expenseItems}
+            </div>}
           </div>
-          <Activecomplaint/>
-          {/* <div className="grid grid-cols-1 gap-5 justify-around items-start  w-full h-full  rounded-lg">
-            <div className="w-full h-auto py-3 bg-[#FFA100]  rounded-md ring-1 ring-gray-200 flex justify-around items-center px-4">
-              <div className=" w-14 h-14 rounded-full relative flex justify-center items-center ">
-                <Image src={Circle} alt="cicle" />
-                <Image
-                  src={electricity}
-                  alt="electricity"
-                  className="absolute"
-                />
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-white">Room: A7</p>
-                <p className="text-xs font-medium text-white">
-                  Electrical Issue
-                </p>
-              </div>
-            </div>
-            <div className="w-full h-auto py-3 bg-[#0096FF]  rounded-md ring-1 ring-gray-200 flex justify-around items-center px-4">
-              <div className=" w-14 h-14 rounded-full relative flex justify-center items-center ">
-                <Image src={Circle} alt="cicle" />
-                <Image src={water} alt="electricity" className="absolute" />
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-white">Room: A7</p>
-                <p className="text-xs font-medium text-white">Plumbing Issue</p>
-              </div>
-            </div>
-            <div className="w-full h-auto py-3 bg-[#ED6300]  rounded-md ring-1 ring-gray-200 flex justify-around items-center px-4">
-              <div className=" w-14 h-14 rounded-full relative flex justify-center items-center ">
-                <Image src={Circle} alt="cicle" />
-                <Image src={wifi} alt="electricity" className="absolute" />
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-white">Room: A7</p>
-                <p className="text-xs font-medium text-white">Internet Issue</p>
-              </div>
-            </div>
-          </div> */}
+          <Activecomplaint />
         </div>
       </div>
     </div>

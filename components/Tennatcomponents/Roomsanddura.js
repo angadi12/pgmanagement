@@ -51,6 +51,28 @@ const Roomsanddura = ({Setopenmodal}) => {
     }
   }, [roomDetails, numberOfMonths]);
 
+
+  useEffect(() => {
+    if (startDate && endDate) {
+      const start = new Date(startDate.toString());
+      const end = new Date(endDate.toString());
+      const months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+      setNumberOfMonths(months);
+    }
+  }, [startDate, endDate]);
+
+  useEffect(() => {
+    if (startDate && numberOfMonths > 0) {
+      const start = new Date(startDate.toString());
+      const newEndDate = new Date(start.setMonth(start.getMonth() + numberOfMonths));
+      setEndDate(parseDate(newEndDate.toISOString().split('T')[0]));
+    }
+  }, [numberOfMonths]);
+
+
+
+
+
   const calculateTotalRent = (price, months) => {
     const total = price * months;
     setTotalRent(total);
@@ -72,6 +94,8 @@ const Roomsanddura = ({Setopenmodal}) => {
     const data = {
       UserName: personalDetails.UserName,
       UserNumber: personalDetails.UserNumber,
+      AadharNumber: personalDetails.aadharNumber,
+      Address: personalDetails.address,
       StartDate: formatDate(startDate),
       LastDate: formatDate(endDate),
       room: selectedRoomId,
@@ -131,6 +155,17 @@ const Roomsanddura = ({Setopenmodal}) => {
           onChange={setStartDate}
         />
         
+        <DatePicker
+          size="lg"
+          radius="sm"
+          variant="bordered"
+          label="Last Date"
+          labelPlacement="outside"
+          className="w-full"
+          value={endDate}
+          onChange={setEndDate}
+        />
+        
         <Input
             type="number"
             name="NumberOfmonth"
@@ -170,7 +205,7 @@ const Roomsanddura = ({Setopenmodal}) => {
             value={maintenance}
             onChange={(e) => setMaintenance(parseInt(e.target.value, 10))}
           />
-        <Input
+        {/* <Input
           type="text"
           name="Roomprice"
           label="Room Rent"
@@ -183,7 +218,7 @@ const Roomsanddura = ({Setopenmodal}) => {
           size="lg"
           placeholder="Room Rent"
         
-        />
+        /> */}
         <Input
           type="number"
           name="Paidamount"
@@ -199,13 +234,12 @@ const Roomsanddura = ({Setopenmodal}) => {
           onChange={handlePaidAmountChange}
           />
       </div>
-      <div className="w-full flex flex-col py-2 justify-end items-end ">
-         <div className="flex flex-col justify-start items-start gap-4">
-         {/* <div >
-         <p>Room Price : {roomDetails?.Price}</p>
-         <p>Total Paid : {paidAmount}</p>
-
-         </div> */}
+      <div className="w-full flex  py-2 justify-end items-end ">
+         <div className="flex  justify-start items-start gap-4">
+         <div >
+         <Button className=" text-white buttongradient  rounded-md">Rent : {roomDetails?.Price}</Button>
+      
+         </div>
 
         <Button className=" text-white bg-red-500 rounded-md">
         Overdue  : {dueAmount}
