@@ -256,7 +256,7 @@ const Availablity = () => {
           <p className="font-semibold"></p>
         </div>
         <div className="grid grid-cols-10 gap-4 w-full items-start mt-4">
-          {filteredRooms.map((room, index) => (
+          {filteredRooms?.map((room, index) => (
             <div
               key={index}
               className="flex flex-col justify-center items-center gap-2"

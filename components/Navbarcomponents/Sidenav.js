@@ -28,7 +28,7 @@ import { FaBuildingColumns } from "react-icons/fa6";
 import Cookies from "js-cookie";
 import {GetAdminbyid,GetSuperAdminbyid} from "../../lib/API/Auth"
 import { useSelector,useDispatch } from 'react-redux';
-import jwt_decode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import {  setUser} from "@/lib/AuthSlice";
 
 const Sidenav = () => {
@@ -42,31 +42,34 @@ const Sidenav = () => {
   const { user, loading, error } = useSelector((state) => state.auth);
 
   
-  // useEffect(() => {
-  //   const token = Cookies.get("token");
-  //   if (token) {
-  //     const decodedToken = jwt_decode(token);
-  //     const { role, userId } = decodedToken;
+  useEffect(() => {
+    const token = Cookies.get("token");
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      const { role, id } = decodedToken;
 
-  //     const fetchUserDetails = async () => {
-  //       try {
-  //         let userDetails;
-  //         if (role === "owner") {
-  //           userDetails = await GetSuperAdminbyid(userId);
-  //         } else if (role === "admin") {
-  //           userDetails = await GetAdminbyid(userId);
-  //         }
-  //         if (userDetails) {
-  //           dispatch(setUser(userDetails?.data));
-  //         }
-  //       } catch (error) {
-  //         console.error("Error fetching user details:", error);
-  //       }
-  //     };
+      const fetchUserDetails = async () => {
+        console.log(id)
+        try {
+          let userDetails;
+          if (role === "owner") {
+            console.log("running")
+            userDetails = await GetSuperAdminbyid(id);
+            console.log(userDetails)
+          } else if (role === "admin") {
+            userDetails = await GetAdminbyid(id);
+          }
+          if (userDetails) {
+            dispatch(setUser(userDetails?.data));
+          }
+        } catch (error) {
+          console.error("Error fetching user details:", error);
+        }
+      };
 
-  //     fetchUserDetails();
-  //   }
-  // }, []);
+      fetchUserDetails();
+    }
+  }, []);
 
   useEffect(() => {
     switch (pathname) {
@@ -91,8 +94,10 @@ const Sidenav = () => {
       case "/Ourstaff":
         setSelected("Staff");
         break;
-
+      case "/Notifications":
+        setSelected("Notifications");
         break;
+
       case "/Branches":
         setSelected("Branches");
         break;
@@ -125,6 +130,9 @@ const Sidenav = () => {
       case "Staff":
         router.push("/Ourstaff");
         break;
+      case "Notifications":
+        router.push("/Notifications");
+        break;
 
       case "Branches":
         router.push("/Branches");
@@ -153,18 +161,17 @@ const Sidenav = () => {
       { key: "Expense", title: "Expense", icon: <GiExpense size={24} /> },
       { key: "Staff", title: "Our staff", icon: <IoIosPeople size={24} /> },
       { key: "Maintenance", title: "Support", icon: <RiHeartAddFill size={24} /> },
+      { key: "Notifications", title: "Notifications", icon: <FaBell size={24} /> },
     ];
 
     if (user?.role === "owner") {
       return [...commonTabs, ...adminTabs];
     }
 
-    return adminTabs.filter((tab) => user?.permission.includes(tab.key))
+    return adminTabs.filter((tab) => user?.permission?.includes(tab.key))
 
   };
 
-
-console.log(user)
 
   return (
     <>
@@ -180,7 +187,7 @@ console.log(user)
           </div>
         </div>
 
-        <div className="flex justify-center items-center w-full h-auto ">
+        <div className="flex justify-start items-start w-full h-auto ">
           <div className="flex w-full  mx-auto flex-col justify-center items-center  ">
             <Tabs
               aria-label="Options"
@@ -196,7 +203,7 @@ console.log(user)
               selectedKey={selected}
               onSelectionChange={handleTabChange}
             >
-              <Tab
+              {/* <Tab
                 onprss
                 key="Dashboard"
                 title={
@@ -268,14 +275,14 @@ console.log(user)
                     <span>Support</span>
                   </div>
                 }
-              ></Tab>
+              ></Tab> */}
 
-              {/* {renderTabs().map((tab) => (
+              {renderTabs().map((tab) => (
                 <Tab key={tab.key} title={<div className="flex items-center  w-44  gap-4">
                      {tab.icon}
                     <span>{tab.title}</span>
                   </div>} />
-              ))} */}
+              ))}
             </Tabs>
           </div>
         </div>

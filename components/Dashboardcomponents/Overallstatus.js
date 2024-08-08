@@ -1,10 +1,10 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { IoPeople } from "react-icons/io5";
 import { FaB, FaBed } from "react-icons/fa6";
 import { IoIosWarning } from "react-icons/io";
 import { Button, Divider } from "@nextui-org/react";
-import {Card, Skeleton} from "@nextui-org/react";
+import { Card, Skeleton } from "@nextui-org/react";
 import { FaCircle } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -12,21 +12,38 @@ import {
   fetchDashboardEarnings,
 } from "../../lib/DashboardSlice";
 import Getfloor from "./Getfloor";
+import { fetchTicketsByBranch } from "@/lib/SupportSlice";
 
 const Overallstatus = () => {
   const dispatch = useDispatch();
   const { data, earnings, loading, error } = useSelector(
     (state) => state.dashboard
   );
+  const { tickets, status } = useSelector((state) => state.tickets);
 
   const selectedBranchId = useSelector(
     (state) => state.branches.selectedBranchId
   );
 
+  const [resolvedCount, setResolvedCount] = useState(0);
+  const [pendingCount, setPendingCount] = useState(0);
+
   useEffect(() => {
     dispatch(fetchDashboardData());
     dispatch(fetchDashboardEarnings());
-  }, [dispatch,selectedBranchId]);
+    dispatch(fetchTicketsByBranch(selectedBranchId));
+  }, [dispatch, selectedBranchId]);
+
+  useEffect(() => {
+    if (tickets) {
+      setResolvedCount(
+        tickets?.filter((ticket) => ticket.status === "resolved").length
+      );
+      setPendingCount(
+        tickets?.filter((ticket) => ticket.status === "pending").length
+      );
+    }
+  }, [tickets]);
 
   // if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -35,7 +52,7 @@ const Overallstatus = () => {
     <div className="flex flex-col gap-4 w-full justify-start items-start  h-full">
       {loading ? (
         <div className="flex flex-col gap-2 justify-center items-center w-full">
-        <div className="w-full flex justify-between items-center  ">
+          <div className="w-full flex justify-between items-center  ">
             <p className="text-sm font-bold">Overall Status</p>
             <p className="text-sm font-bold text-[#16C133]">Live</p>
           </div>
@@ -61,7 +78,13 @@ const Overallstatus = () => {
         <div className="flex flex-col gap-2 justify-center items-center w-full">
           <div className="w-full flex justify-between items-center  ">
             <p className="text-sm font-bold">Overall Status</p>
-            <p className="text-sm font-bold text-[#16C133] flex items-center gap-1"><FaCircle size={5} className="animate-ping duration-1000 text-red-600"/>Live</p>
+            <p className="text-sm font-bold text-[#16C133] flex items-center gap-1">
+              <FaCircle
+                size={5}
+                className="animate-ping duration-1000 text-red-600"
+              />
+              Live
+            </p>
           </div>
           <div className="grid md:grid-cols-3 lg:grid-cols-3 grid-cols-1 md:gap-6 lg:gap-6 gap-2 justify-around items-center mx-auto w-full ">
             <div className="boxshadow  rounded-lg flex md:justify-center lg:justify-center justify-between md:items-center lg:items-center items-start gap-2 py-4 px-4 md:px-0 lg:px-0 md:h-36 lg:h-36 md:flex-col lg:flex-col">
@@ -69,7 +92,7 @@ const Overallstatus = () => {
                 <IoPeople size={24} />
               </div>
               <div className="flex flex-col justify-center items-center">
-                <p className="font-bold">{data.totalBeds}</p>
+                <p className="font-bold">{data?.totalBeds}</p>
                 <p className="text-xs font-semibold text-[#8B8B8B]">
                   Total Tenants
                 </p>
@@ -80,7 +103,7 @@ const Overallstatus = () => {
                 <FaBed size={24} />
               </div>
               <div className="flex flex-col justify-center items-center">
-                <p className="font-bold">{data.totalRemaining}</p>
+                <p className="font-bold">{data?.totalRemaining}</p>
                 <p className="text-xs font-semibold text-[#8B8B8B]">
                   Vacant Beds
                 </p>
@@ -96,14 +119,14 @@ const Overallstatus = () => {
                     <p className="text-[0.6rem] font-semibold text-[#ED0000]">
                       Pending
                     </p>
-                    <p className="font-bold text-xs">12</p>
+                    <p className="font-bold text-xs">{pendingCount}</p>
                   </div>
                   <Divider className="h-6" orientation="vertical" />
                   <div className="flex flex-col justify-center items-center gap-1">
                     <p className="text-[0.6rem] font-semibold text-[#00A61C]">
                       Resolved
                     </p>
-                    <p className="font-bold text-xs">12</p>
+                    <p className="font-bold text-xs">{resolvedCount}</p>
                   </div>
                 </div>
                 <p className="md:text-xs lg:text-xs text-tiny font-semibold text-[#8B8B8B]">

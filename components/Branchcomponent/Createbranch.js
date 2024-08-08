@@ -1,11 +1,12 @@
+"use client"
 import React, { useState } from "react";
 import { Input, Button } from "@nextui-org/react";
 import { Createbranchapi } from "../../lib/API/Branch";
 import toast, { Toaster } from "react-hot-toast";
-import { useSelector,useDispatch } from "react-redux";
-import { createBranch,fetchBranches } from "@/lib/BranchSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { createBranch, fetchBranches } from "@/lib/BranchSlice";
 
-const Createbranch = ({ onOpenChange, onRefresh }) => {
+const Createbranch = ({ Setopenbranch }) => {
   const branches = useSelector((state) => state.branches.branches);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
@@ -17,12 +18,10 @@ const Createbranch = ({ onOpenChange, onRefresh }) => {
     code: "",
   });
 
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
-
 
   const validate = () => {
     if (!formData.Branchname) return "Branch Name is required";
@@ -57,71 +56,67 @@ const Createbranch = ({ onOpenChange, onRefresh }) => {
     const result = await Createbranchapi(formData);
     if (result.status) {
       toast.success("Branch created successfully");
-      onOpenChange()
-    dispatch(fetchBranches());
-    setLoading(false)
+      dispatch(fetchBranches());
+      Setopenbranch(false)
+      setLoading(false);
     } else {
-
       toast.error(result.message.result || "Failed to create branch");
-      setLoading(false)
+      setLoading(false);
     }
   };
 
   return (
     <>
-    <div className="flex flex-col justify-center items-center gap-6">
-      <div className="w-full text-start">
-        <p className="text-lg font-semibold">Fill Branch Details</p>
-      </div>
-      <div
-        className="w-full grid lg:grid-cols-2 grid-cols-1 gap-6 place-content-center justify-between items-start"
-      
-      >
-        <Input
-          type="text"
-          name="Branchname"
-          variant="bordered"
-          radius="sm"
-          className="w-full rounded-none"
-          size="lg"
-          placeholder="Branch Name"
-          value={formData.Branchname}
-          onChange={handleChange}
-        />
-        <Input
-          type="text"
-          name="Address"
-          variant="bordered"
-          radius="sm"
-          className="w-full rounded-none"
-          size="lg"
-          placeholder="Location"
-          value={formData.Address}
-          onChange={handleChange}
-        />
-        <Input
-          type="tel"
-          name="Number"
-          variant="bordered"
-          radius="sm"
-          className="w-full rounded-none"
-          size="lg"
-          placeholder="Phone Number"
-          value={formData.Number}
-          onChange={handleChange}
-        />
-        <Input
-          type="text"
-          name="code"
-          variant="bordered"
-          radius="sm"
-          className="w-full rounded-none"
-          size="lg"
-          placeholder="code"
-          value={formData.code}
-          onChange={handleChange}
-        />
-        {/* <div className="w-full text-start flex justify-start items-center gap-2 py-2 lg:col-span-2">
+      <div className="flex flex-col justify-center items-center gap-6">
+        <div className="w-full text-start">
+          <p className="text-lg font-semibold">Fill Branch Details</p>
+        </div>
+        <div className="w-full grid lg:grid-cols-2 grid-cols-1 gap-6 place-content-center justify-between items-start">
+          <Input
+            type="text"
+            name="Branchname"
+            variant="bordered"
+            radius="sm"
+            className="w-full rounded-none"
+            size="lg"
+            placeholder="Branch Name"
+            value={formData.Branchname}
+            onChange={handleChange}
+          />
+          <Input
+            type="text"
+            name="Address"
+            variant="bordered"
+            radius="sm"
+            className="w-full rounded-none"
+            size="lg"
+            placeholder="Location"
+            value={formData.Address}
+            onChange={handleChange}
+          />
+          <Input
+            type="tel"
+            name="Number"
+            variant="bordered"
+            radius="sm"
+            className="w-full rounded-none"
+            size="lg"
+            placeholder="Phone Number"
+            value={formData.Number}
+            onChange={handleChange}
+          />
+          <Input
+            type="text"
+            name="code"
+            variant="bordered"
+            radius="sm"
+            className="w-full rounded-none"
+            size="lg"
+            placeholder="code"
+            value={formData.code}
+            onChange={handleChange}
+          />
+          {/* <div className="w-full text-start flex justify-start items-center gap-2 py-2 lg:col-span-2">
           <p className="text-[#205093] text-sm font-bold underline cursor-pointer">
             +Upload Building Image
           </p>
@@ -129,17 +124,18 @@ const Createbranch = ({ onOpenChange, onRefresh }) => {
             (PNG, JPG only)
           </span>
         </div> */}
-      </div>
-        <div className="flex justify-center items-center w-full">
-        <Button onPress={handleSubmit} className="buttongradient text-white rounded-md w-60 uppercase font-semibold">
-        {loading ? <span className="loader2"></span> : "Create Branch"}
-        </Button>
-
         </div>
-    </div>
+        <div className="flex justify-center items-center w-full">
+          <Button
+            onPress={handleSubmit}
+            className="buttongradient text-white rounded-md w-60 uppercase font-semibold"
+          >
+            {loading ? <span className="loader2"></span> : "Create Branch"}
+          </Button>
+        </div>
+      </div>
 
-
-    <Toaster
+      <Toaster
         position="top-center"
         reverseOrder={false}
         gutter={8}
@@ -164,7 +160,6 @@ const Createbranch = ({ onOpenChange, onRefresh }) => {
           },
         }}
       />
-
     </>
   );
 };

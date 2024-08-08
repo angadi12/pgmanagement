@@ -216,7 +216,7 @@ const Loginpage = () => {
                   <div className="bg-[#324970] rounded-md w-11/12 mx-auto h-12 flex justify-start px-2 items-center gap-4">
                     <FaUser className="text-white" size={24} />
                     <input
-                      className="outline-none bg-transparent text-white placeholder:text-white placeholder:text-sm placeholder:font-medium"
+                      className="outline-none bg-transparent   text-white placeholder:text-white placeholder:text-sm placeholder:font-medium"
                       placeholder="User Name"
                       value={adminEmail}
                       onChange={(e) => setAdminEmail(e.target.value)}
