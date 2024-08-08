@@ -18,7 +18,7 @@ import {
 import { Tabs, Tab, Chip } from "@nextui-org/react";
 import Updateadmindetails from "./Updateadmindetails";
 import { useDispatch, useSelector } from "react-redux";
-import { setAdminId, clearSelectedAdmin } from "@/lib/AdminSlice";
+import { setAdminId, clearSelectedAdmin} from "@/lib/AdminSlice";
 import { Updateadminstatusapi, GetAdminbyid } from "../../lib/API/Admin";
 import Admincardskeleton from "./Admincardskeleton";
 
@@ -29,7 +29,9 @@ const Admincard = ({ admin }) => {
   const [isSelected, setIsSelected] = React.useState(admin?.activate);
   const [loading, setLoading] = useState(false);
   const [adminDetails, setAdminDetails] = useState(admin);
-
+  const selectedBranchId = useSelector(
+    (state) => state.branches.selectedBranchId
+  );
   const dispatch = useDispatch();
 
   const handleOpen = () => {
@@ -72,6 +74,7 @@ const Admincard = ({ admin }) => {
       console.error("Error updating activation status:", error);
     } finally {
       setLoading(false);
+
     }
   };
 
@@ -95,8 +98,15 @@ const Admincard = ({ admin }) => {
           className="rounded-full mx-auto -mt-12 w-24 h-24"
         />
         <h2 className="text-lg font-bold mt-2 uppercase">{adminDetails?.name}</h2>
-        <p className="text-xs font-bold flex items-center gap-2">
-          Access:<span className="text-[#1B9D31]">{adminDetails.permission.join(",")}</span>
+        <p className="text-xs font-medium flex flex-wrap justify-center items-center ">
+        {
+          adminDetails.permission.slice(0,3).map((value,key)=>(
+            <div key={key} className="flex justify-center items-center">
+              <span className="text-[#1B9D31] text-tiny">{value},</span>
+            </div>
+          ))
+        }
+          {/* Access:<span className="text-[#1B9D31] ">{adminDetails.permission.join(",")}</span> */}
         </p>
         <div className="py-2">
           {isSelected 

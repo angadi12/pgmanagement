@@ -42,11 +42,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchTenantsByBranch } from "@/lib/TennatSlice";
 import Createtennat from "@/components/Tennatcomponents/Createtennat";
 import Updatetennat from "@/components/Tennatcomponents/Updatetennat";
-import { setSelectedTenantId } from '../../lib/TennatSlice';
-import {Getsingletennatbyid} from "../../lib/API/Tennat"
-import tennatpic from "../../public/Loginasset/tennatpic.png"
+import { setSelectedTenantId } from "../../lib/TennatSlice";
+import { Getsingletennatbyid, Removetenantapi } from "../../lib/API/Tennat";
+import tennatpic from "../../public/Loginasset/tennatpic.png";
 import { FaUser } from "react-icons/fa";
 import { BsDoorClosedFill } from "react-icons/bs";
+import {BaseUrl} from "../../lib/API/Baseurl"
+import Cookies from "js-cookie";
 
 const columns = [
   { name: "ID", uid: "_id" },
@@ -67,8 +69,6 @@ const statusOptions = [
   { name: "Paid Due", uid: "Paid" },
   { name: "Pending Due", uid: "Due" },
 ];
-
-
 
 export { columns, statusOptions };
 const statusColorMap = {
@@ -108,8 +108,9 @@ export default function Tennat() {
   const [openview, Setopenview] = useState(false);
   const [opendelete, Setopendelete] = useState(false);
   const [openedit, Setopenedit] = useState(false);
-  const [loadingroomdata,setLoadingData]=useState(true)
-  const [tenantdata,Settennatdata]=useState()
+  const [loadingroomdata, setLoadingData] = useState(true);
+  const [tenantdata, Settennatdata] = useState();
+  const [loadingtennat, Setloadingtennat] = useState(false);
 
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
@@ -177,18 +178,51 @@ export default function Tennat() {
 
   const handleViewClick = (id) => {
     dispatch(setSelectedTenantId(id));
-    Setopenview(true)
+    Setopenview(true);
   };
 
   const handleEditClick = (id) => {
     dispatch(setSelectedTenantId(id));
-    Setopenedit(true)
+    Setopenedit(true);
   };
 
   const handleDeleteClick = (id) => {
     dispatch(setSelectedTenantId(id));
-   Setopendelete(true)
+    Setopendelete(true);
   };
+
+  const Deletetenant = async (id) => {
+    const token = Cookies.get("token");
+    try {
+      let result = await fetch(`${BaseUrl}/users/remove/user/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-type": "application/json",
+          token: token,
+        },
+      });
+      result = await result.json();
+      console.log(result);
+    } catch (error) {
+      console.log(error.message);
+      return error.message;
+    }
+    // Setloadingtennat(true);
+    // try {
+    //   const result = await Removetenantapi(selectedTenantId);
+    //   console.log(result.message)
+    //     Setloadingtennat(false);
+    //     Setopendelete(false);
+    //     dispatch(fetchTenantsByBranch(selectedBranchId));
+    // } catch (error) {
+    //   console.log("erorr while deleteing tenant");
+    //   Setloadingtennat(false);
+
+    // } finally {
+    //   Setloadingtennat(false);
+    // }
+  };
+
 
 
   const renderCell = React.useCallback((tenant, columnKey) => {
@@ -196,31 +230,28 @@ export default function Tennat() {
 
     switch (columnKey) {
       case "UserName":
-        return <p className="flex items-center gap-1"><FaUser className="text-[#205093]"/>{tenant.UserName}</p>;
+        return (
+          <p className="flex items-center gap-1">
+            <FaUser className="text-[#205093]" />
+            {tenant.UserName}
+          </p>
+        );
       case "RoomNumber":
         return (
           <p className="text-bold flex items-center gap-1 capitalize ">
-            <BsDoorClosedFill className="text-[#205093]"/>{tenant?.room[0]?.roomName} <span className="text-tiny text-default-500">({tenant?.room[0]?.RoomNumber})</span>
+            <BsDoorClosedFill className="text-[#205093]" />
+            {tenant?.room[0]?.roomName}{" "}
+            <span className="text-tiny text-default-500">
+              ({tenant?.room[0]?.RoomNumber})
+            </span>
           </p>
         );
       case "StartDate":
-        return (
-          <p className="text-bold  capitalize ">
-            {tenant.StartDate}
-          </p>
-        );
+        return <p className="text-bold  capitalize ">{tenant.StartDate}</p>;
       case "LastDate":
-        return (
-          <p className="text-bold capitalize ">
-            {tenant.LastDate}
-          </p>
-        );
+        return <p className="text-bold capitalize ">{tenant.LastDate}</p>;
       case "NumberOfmonth":
-        return (
-          <p className="text-bold capitalize ">
-            {tenant.NumberOfmonth}
-          </p>
-        );
+        return <p className="text-bold capitalize ">{tenant.NumberOfmonth}</p>;
       case "Status":
         return (
           <Chip
@@ -237,7 +268,7 @@ export default function Tennat() {
           <div className="relative flex items-center gap-4">
             <Tooltip content="Details">
               <span
-                onClick={() =>handleViewClick(tenant._id)}
+                onClick={() => handleViewClick(tenant._id)}
                 className="text-lg text-default-400 cursor-pointer active:opacity-50"
               >
                 <IoEyeSharp />
@@ -463,45 +494,39 @@ export default function Tennat() {
     []
   );
 
-
-
   // fetch single tennat
-const isValidObjectId = (id) => /^[0-9a-fA-F]{24}$/.test(id);
+  const isValidObjectId = (id) => /^[0-9a-fA-F]{24}$/.test(id);
 
-
-
-
-useEffect(() => {
-  const fetchsingletennatData = async () => {
+  useEffect(() => {
+    const fetchsingletennatData = async () => {
       if (!isValidObjectId(selectedTenantId)) {
-          toast.error("Invalid branch ID");
-          setLoadingData(false);
-          return;
-        }
-
-    setLoadingData(true);
-    try {
-      const result = await Getsingletennatbyid(selectedTenantId);
-      if (result.status) {
-        console.log(result,"modal")
-       Settennatdata(result.data)
-      } else {
-        toast.error(result.message || "Failed to fetch branch data");
+        toast.error("Invalid branch ID");
+        setLoadingData(false);
+        return;
       }
-    } catch (error) {
-      toast.error("An error occurred while fetching branch data");
-    } finally {
-      setLoadingData(false);
+
+      setLoadingData(true);
+      try {
+        const result = await Getsingletennatbyid(selectedTenantId);
+        if (result.status) {
+          Settennatdata(result.data);
+        } else {
+          toast.error(result.message || "Failed to fetch branch data");
+        }
+      } catch (error) {
+        toast.error("An error occurred while fetching branch data");
+      } finally {
+        setLoadingData(false);
+      }
+    };
+
+    if (selectedTenantId) {
+      fetchsingletennatData();
     }
-  };
-
-  if (selectedTenantId) {
-    fetchsingletennatData();
-  }
-}, [selectedTenantId]);
+  }, [selectedTenantId]);
 
 
-console.log(tenantdata)
+
   return (
     <>
       {status === "loading" ? (
@@ -591,7 +616,7 @@ console.log(tenantdata)
         </ModalContent>
       </Modal>
 
-{/* view */}
+      {/* view */}
       <Modal
         isDismissable={false}
         isKeyboardDismissDisabled={true}
@@ -623,85 +648,96 @@ console.log(tenantdata)
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col text-center">
-              </ModalHeader>
+              <ModalHeader className="flex flex-col text-center"></ModalHeader>
               <ModalBody>
-              {loadingroomdata ?
-                <div className="flex justify-center items-center h-60 gap-4 w-full">
-                  <span className="loader3"></span>
-                </div> :  <div className="flex justify-evenly items-center h-60 gap-4 w-full">
-                  <div>
-                    <Image
-                      src={tennatpic}
-                      className="object-fill h-full"
-                      alt="Roomimage"
-                    />
+                {loadingroomdata ? (
+                  <div className="flex justify-center items-center h-60 gap-4 w-full">
+                    <span className="loader3"></span>
                   </div>
-                  <div className="flex flex-col justify-between items-start h-full py-4">
-                    <div className="flex flex-col justify-start items-start text-sm font-semibold">
-                      <p>Name : {tenantdata.UserName}</p>
-                      <p className="flex flex-col justify-start items-start text-sm font-bold">
-                      {tenantdata.roomName}
-                      </p>
+                ) : (
+                  <div className="flex justify-evenly items-center h-60 gap-4 w-full">
+                    <div>
+                      <Image
+                        src={tennatpic}
+                        className="object-fill h-full"
+                        alt="Roomimage"
+                      />
                     </div>
-                    <div className="flex flex-col justify-start items-start text-sm font-semibold">
-                      <p>Contact Info</p>
-                     
+                    <div className="flex flex-col justify-between items-start h-full py-4">
+                      <div className="flex flex-col justify-start items-start text-sm font-semibold">
+                        <p>Name : {tenantdata.UserName}</p>
+                        <p className="flex flex-col justify-start items-start text-sm font-bold">
+                          {tenantdata.roomName}
+                        </p>
+                      </div>
+                      <div className="flex flex-col justify-start items-start text-sm font-semibold">
+                        <p>Contact Info</p>
+                      </div>
+                    </div>
+                    <Divider orientation="vertical" />
+                    <div className="flex flex-col justify-between items-start h-full py-4">
+                      <div className="flex flex-col flex-wrap gap-2 justify-start items-start text-sm font-semibold">
+                        <p>Tenant Details</p>
+                        <p className="flex flex-col justify-start items-start text-xs ">
+                          Name: {tenantdata.UserName}
+                        </p>
+                        <p className="flex flex-col justify-start items-start text-xs">
+                          phone: {tenantdata?.UserNumber}
+                        </p>
+                        <p className="flex flex-col justify-start items-start text-xs ">
+                          Period:
+                        </p>
+                        <p className="flex flex-col justify-start items-start text-xs ">
+                          Period: 4 Months
+                        </p>
+                      </div>
+                      <div className="flex flex-col gap-2 justify-start items-start text-xs ">
+                        <p className="flex   items-center gap-2 text-sm font-semibold">
+                          Rent:{" "}
+                          <span className="text-green-600">
+                            {tenantdata?.Status}
+                          </span>
+                        </p>
+                        <p className="flex  items-center gap-2 text-sm font-semibold">
+                          Overdue:{" "}
+                          <span className={"text-red-600"}>
+                            {tenantdata?.DueAmount}{" "}
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+                    <Divider orientation="vertical" />
+                    <div className=" flex-col  flex justify-center items-center gap-4">
+                      <Card className=" border-none shadow-none">
+                        <CardBody className="justify-center items-center pb-0">
+                          <CircularProgress
+                            classNames={{
+                              svg: "w-40 h-40 drop-shadow-md",
+                              indicator: "stroke-[#205093]",
+                              track: "stroke-[#205093]/10",
+                              value: "text-3xl font-semibold text-[#205093]",
+                            }}
+                            value={70}
+                            strokeWidth={4}
+                            showValueLabel={true}
+                          />
+                        </CardBody>
+                        <CardFooter className="justify-center items-center pt-0 mt-4">
+                          <Chip
+                            classNames={{
+                              base: "border-1 border-[#205093]/30",
+                              content:
+                                "text-[#205093]/90 text-small font-semibold",
+                            }}
+                            variant="bordered"
+                          >
+                            Tenant Satisfaction
+                          </Chip>
+                        </CardFooter>
+                      </Card>
                     </div>
                   </div>
-                  <Divider orientation="vertical" />
-                  <div className="flex flex-col justify-between items-start h-full py-4">
-                    <div className="flex flex-col flex-wrap gap-2 justify-start items-start text-sm font-semibold">
-                      <p>Tenant Details</p>
-                      <p className="flex flex-col justify-start items-start text-xs ">
-                      Name: {tenantdata.UserName}
-                      </p>
-                      <p className="flex flex-col justify-start items-start text-xs">
-                      phone: {tenantdata?.UserNumber}
-                      </p>
-                      <p className="flex flex-col justify-start items-start text-xs ">
-                      Period:
-                      </p>
-                      <p className="flex flex-col justify-start items-start text-xs ">
-                      Period: 4 Months
-                      </p>
-                    </div>
-                    <div className="flex flex-col gap-2 justify-start items-start text-xs ">
-                      <p className="flex   items-center gap-2 text-sm font-semibold">Rent: <span className="text-green-600">{tenantdata?.Status}</span></p>
-                      <p className="flex  items-center gap-2 text-sm font-semibold">Overdue:  <span className={"text-red-600"}>{tenantdata?.DueAmount} </span></p>
-                    </div>
-                  </div>
-                  <Divider orientation="vertical" />
-                  <div className=" flex-col  flex justify-center items-center gap-4">
-                    <Card className=" border-none shadow-none">
-                      <CardBody className="justify-center items-center pb-0">
-                        <CircularProgress
-                          classNames={{
-                            svg: "w-40 h-40 drop-shadow-md",
-                            indicator: "stroke-[#205093]",
-                            track: "stroke-[#205093]/10",
-                            value: "text-3xl font-semibold text-[#205093]",
-                          }}
-                          value={70}
-                          strokeWidth={4}
-                          showValueLabel={true}
-                        />
-                      </CardBody>
-                      <CardFooter className="justify-center items-center pt-0 mt-4">
-                        <Chip
-                          classNames={{
-                            base: "border-1 border-[#205093]/30",
-                            content:
-                              "text-[#205093]/90 text-small font-semibold",
-                          }}
-                          variant="bordered"
-                        >
-                         Tenant Satisfaction
-                        </Chip>
-                      </CardFooter>
-                    </Card>
-                  </div>
-                </div>}
+                )}
               </ModalBody>
               <ModalFooter className="flex justify-center items-center text-center"></ModalFooter>
             </>
@@ -747,20 +783,23 @@ console.log(tenantdata)
               </ModalHeader>
               <ModalBody>
                 <div className="flex w-full justify-start items-start">
-                  <p>Do you want to delete Tenant ?</p>
+                  <p>Do you want to delete Tenant?</p>
                 </div>
               </ModalBody>
               <ModalFooter className="flex justify-end items-end ">
-                <Button onPress={onClose} color="primary" variant="solid">Cancel</Button>
-                <Button color="danger" variant="solid">Delete</Button>
+                <Button onPress={onClose} color="primary" variant="solid">
+                  Cancel
+                </Button>
+                <Button onPress={()=>Deletetenant(selectedTenantId)} color="danger" variant="solid">
+                  {loadingtennat ? <span className="loader2"></span> : "Delete"}
+                </Button>
               </ModalFooter>
             </>
           )}
         </ModalContent>
       </Modal>
 
-
-    {/* update */}
+      {/* update */}
       <Modal
         isDismissable={false}
         isKeyboardDismissDisabled={true}
@@ -796,7 +835,7 @@ console.log(tenantdata)
                 Upadte Tenant Details
               </ModalHeader>
               <ModalBody>
-                <Updatetennat  Setopenedit={Setopenedit}/>
+                <Updatetennat Setopenedit={Setopenedit} />
               </ModalBody>
               <ModalFooter className="flex justify-center items-center text-center"></ModalFooter>
             </>

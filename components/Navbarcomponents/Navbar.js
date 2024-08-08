@@ -27,12 +27,11 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-  useDisclosure
+  useDisclosure,
 } from "@nextui-org/react";
 import { IoMenu } from "react-icons/io5";
 import { fetchNotificationByBranch } from "@/lib/NotificationSlice";
 import Cookies from "js-cookie";
-
 
 export default function Navbarr() {
   const router = useRouter();
@@ -45,21 +44,33 @@ export default function Navbarr() {
     (state) => state.notifications.notifications
   );
 
+  const { user } = useSelector((state) => state.auth);
+
   const [selectedKey, setSelectedKey] = useState(selectedBranchId);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoading, setIsLoading] = useState(true);
   const [isdelete, Setisdelete] = useState(false);
 
-  useEffect(() => {
-    dispatch(fetchBranches()).then(() => setIsLoading(false));
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchBranches()).then(() => setIsLoading(false));
+  // }, [dispatch]);
+
+  // useEffect(() => {
+  //   if (branches?.length > 0 && selectedKey === null) {
+  //     setSelectedKey(branches[0]?._id);
+  //     dispatch(setSelectedBranch(branches[0]?._id));
+  //   }
+  // }, [branches, selectedKey, dispatch]);
 
   useEffect(() => {
-    if (branches?.length > 0 && selectedKey === null) {
+    if (user?.role === "admin" && user.branch) {
+      setSelectedKey(user.branch);
+      dispatch(setSelectedBranch(user.branch));
+    } else if (branches?.length > 0 && selectedKey === null) {
       setSelectedKey(branches[0]?._id);
       dispatch(setSelectedBranch(branches[0]?._id));
     }
-  }, [branches, selectedKey, dispatch]);
+  }, [branches, selectedKey, dispatch, user]);
 
   useEffect(() => {
     if (selectedBranchId) {
@@ -82,91 +93,145 @@ export default function Navbarr() {
     router.push("/Notifications");
   };
 
-
   const handleLogout = () => {
     Cookies.remove("token");
     router.push("/Signin");
   };
   return (
-
     <>
-    <Navbar isBordered maxWidth="full">
-      <NavbarContent justify="start">
-        <NavbarBrand className="mr-4 hidden md:flex lg:flex">
-          <p>Hello Admin!</p>
-        </NavbarBrand>
-        <NavbarBrand className="-ml-4 block md:hidden lg:hidden">
-        <IoMenu size={24}/>
-        </NavbarBrand>
+      <Navbar isBordered maxWidth="full">
+        <NavbarContent justify="start">
+          <NavbarBrand className="mr-4 hidden md:flex lg:flex">
+            <p>Hello Admin!</p>
+          </NavbarBrand>
+          <NavbarBrand className="-ml-4 block md:hidden lg:hidden">
+            <IoMenu size={24} />
+          </NavbarBrand>
+        </NavbarContent>
 
-      </NavbarContent>
+        {user?.role === "admin" ?
+        <NavbarContent as="div" className="items-center" justify="end">
+        
+          <Dropdown placement="bottom-end">
+            <DropdownTrigger>
+              <Avatar
+                isBordered
+                radius="md"
+                as="button"
+                className="transition-transform hidden md:flex lg:flex"
+                color="primary"
+                size="sm"
+              />
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Profile Actions" variant="flat">
+              <DropdownItem key="profile" className="h-14 gap-2">
+                <p className="font-semibold">Signed in as</p>
+                <p className="font-semibold">Admin</p>
+              </DropdownItem>
 
-      <NavbarContent as="div" className="items-center" justify="end">
-       {branches?.length>0 && <Autocomplete
-          color="primary" 
-          startContent={<BsBuildingsFill className="text-[#005CFF]" size={24} />}
-          inputProps={{
-            classNames: {
-              input: "uppercase",
-            },
-          }}
-          size="md"
-          radius="sm"
-          variant="bordered"
-          defaultItems={branches?.map((branch) => ({
-            key: branch?._id,
-            label: branch?.Branchname,
-            value: branch?._id,
-          }))}
-          placeholder="Select Branch"
-          className="w-60 bg-white rounded-lg uppercase"
-          selectedKey={selectedKey}
-          onSelectionChange={handleBranchSelect}
-        >
-          {(branch) => (
-            <AutocompleteItem   color="primary"   variant="flat"     startContent={<BsBuildingsFill className="text-gray-600" size={10} />}
-  key={branch?.value} value={branch?.id} className="uppercase flex items-center gap-2">
-            {branch?.label}
-            </AutocompleteItem>
-          )}
-        </Autocomplete>}
-
-        <Badge onClick={routetonoti} content={notifications?.length} color="primary">
-          <Image
-            onClick={routetonoti}
-            className="object-contain h-10 w-10 cursor-pointer"
-            src={Bellicon}
-            alt="Bellicon"
-          />
-        </Badge>
-
-        <Dropdown placement="bottom-end">
-          <DropdownTrigger>
-            <Avatar
-              isBordered
-              radius="md"
-              as="button"
-              className="transition-transform hidden md:flex lg:flex"
+              <DropdownItem
+                onPress={() => Setisdelete(true)}
+                key="logout"
+                color="primary"
+              >
+                Log Out
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        </NavbarContent>:
+        <NavbarContent as="div" className="items-center" justify="end">
+          {branches?.length > 0  && (
+            <Autocomplete
               color="primary"
-             
-              size="sm"
+              startContent={
+                <BsBuildingsFill className="text-[#005CFF]" size={24} />
+              }
+              inputProps={{
+                classNames: {
+                  input: "uppercase",
+                },
+              }}
+              size="md"
+              radius="sm"
+              variant="bordered"
+              defaultItems={branches?.map((branch) => ({
+                key: branch?._id,
+                label: branch?.Branchname,
+                value: branch?._id,
+              }))}
+              placeholder="Select Branch"
+              className="w-60 bg-white rounded-lg uppercase"
+              selectedKey={selectedKey}
+              onSelectionChange={handleBranchSelect}
+              isDisabled={user?.role === "admin"}
+            >
+              {(branch) => (
+                <AutocompleteItem
+                  color="primary"
+                  variant="flat"
+                  startContent={
+                    <BsBuildingsFill className="text-gray-600" size={10} />
+                  }
+                  key={branch?.value}
+                  value={branch?.id}
+                  className="uppercase flex items-center gap-2"
+                >
+                  {branch?.label}
+                </AutocompleteItem>
+              )}
+            </Autocomplete>
+          )}
+
+          <Badge
+            onClick={routetonoti}
+            content={notifications?.length}
+            color="primary"
+          >
+            <Image
+              onClick={routetonoti}
+              className="object-contain h-10 w-10 cursor-pointer"
+              src={Bellicon}
+              alt="Bellicon"
             />
-          </DropdownTrigger>
-          <DropdownMenu aria-label="Profile Actions" variant="flat">
-            <DropdownItem key="profile" className="h-14 gap-2">
-              <p className="font-semibold">Signed in as</p>
-              <p className="font-semibold">Admin</p>
-            </DropdownItem>        
+          </Badge>
 
-            <DropdownItem onPress={()=>Setisdelete(true)} key="logout" color="primary">
-              Log Out
-            </DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
-      </NavbarContent>
-    </Navbar>
+          <Dropdown placement="bottom-end">
+            <DropdownTrigger>
+              <Avatar
+                isBordered
+                radius="md"
+                as="button"
+                className="transition-transform hidden md:flex lg:flex"
+                color="primary"
+                size="sm"
+              />
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Profile Actions" variant="flat">
+              <DropdownItem key="profile" className="h-14 gap-2">
+                <p className="font-semibold">Signed in as</p>
+                <p className="font-semibold">Admin</p>
+              </DropdownItem>
 
-    <Modal
+              <DropdownItem
+                onPress={() => Setisdelete(true)}
+                key="logout"
+                color="primary"
+              >
+                Log Out
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        </NavbarContent>
+        
+        
+        }
+
+      </Navbar>
+
+
+      
+
+      <Modal
         isDismissable={false}
         isKeyboardDismissDisabled={true}
         backdrop="blur"
@@ -183,7 +248,10 @@ export default function Navbarr() {
                 <p>Please select a branch to proceed.</p>
               </ModalBody>
               <ModalFooter className="flex justify-center items-center text-center">
-                <Button onPress={onClose} className="bg-[#205093] text-background">
+                <Button
+                  onPress={onClose}
+                  className="bg-[#205093] text-background"
+                >
                   OK
                 </Button>
               </ModalFooter>
@@ -192,7 +260,6 @@ export default function Navbarr() {
         </ModalContent>
       </Modal>
 
-      
       <Modal
         isDismissable={false}
         isKeyboardDismissDisabled={true}
@@ -221,7 +288,7 @@ export default function Navbarr() {
                 </Button>
                 <Button
                   size="md"
-                  onPress={()=>Setisdelete(false)}
+                  onPress={() => Setisdelete(false)}
                   className="bg-white ring-1 rounded-sm ring-[#205093] text-[#205093]"
                 >
                   No
@@ -231,7 +298,6 @@ export default function Navbarr() {
           )}
         </ModalContent>
       </Modal>
-
     </>
   );
 }

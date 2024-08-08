@@ -25,8 +25,8 @@ const Branches = () => {
   const [selected, setSelected] = React.useState("Branches");
   const [selectedtab, setSelectedtab] = React.useState("Branch Details");
   const [selectedtab2, setSelectedtab2] = React.useState("Personal Details");
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [Open, SetOpen, ] = useState(false);
+  const [Open, SetOpen] = useState(false);
+  const [openbranch,Setopenbranch] = useState(false);
   const dispatch = useDispatch();
 
 
@@ -94,7 +94,7 @@ const Branches = () => {
             />
             <div className="flex gap-3">
               {selected ==='Branches' ?<Button
-                onPress={onOpen}
+                onPress={()=>Setopenbranch(true)}
                 className="bg-[#205093] text-background"
                 endContent={<FaPlus />}
                 size="sm"
@@ -120,8 +120,8 @@ const Branches = () => {
         isKeyboardDismissDisabled={true}
         backdrop="blur"
         size="4xl"
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
+        isOpen={openbranch}
+        onOpenChange={Setopenbranch}
         motionProps={{
           variants: {
             enter: {
@@ -174,7 +174,7 @@ const Branches = () => {
                   />
                 </Tabs>
                 <div className="w-full h-auto">
-                  {selectedtab === "Branch Details" && <Createbranch onOpenChange={onOpenChange} />}
+                  {selectedtab === "Branch Details" && <Createbranch Setopenbranch={Setopenbranch} />}
                 </div>
               </ModalBody>
               <ModalFooter className="flex justify-center items-center text-center">

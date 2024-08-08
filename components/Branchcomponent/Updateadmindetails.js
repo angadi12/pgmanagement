@@ -122,7 +122,6 @@ const Updateadmindetails = () => {
     const result = await Updateadminapi(formData, selectedAdminid);
     console.log(result);
     if (result.status) {
-      toast.success("Admin Details Updated successfully");
       dispatch(fetchAdmins(selectedBranchId));
       setLoading(false);
     } else {

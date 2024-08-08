@@ -21,7 +21,7 @@ const Personaldetails = () => {
     Number: "",
     Password: "",
     branch: "",
-    permission: [],
+    permission: ["Notifications"]
   });
 
   useEffect(() => {
@@ -141,9 +141,11 @@ const Personaldetails = () => {
           multiple
         >
           <SelectItem  color="primary"   variant="flat"  key="Rooms">Rooms</SelectItem>
-          <SelectItem  color="primary"   variant="flat"  key="Tenant">Tenant</SelectItem>
+          <SelectItem  color="primary"   variant="flat"  key="Tenants">Tenant</SelectItem>
           <SelectItem  color="primary"   variant="flat"  key="Expense">Expense</SelectItem>
-          <SelectItem  color="primary"   variant="flat"  key="Payment">Payment</SelectItem>
+          <SelectItem  color="primary"   variant="flat"  key="Payments">Payment</SelectItem>
+          <SelectItem  color="primary"   variant="flat"  key="Staff">Staff</SelectItem>
+          <SelectItem  color="primary"   variant="flat"  key="Maintenance">Maintenance</SelectItem>
         </Select>
         <Select
            selectedKeys={new Set([formData.branch])}
