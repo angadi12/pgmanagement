@@ -109,8 +109,8 @@ const Expenseandcomp = () => {
     const color = chartConfig[item.name]?.color || "#ccc";
     return (
 
-      <div className="w-full">
-     <div className="flex flex-col justify-start items-start w-full" key={item.name}>
+      <div className="w-full" key={item.name}>
+     <div className="flex flex-col justify-start items-start w-full" >
         <p className="flex gap-1 items-center text-tiny">
           <FaCircle className="text-[color] text-tiny" style={{ color: color }} /> {item.name}
         </p>
