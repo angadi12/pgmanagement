@@ -29,21 +29,74 @@ const chartConfig = {
   },
   ElectricityBill: {
     label: "Electricity Bill",
-    color: "#FFA100",
+    color: "#FFA100", // existing color
   },
   GasBill: {
     label: "Gas Bill",
-    color: "#9747FF",
+    color: "#9747FF", // existing color
   },
   WaterBill: {
     label: "Water Bill",
-    color: "#0096FF",
+    color: "#0096FF", // existing color
   },
   InternetBill: {
     label: "Internet Bill",
-    color: "#ED6300",
+    color: "#ED6300", // existing color
+  },
+  MessExpense: {
+    label: "Mess Expense",
+    color: "#FF5722", // new color
+  },
+  Housekeeping: {
+    label: "Housekeeping",
+    color: "#4CAF50", // new color
+  },
+  Security: {
+    label: "Security",
+    color: "#9C27B0", // new color
+  },
+  Repairs: {
+    label: "Repairs",
+    color: "#FFEB3B", // new color
+  },
+  Laundry: {
+    label: "Laundry",
+    color: "#00BCD4", // new color
+  },
+  WasteManagement: {
+    label: "Waste Management",
+    color: "#795548", // new color
+  },
+  Gardening: {
+    label: "Gardening",
+    color: "#8BC34A", // new color
+  },
+  Plumbing: {
+    label: "Plumbing",
+    color: "#3F51B5", // new color
+  },
+  ElectricalMaintenance: {
+    label: "Electrical Maintenance",
+    color: "#FF9800", // new color
+  },
+  PestControl: {
+    label: "Pest Control",
+    color: "#9E9E9E", // new color
+  },
+  FireSafety: {
+    label: "Fire Safety",
+    color: "#F44336", // new color
+  },
+  LiftMaintenance: {
+    label: "Lift Maintenance",
+    color: "#03A9F4", // new color
+  },
+  BuildingMaintenance: {
+    label: "Building Maintenance",
+    color: "#673AB7", // new color
   },
 };
+
 
 export function Expensebreak() {
   const dispatch = useDispatch();
@@ -114,7 +167,7 @@ export function Expensebreak() {
                           <tspan
                             x={viewBox.cx}
                             y={viewBox.cy}
-                            className="fill-foreground text-3xl font-bold"
+                            className="fill-foreground text-xl font-bold"
                           >
                             {totalVisitors.toLocaleString()}
                           </tspan>

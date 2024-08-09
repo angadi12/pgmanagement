@@ -17,6 +17,7 @@ import Allocverify from './Allocverify';
 import Userandpass from './Userandpass';
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAdmins } from '@/lib/AdminSlice';
+import {Setopenadmin} from "@/lib/BranchSlice";
 
 const Adminlist = () => {
   const [selectedtab2, setSelectedtab2] = React.useState("Personal Details");
@@ -29,7 +30,9 @@ const Adminlist = () => {
   const filterQuery = useSelector((state) => state.admins.filterQuery);
   const [filteredAdmins, setFilteredAdmins] = useState(admins);
   const error = useSelector((state) => state.admins.error);
-
+  const openadmin = useSelector(
+    (state) => state.branches.openadmin
+  );
 
   useEffect(() => {
     if (selectedBranchId) {
@@ -46,8 +49,10 @@ const Adminlist = () => {
     );
   }, [admins, filterQuery]);
   
-console.log("error",error)
-console.log("admin",filteredAdmins)
+  const setopenmodeladmin = () => {
+    dispatch(Setopenadmin(!openadmin)); 
+  };
+
   return (
     <>
     <div className='w-full h-auto  mx-auto grid grid-cols-3 justify-center items-start place-content-center content-stretch gap-y-16 gap-4 mt-20'>
@@ -59,7 +64,7 @@ console.log("admin",filteredAdmins)
         {status !== "loading" && filteredAdmins?.length === 0 && (
           <div className="w-full h-40 col-span-3 flex justify-center items-center flex-col gap-4  rounded-md">
             <p>No admins found.</p>
-            <FaCirclePlus onClick={()=>SetOpen(true)}  size={50} className='text-[#205093]'/>
+            <FaCirclePlus onClick={setopenmodeladmin}  size={50} className='text-[#205093]'/>
           </div>
         )}
         { filteredAdmins === undefined &&  (
@@ -80,8 +85,8 @@ console.log("admin",filteredAdmins)
         isKeyboardDismissDisabled={true}
         backdrop="blur"
         size="4xl"
-        isOpen={Open}
-        onOpenChange={SetOpen}
+        isOpen={openadmin}
+        onOpenChange={setopenmodeladmin}
         motionProps={{
           variants: {
             enter: {
@@ -139,8 +144,8 @@ console.log("admin",filteredAdmins)
                         <span>Allocation & Verification</span>
                       </div>
                     }
-                  /> */}
-                  {/* <Tab
+                  />
+                  <Tab
                     key="User Name & Password"
                     title={
                       <div className="flex items-center space-x-2">

@@ -6,6 +6,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchBranches } from "@/lib/BranchSlice";
 import { fetchAdmins } from "@/lib/AdminSlice";
+import {Setopenadmin} from "@/lib/BranchSlice";
 
 
 
@@ -14,7 +15,9 @@ const Personaldetails = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const selectedBranchId = useSelector((state) => state.branches.selectedBranchId); 
-
+  const openadmin = useSelector(
+    (state) => state.branches.openadmin
+  );
   const [formData, setFormData] = useState({
     name: "",
     Email: "",
@@ -23,6 +26,10 @@ const Personaldetails = () => {
     branch: "",
     permission: ["Notifications"]
   });
+
+  const setopenmodeladmin = () => {
+    dispatch(Setopenadmin(!openadmin)); 
+  };
 
   useEffect(() => {
     dispatch(fetchBranches());
@@ -74,8 +81,8 @@ const Personaldetails = () => {
     const result = await Createadminapi(formData);
     console.log(result)
     if (result.status) {
-      toast.success("Admin created successfully");
       dispatch(fetchAdmins(selectedBranchId));
+      setopenmodeladmin()
       setLoading(false);
     } else {
       toast.error(result.message ||"Failed to create Admin");
@@ -103,7 +110,9 @@ const Personaldetails = () => {
         />
        
         <Input
-          type="text"
+          type="tel"
+          maxLength={10}
+          max={10}
           name="Number"
           value={formData.Number}
           onChange={handleInputChange}

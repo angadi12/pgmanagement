@@ -20,6 +20,15 @@ import { fetchPaymentByBranch } from "../../lib/PaymentSlice";
 import Updatepayment from "@/components/Paymentcomponet/Updatepayment";
 import { HiPencil } from "react-icons/hi2";
 
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const day = date.getDate();
+  const month = date.toLocaleString("default", { month: "short" });
+  const year = date.getFullYear();
+
+  return `${day} ${month} ${year}`;
+};
+
 const Payments = () => {
   const dispatch = useDispatch();
   const selectedBranchId = useSelector(
@@ -32,7 +41,7 @@ const Payments = () => {
   const [selectedtab, setSelectedtab] = React.useState("Payment Details");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [Openupdate, Setopenupdate] = useState(false);
-  const [paymentid,Setpaymentid]=useState("")
+  const [paymentid, Setpaymentid] = useState("");
 
   useEffect(() => {
     if (selectedBranchId) {
@@ -40,7 +49,20 @@ const Payments = () => {
     }
   }, [selectedBranchId, dispatch]);
 
-  console.log(payments);
+  const getTodayDate = () => {
+    const today = new Date();
+    return today.toISOString().split("T")[0];
+  };
+
+  const filteredPayments = payments?.filter((pay) => {
+    const paymentDate = new Date(pay.PayemntDate).toISOString().split("T")[0];
+    if (selected === "Today") {
+      return paymentDate === getTodayDate();
+    } else if (selected === "History") {
+      return paymentDate !== getTodayDate();
+    }
+    return true;
+  });
 
   return (
     <>
@@ -73,14 +95,23 @@ const Payments = () => {
                     </div>
                   }
                 />
+                 {/* <Tab
+              key="Overdue"
+              title={
+                <div className="flex items-center space-x-2">
+                  <span>Overdue</span>
+                </div>
+              }
+            /> */}
                 <Tab
-                  key="Paid Rent"
+                  key="History"
                   title={
                     <div className="flex items-center space-x-2">
-                      <span>Paid Rent</span>
+                      <span>History</span>
                     </div>
                   }
                 />
+
                 {/* <Tab
               key="Pending Rent"
               title={
@@ -108,31 +139,21 @@ const Payments = () => {
               </Tabs>
             </div>
             <div className="flex gap-3 justify-end items-end">
-              {/* <Input
-                isClearable
-                classNames={{
-                  base: "w-full sm:max-w-[60%]",
-                  inputWrapper: "border-1",
-                }}
-                placeholder="Search by name..."
-                size="sm"
-                startContent={""}
-                variant="bordered"
-                // onClear={() => setFilterValue("")}
-                // onValueChange={onSearchChange}
-              /> */}
               <div className="flex gap-3">
                 <Button
                   onPress={onOpen}
                   className="bg-[#205093] text-background"
-                
                   size="sm"
-                ><FaPlus /></Button>
+                >
+                  <FaPlus />
+                </Button>
               </div>
             </div>
           </div>
           <Divider />
         </div>
+
+      
 
         <div className="w-full flex flex-col gap-4 justify-start items-start p-4 mx-auto bg-[#F9F9F9] h-auto mt-2 rounded-sm">
           {status == "loading" ? (
@@ -141,77 +162,84 @@ const Payments = () => {
             </div>
           ) : (
             <>
-              {payments?.length > 0 ? (
-                <>
-               {payments?.map((pay,key)=>(
-                <div key={key} className="flex  justify-between items-center bg-white w-full p-3">
-                  <div className="w-full flex gap-4 items-center">
-                    <div className="flex justify-center items-center gap-2">
-                      <div className=" w-14 h-14 rounded-full  flex justify-center items-center ">
-                        <Image src={person} alt="person" />
-                      </div>
-                      <div>
-                        <p className="text-xs font-semibold text-gray-400 ">
-                          {pay.UserId}
-                        </p>
-                        {/* <p className="text-sm font-semibold ">Mithul M</p> */}
-                      </div>
-                    </div>
-                    <Divider orientation="vertical" className="h-14" />
+              {filteredPayments?.length > 0 ? (
+                filteredPayments?.map((pay, key) => (
+                  <div
+                    key={key}
+                    className="flex justify-between items-center bg-white w-full p-3"
+                  >
+                    <div
+                      key={key}
+                      className="flex  justify-between items-center bg-white w-full p-3"
+                    >
+                      <div className="w-full flex gap-4 items-center">
+                        <div className="flex justify-center items-center gap-2">
+                          <div className=" w-14 h-14 rounded-full  flex justify-center items-center ">
+                            <Image src={person} alt="person" />
+                          </div>
+                          <div>
+                            <p className="text-xs font-semibold text-gray-400 ">
+                              {pay.UserId}
+                            </p>
+                            {/* <p className="text-sm font-semibold ">Mithul M</p> */}
+                          </div>
+                        </div>
+                        <Divider orientation="vertical" className="h-14" />
 
-                    <div className="flex flex-col">
-                      {/* <p className="text-xs font-semibold text-gray-400">
+                        <div className="flex flex-col">
+                          {/* <p className="text-xs font-semibold text-gray-400">
                         Room No:{" "}
                         <span className="text-black font-semibold">A7</span>
                       </p> */}
-                      <p className="text-xs font-semibold text-gray-400">
-                      Maintaince:&nbsp;
-                        <span className="text-black font-semibold">
-                        {pay.Maintaince}
-                        </span>
-                      </p>
-                      <p className="text-xs font-semibold text-gray-400">
-                      Security:&nbsp;
-                        <span className="text-black font-semibold">
-                        {pay.Security}
-                        </span>
-                      </p>
-                    </div>
-                    <Divider orientation="vertical" className="h-14" />
+                          <p className="text-xs font-semibold text-gray-400">
+                            Maintaince:&nbsp;
+                            <span className="text-black font-semibold">
+                              {pay.Maintaince}
+                            </span>
+                          </p>
+                          <p className="text-xs font-semibold text-gray-400">
+                            Security:&nbsp;
+                            <span className="text-black font-semibold">
+                              {pay.Security}
+                            </span>
+                          </p>
+                        </div>
+                        <Divider orientation="vertical" className="h-14" />
 
-                    <div>
-                      <Chip
-                        variant="flat"
-                        radius="sm"
-                        className="bg-[#D3FFDA] text-[#1B9D31]"
-                      >
-                        Paid
-                      </Chip>
+                        <div>
+                          <Chip
+                            variant="flat"
+                            radius="sm"
+                            className="bg-[#D3FFDA] text-[#1B9D31]"
+                          >
+                            Paid
+                          </Chip>
+                        </div>
+                      </div>
+                      <div className="flex gap-4 items-center w-60">
+                        <div className="flex flex-col justify-between gap-4 items-end border-r-1 border-gray-300 px-2">
+                          <p className="text-xs font-medium text-gray-400">
+                            {formatDate(pay.PayemntDate)}
+                          </p>
+                          <p className="text-lg font-bold">{pay.Amount}/-</p>
+                        </div>
+                        <div>
+                          <Button
+                            onPress={() => {
+                              Setopenupdate(true), Setpaymentid(pay._id);
+                            }}
+                            variant="light"
+                            size="sm"
+                            className="flex  items-center gap-1 text-tiny font-bold uppercase underline text-[#205093]"
+                          >
+                            {" "}
+                            edit <HiPencil className="text-[#205093]" />
+                          </Button>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div className="flex gap-4 items-center w-96">
-                    <div className="flex flex-col justify-between gap-4 items-end border-r-1 border-gray-300 px-2">
-                      <p className="text-xs font-medium text-gray-400">
-                      {pay.PayemntDate}
-                      </p>
-                      <p className="text-lg font-bold">{pay.Amount}/-</p>
-                    </div>
-                    <div>
-                      <Button
-                        onPress={() => {Setopenupdate(true),Setpaymentid(pay._id)}}
-                        variant="light"
-                        size="sm"
-                        className="flex  items-center gap-1 text-tiny font-bold uppercase underline text-[#205093]"
-                      >
-                        {" "}
-                        edit <HiPencil className="text-[#205093]" />
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-               )) }
-
-                </>
+                ))
               ) : (
                 <div>
                   <p>No payment history available</p>
@@ -351,7 +379,10 @@ const Payments = () => {
                 </Tabs>
                 <div className="w-full h-auto">
                   {selectedtab === "Payment Details" && (
-                    <Updatepayment id={paymentid} Setopenupdate={Setopenupdate} />
+                    <Updatepayment
+                      id={paymentid}
+                      Setopenupdate={Setopenupdate}
+                    />
                   )}
                 </div>
               </ModalBody>
