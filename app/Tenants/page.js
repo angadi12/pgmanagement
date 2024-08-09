@@ -49,6 +49,9 @@ import { FaUser } from "react-icons/fa";
 import { BsDoorClosedFill } from "react-icons/bs";
 import { BaseUrl } from "../../lib/API/Baseurl";
 import Cookies from "js-cookie";
+import { FaExchangeAlt } from "react-icons/fa";
+import { MdLocalPhone } from "react-icons/md";
+import  Changeroom from "@/components/Tennatcomponents/Changeroom";
 
 const columns = [
   { name: "ID", uid: "_id" },
@@ -103,7 +106,7 @@ export default function Tennat() {
     }
   }, [selectedBranchId, dispatch]);
 
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [openChangeroom,Setchangeroom] =useState(false)
   const [openmodal, Setopenmodal] = useState(false);
   const [openview, Setopenview] = useState(false);
   const [opendelete, Setopendelete] = useState(false);
@@ -191,6 +194,11 @@ export default function Tennat() {
     Setopendelete(true);
   };
 
+  const handleChangeroomClick = (id) => {
+    dispatch(setSelectedTenantId(id));
+    Setchangeroom(true);
+  };
+
   const Deletetenant = async (id) => {
     Setloadingtennat(true);
     const token = Cookies.get("token");
@@ -240,6 +248,13 @@ export default function Tennat() {
             {tenant.UserName}
           </p>
         );
+      case "UserNumber":
+        return (
+          <p className="flex items-center gap-1">
+            <MdLocalPhone  className="text-[#205093]" />
+            {tenant.UserNumber}
+          </p>
+        );
       case "RoomNumber":
         return (
           <p className="text-bold flex items-center gap-1 capitalize ">
@@ -275,7 +290,7 @@ export default function Tennat() {
                 onClick={() => handleViewClick(tenant._id)}
                 className="text-lg text-default-400 cursor-pointer active:opacity-50"
               >
-                <IoEyeSharp />
+                <IoEyeSharp className="text-[#205093]"/>
               </span>
             </Tooltip>
             <Tooltip content="Edit">
@@ -283,7 +298,15 @@ export default function Tennat() {
                 onClick={() => handleEditClick(tenant._id)}
                 className="text-lg text-default-400 cursor-pointer active:opacity-50"
               >
-                <RiPencilFill />
+                <RiPencilFill className="text-[#205093]"/>
+              </span>
+            </Tooltip>
+            <Tooltip color="primary" content="Change Room">
+              <span
+              onClick={() => handleChangeroomClick(tenant._id)}
+                className="text-lg text-red-500 cursor-pointer active:opacity-50"
+              >
+                <FaExchangeAlt className="text-[#205093]"/>
               </span>
             </Tooltip>
             <Tooltip color="danger" content="Remove tenant">
@@ -674,6 +697,9 @@ export default function Tennat() {
                       </div>
                       <div className="flex flex-col justify-start items-start text-sm font-semibold">
                         <p>Contact Info</p>
+                        <p className="flex flex-col justify-start items-start text-xs">
+                          phone: {tenantdata?.UserNumber}
+                        </p>
                       </div>
                     </div>
                     <Divider orientation="vertical" />
@@ -840,6 +866,50 @@ export default function Tennat() {
               </ModalHeader>
               <ModalBody>
                 <Updatetennat Setopenedit={Setopenedit} />
+              </ModalBody>
+              <ModalFooter className="flex justify-center items-center text-center"></ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+
+      {/* change room */}
+      <Modal
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
+        backdrop="blur"
+        size="4xl"
+        isOpen={openChangeroom}
+        onOpenChange={Setchangeroom}
+        motionProps={{
+          variants: {
+            enter: {
+              y: 0,
+              opacity: 1,
+              transition: {
+                duration: 0.3,
+                ease: "easeOut",
+              },
+            },
+            exit: {
+              y: -20,
+              opacity: 0,
+              transition: {
+                duration: 0.2,
+                ease: "easeIn",
+              },
+            },
+          },
+        }}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col text-center">
+               Change Room
+              </ModalHeader>
+              <ModalBody>
+                <Changeroom Setchangeroom={Setchangeroom} />
               </ModalBody>
               <ModalFooter className="flex justify-center items-center text-center"></ModalFooter>
             </>
