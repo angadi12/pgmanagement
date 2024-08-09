@@ -135,8 +135,8 @@ const Notifications = () => {
                         <p className="text-tiny font-semibold text-gray-400">
                         {noti.titile}
                         </p>
-                        <p className="text-xs font-semibold text-gray-400">
-                        {noti.titile}
+                        <p className="text-tiny font-medium text-gray-400">
+                        {noti.Desc}
                         </p>
 
                         </div>

@@ -249,14 +249,14 @@ const Createroom = () => {
           </Select>
         </div>
 
-        <div className="w-full text-start flex justify-start items-center gap-2 py-2">
+        {/* <div className="w-full text-start flex justify-start items-center gap-2 py-2">
           <p className="text-[#205093] text-sm font-bold underline cursor-pointer">
             +Upload Room Image
           </p>
           <span className="text-xs text-gray-400 no-underline">
             (PNG, JPG only)
           </span>
-        </div>
+        </div> */}
         <div className="flex justify-center items-center w-full">
           <Button
             onPress={handleSubmit}

@@ -47,9 +47,9 @@ const Sidenav = () => {
     if (token) {
       const decodedToken = jwtDecode(token);
       const { role, id } = decodedToken;
-
+        console.log(role)
       const fetchUserDetails = async () => {
-        console.log(id)
+        console.log(id,role)
         try {
           let userDetails;
           if (role === "owner") {
@@ -172,6 +172,10 @@ const Sidenav = () => {
 
   };
 
+  // if (loading || !user) {
+  //   // Show a loader or placeholder while fetching data
+  //   return <div>Loading...</div>;
+  // }
 
   return (
     <>
