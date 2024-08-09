@@ -684,11 +684,9 @@ export default function Tennat() {
                         <p className="flex flex-col justify-start items-start text-xs">
                           phone: {tenantdata?.UserNumber}
                         </p>
+                      
                         <p className="flex flex-col justify-start items-start text-xs ">
-                          Period:
-                        </p>
-                        <p className="flex flex-col justify-start items-start text-xs ">
-                          Period: 4 Months
+                          Period:&nbsp;{tenantdata?.NumberOfmonth}&nbsp;months
                         </p>
                       </div>
                       <div className="flex flex-col gap-2 justify-start items-start text-xs ">

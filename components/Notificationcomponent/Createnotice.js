@@ -6,6 +6,9 @@ import { CreatNoticeapi } from "../../lib/API/Notification";
 
 import toast, { Toaster } from "react-hot-toast";
 
+
+
+
 const Createnotice = () => {
     const [Loading, setLoading] = useState(false);
     const selectedBranchId = useSelector(
@@ -16,6 +19,19 @@ const Createnotice = () => {
     const [desc, setDesc] = useState("");
    
     
+    const noticeTypes = [
+      "Vacating Notice",
+      "Rent Due Notice",
+      "Maintenance Notice",
+      "Policy Update Notice",
+      "Event Notice",
+      "Inspection Notice",
+      "Rent Increase Notice",
+      "General Notice"
+    ];
+    
+
+
 
     const handleTypeChange = (key) => {
       setType(key);
@@ -75,29 +91,9 @@ const Createnotice = () => {
             selectedKeys={new Set([Type])}
             onSelectionChange={(selectedKeys) => handleTypeChange(selectedKeys.values().next().value)}
           >
-            <SelectItem color="primary" variant="flat" key="First"></SelectItem>
-            <SelectItem color="primary" variant="flat" key="First"></SelectItem>
-            <SelectItem
-              color="primary"
-              variant="flat"
-              key="Secound"
-            ></SelectItem>
-            <SelectItem color="primary" variant="flat" key="Third"></SelectItem>
-            <SelectItem
-              color="primary"
-              variant="flat"
-              key="Fourth"
-            ></SelectItem>
-            <SelectItem
-              color="primary"
-              variant="flat"
-              key="Fourth"
-            ></SelectItem>
-            <SelectItem
-              color="primary"
-              variant="flat"
-              key="Fourth"
-            ></SelectItem>
+           {noticeTypes.map((value)=>(
+            <SelectItem color="primary" variant="flat" key={value}>{value}</SelectItem>
+           ))}
           </Select>
         </div>
 
