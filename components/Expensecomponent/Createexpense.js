@@ -13,6 +13,29 @@ export const animals = [
   { key: "Expense ", label: "Expense " },
 ];
 
+export const expenseNames = [
+  { key: "ElectricityBill", label: "Electricity Bill" },
+  { key: "GasBill", label: "Gas Bill" },
+  { key: "WaterBill", label: "Water Bill" },
+  { key: "InternetBill", label: "Internet Bill" },
+  { key: "MessExpense", label: "Mess Expense" },
+  { key: "Housekeeping", label: "Housekeeping" },
+  { key: "Security", label: "Security" },
+  { key: "Repairs", label: "Repairs" },
+  { key: "Laundry", label: "Laundry" },
+  { key: "WasteManagement", label: "Waste Management" },
+  { key: "Gardening", label: "Gardening" },
+  { key: "Plumbing", label: "Plumbing" },
+  { key: "ElectricalMaintenance", label: "Electrical Maintenance" },
+  { key: "PestControl", label: "Pest Control" },
+  { key: "FireSafety", label: "Fire Safety" },
+  { key: "LiftMaintenance", label: "Lift Maintenance" },
+  { key: "BuildingMaintenance", label: "Building Maintenance" },
+];
+
+
+
+
 const formatDate = (date) => {
   const d = new Date(date);
   const month = String(d.getMonth() + 1).padStart(2, "0");
@@ -46,14 +69,22 @@ const Createexpense = ({onOpenChange}) => {
     }));
   };
 
+  // const handleSelectChange = (key, selectedKeys) => {
+  //   const selectedArray = Array.from(selectedKeys);
+  //   if (key === "Categoery") {
+  //     setFormData((prevData) => ({
+  //       ...prevData,
+  //       Categoery: selectedArray[0],
+  //     }));
+  //   }
+  // };
+
   const handleSelectChange = (key, selectedKeys) => {
     const selectedArray = Array.from(selectedKeys);
-    if (key === "Categoery") {
-      setFormData((prevData) => ({
-        ...prevData,
-        Categoery: selectedArray[0],
-      }));
-    }
+    setFormData((prevData) => ({
+      ...prevData,
+      [key]: selectedArray[0],
+    }));
   };
 
   const handleSubmit = async () => {
@@ -113,17 +144,22 @@ const Createexpense = ({onOpenChange}) => {
           <p className="text-lg font-semibold">Fill Expense Details</p>
         </div>
         <div className="w-full grid lg:grid-cols-2 grid-cols-1 gap-6 place-content-center justify-between items-start ">
-          <Input
-            type="text"
-            name="name"
-            variant="bordered"
-            radius="sm"
-            className="w-full rounded-none"
-            size="lg"
-            placeholder="Expense Name"
+        <Select
             value={formData.name}
-            onChange={handleChange}
-          />
+            size="lg"
+            radius="sm"
+            variant="bordered"
+            placeholder="Expense Name"
+            className="w-full"
+            selectedKeys={new Set([formData.name])}
+            onSelectionChange={(selectedKeys) => handleSelectChange("name", selectedKeys)}
+          >
+            {expenseNames.map((expense) => (
+              <SelectItem key={expense.key} value={expense.key}>
+                {expense.label}
+              </SelectItem>
+            ))}
+          </Select>
           <Select
             value={formData.Categoery}
             size="lg"

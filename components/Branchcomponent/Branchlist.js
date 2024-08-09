@@ -14,7 +14,7 @@ import {
 import Createbranch from "./Createbranch";
 import { Tabs, Tab } from "@nextui-org/react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchBranches } from "@/lib/BranchSlice";
+import { fetchBranches,Setopenbranch } from "@/lib/BranchSlice";
 
 const Branchlist = () => {
   const [selected, setSelected] = React.useState("Branches");
@@ -25,6 +25,9 @@ const Branchlist = () => {
   const status = useSelector((state) => state.branches.status);
   const filterQuery = useSelector((state) => state.branches.filterQuery);
   const [filteredBranches, setFilteredBranches] = useState(branches);
+  const openbranch = useSelector(
+    (state) => state.branches.openbranch
+  );
 
   useEffect(() => {
     dispatch(fetchBranches());
@@ -44,7 +47,9 @@ const Branchlist = () => {
     );
   }, [branches, filterQuery]);
 
-
+  const setopenmodel = () => {
+    dispatch(Setopenbranch(!openbranch)); 
+  };
 
   const handleRefresh = () => {
     dispatch(fetchBranches());
@@ -77,7 +82,7 @@ const Branchlist = () => {
 
           {status === "succeeded" && (
             <Button
-              onPress={onOpen}
+              onPress={setopenmodel}
               className="w-full  h-40 flex justify-center ring-2 ring-[#205093] bg-[#B9D6FF59]  items-center p-3 rounded-md"
             >
               <FaCirclePlus size={40} className="text-[#205093]" />
@@ -91,8 +96,8 @@ const Branchlist = () => {
         isKeyboardDismissDisabled={true}
         backdrop="blur"
         size="4xl"
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
+        isOpen={openbranch}
+        onOpenChange={setopenmodel}
         motionProps={{
           variants: {
             enter: {
@@ -145,12 +150,12 @@ const Branchlist = () => {
                   />
                 </Tabs>
                 <div className="w-full h-auto">
-                  {selectedtab === "Branch Details" && (
-                    <Createbranch onClose={onClose} onRefresh={handleRefresh} />
-                  )}
+                  {selectedtab === "Branch Details" && <Createbranch  />}
                 </div>
               </ModalBody>
-              <ModalFooter className="flex justify-center items-center text-center"></ModalFooter>
+              <ModalFooter className="flex justify-center items-center text-center">
+                
+              </ModalFooter>
             </>
           )}
         </ModalContent>

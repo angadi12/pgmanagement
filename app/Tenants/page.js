@@ -47,7 +47,7 @@ import { Getsingletennatbyid, Removetenantapi } from "../../lib/API/Tennat";
 import tennatpic from "../../public/Loginasset/tennatpic.png";
 import { FaUser } from "react-icons/fa";
 import { BsDoorClosedFill } from "react-icons/bs";
-import {BaseUrl} from "../../lib/API/Baseurl"
+import { BaseUrl } from "../../lib/API/Baseurl";
 import Cookies from "js-cookie";
 
 const columns = [
@@ -192,6 +192,7 @@ export default function Tennat() {
   };
 
   const Deletetenant = async (id) => {
+    Setloadingtennat(true);
     const token = Cookies.get("token");
     try {
       let result = await fetch(`${BaseUrl}/users/remove/user/${id}`, {
@@ -203,10 +204,15 @@ export default function Tennat() {
       });
       result = await result.json();
       console.log(result);
+      dispatch(fetchTenantsByBranch(selectedBranchId))
+      Setloadingtennat(false);
+      Setopendelete(false)
     } catch (error) {
-      console.log(error.message);
+      Setloadingtennat(false);
       return error.message;
-    }
+    }finally {
+     Setloadingtennat(false);
+       }
     // Setloadingtennat(true);
     // try {
     //   const result = await Removetenantapi(selectedTenantId);
@@ -222,8 +228,6 @@ export default function Tennat() {
     //   Setloadingtennat(false);
     // }
   };
-
-
 
   const renderCell = React.useCallback((tenant, columnKey) => {
     const cellValue = tenant[columnKey];
@@ -282,7 +286,7 @@ export default function Tennat() {
                 <RiPencilFill />
               </span>
             </Tooltip>
-            <Tooltip color="danger" content="Delete">
+            <Tooltip color="danger" content="Remove tenant">
               <span
                 onClick={() => handleDeleteClick(tenant._id)}
                 className="text-lg text-red-500 cursor-pointer active:opacity-50"
@@ -525,8 +529,6 @@ export default function Tennat() {
     }
   }, [selectedTenantId]);
 
-
-
   return (
     <>
       {status === "loading" ? (
@@ -684,7 +686,7 @@ export default function Tennat() {
                         <p className="flex flex-col justify-start items-start text-xs">
                           phone: {tenantdata?.UserNumber}
                         </p>
-                      
+
                         <p className="flex flex-col justify-start items-start text-xs ">
                           Period:&nbsp;{tenantdata?.NumberOfmonth}&nbsp;months
                         </p>
@@ -777,19 +779,23 @@ export default function Tennat() {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col text-center">
-                Confirm Delete
+                Confirm Remove
               </ModalHeader>
               <ModalBody>
                 <div className="flex w-full justify-start items-start">
-                  <p>Do you want to delete Tenant?</p>
+                  <p>Do you want to Remove Tenant?</p>
                 </div>
               </ModalBody>
               <ModalFooter className="flex justify-end items-end ">
                 <Button onPress={onClose} color="primary" variant="solid">
                   Cancel
                 </Button>
-                <Button onPress={()=>Deletetenant(selectedTenantId)} color="danger" variant="solid">
-                  {loadingtennat ? <span className="loader2"></span> : "Delete"}
+                <Button
+                  onPress={() => Deletetenant(selectedTenantId)}
+                  color="danger"
+                  variant="solid"
+                >
+                  {loadingtennat ? <span className="loader2"></span> : "Remove"}
                 </Button>
               </ModalFooter>
             </>

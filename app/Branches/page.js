@@ -17,17 +17,22 @@ import Createbranch from "@/components/Branchcomponent/Createbranch";
 import Personaldetails from "@/components/Branchcomponent/Personaldetails";
 import Allocverify from "@/components/Branchcomponent/Allocverify";
 import Userandpass from "@/components/Branchcomponent/Userandpass";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { setFilterQuery as setBranchFilterQuery } from "../../lib/BranchSlice";
+import { Setopenbranch ,Setopenadmin} from "../../lib/BranchSlice";
 import { setFilterQuery as setAdminFilterQuery } from "@/lib/AdminSlice";
 
 const Branches = () => {
   const [selected, setSelected] = React.useState("Branches");
   const [selectedtab, setSelectedtab] = React.useState("Branch Details");
   const [selectedtab2, setSelectedtab2] = React.useState("Personal Details");
-  const [Open, SetOpen] = useState(false);
-  const [openbranch,Setopenbranch] = useState(false);
   const dispatch = useDispatch();
+  const openbranch = useSelector(
+    (state) => state.branches.openbranch
+  );
+  const openadmin = useSelector(
+    (state) => state.branches.openadmin
+  );
 
 
   const handleSearchChange = (event) => {
@@ -37,6 +42,15 @@ const Branches = () => {
     } else if (selected === "Admins") {
       dispatch(setAdminFilterQuery(query));
     }
+  };
+
+
+  const setopenmodel = () => {
+    dispatch(Setopenbranch(!openbranch)); 
+  };
+
+  const setopenmodeladmin = () => {
+    dispatch(Setopenadmin(!openadmin)); 
   };
 
   return (
@@ -94,13 +108,13 @@ const Branches = () => {
             />
             <div className="flex gap-3">
               {selected ==='Branches' ?<Button
-                onPress={()=>Setopenbranch(true)}
+                onPress={setopenmodel}
                 className="bg-[#205093] text-background"
                 endContent={<FaPlus />}
                 size="sm"
               ></Button>:
               <Button
-               onPress={()=>SetOpen(true)}
+               onPress={setopenmodeladmin}
                 className="bg-[#205093] text-background"
                 endContent={<FaPlus />}
                 size="sm"
@@ -121,7 +135,7 @@ const Branches = () => {
         backdrop="blur"
         size="4xl"
         isOpen={openbranch}
-        onOpenChange={Setopenbranch}
+        onOpenChange={setopenmodel}
         motionProps={{
           variants: {
             enter: {
@@ -174,7 +188,7 @@ const Branches = () => {
                   />
                 </Tabs>
                 <div className="w-full h-auto">
-                  {selectedtab === "Branch Details" && <Createbranch Setopenbranch={Setopenbranch} />}
+                  {selectedtab === "Branch Details" && <Createbranch  />}
                 </div>
               </ModalBody>
               <ModalFooter className="flex justify-center items-center text-center">
@@ -191,8 +205,8 @@ const Branches = () => {
         isKeyboardDismissDisabled={true}
         backdrop="blur"
         size="4xl"
-        isOpen={Open}
-        onOpenChange={SetOpen}
+        isOpen={openadmin}
+        onOpenChange={setopenmodeladmin}
         motionProps={{
           variants: {
             enter: {

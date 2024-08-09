@@ -4,13 +4,19 @@ import { Input, Button } from "@nextui-org/react";
 import { Createbranchapi } from "../../lib/API/Branch";
 import toast, { Toaster } from "react-hot-toast";
 import { useSelector, useDispatch } from "react-redux";
-import { createBranch, fetchBranches } from "@/lib/BranchSlice";
+import { createBranch, fetchBranches ,Setopenbranch} from "@/lib/BranchSlice";
 
-const Createbranch = ({ Setopenbranch }) => {
+const Createbranch = () => {
   const branches = useSelector((state) => state.branches.branches);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const openbranch = useSelector(
+    (state) => state.branches.openbranch
+  );
 
+  const setopenmodel = () => {
+    dispatch(Setopenbranch(!openbranch)); 
+  };
   const [formData, setFormData] = useState({
     Branchname: "",
     Address: "",
@@ -57,7 +63,7 @@ const Createbranch = ({ Setopenbranch }) => {
     if (result.status) {
       toast.success("Branch created successfully");
       dispatch(fetchBranches());
-      Setopenbranch(false)
+      setopenmodel()
       setLoading(false);
     } else {
       toast.error(result.message.result || "Failed to create branch");

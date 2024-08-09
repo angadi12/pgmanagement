@@ -45,7 +45,7 @@ const columns = [
   { name: "Name", uid: "name" },
   { name: "Description", uid: "description" },
   { name: "Category", uid: "Categoery" },
-  { name: "month", uid: "month" },
+  { name: "Date", uid: "createdAt" },
   { name: "Amount", uid: "amount" },
   { name: "Modify", uid: "Modify" },
 ];
@@ -70,11 +70,21 @@ const statusColorMap = {
 const INITIAL_VISIBLE_COLUMNS = [
   "name",
  "Categoery",
-  "month",
+  "createdAt",
   "description",
   "amount",
   "Modify",
 ];
+
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const day = date.getDate();
+  const month = date.toLocaleString('default', { month: 'short' });
+  const year = date.getFullYear();
+  
+  return `${day} ${month} ${year}`;
+};
 
 export default function Expense() {
   const dispatch = useDispatch();
@@ -169,8 +179,16 @@ export default function Expense() {
       case "Categoery":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-tiny capitalize text-default-500">
+            <p className="text-bold text-tiny capitalize ">
               {expense.Categoery}
+            </p>
+          </div>
+        );
+      case "createdAt":
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold text-tiny capitalize ">
+              {formatDate(expense.createdAt)}
             </p>
           </div>
         );

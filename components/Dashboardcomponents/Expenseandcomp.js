@@ -7,17 +7,76 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchDashboardExpense } from "@/lib/DashboardSlice";
 
 const chartConfig = {
+  visitors: {
+    label: "Increase in Expense",
+  },
   ElectricityBill: {
-    color: "#FFA100",
+    label: "Electricity Bill",
+    color: "#FFA100", // existing color
   },
   GasBill: {
-    color: "#9747FF",
+    label: "Gas Bill",
+    color: "#9747FF", // existing color
   },
   WaterBill: {
-    color: "#0096FF",
+    label: "Water Bill",
+    color: "#0096FF", // existing color
   },
   InternetBill: {
-    color: "#ED6300",
+    label: "Internet Bill",
+    color: "#ED6300", // existing color
+  },
+  MessExpense: {
+    label: "Mess Expense",
+    color: "#FF5722", // new color
+  },
+  Housekeeping: {
+    label: "Housekeeping",
+    color: "#4CAF50", // new color
+  },
+  Security: {
+    label: "Security",
+    color: "#9C27B0", // new color
+  },
+  Repairs: {
+    label: "Repairs",
+    color: "#FFEB3B", // new color
+  },
+  Laundry: {
+    label: "Laundry",
+    color: "#00BCD4", // new color
+  },
+  WasteManagement: {
+    label: "Waste Management",
+    color: "#795548", // new color
+  },
+  Gardening: {
+    label: "Gardening",
+    color: "#8BC34A", // new color
+  },
+  Plumbing: {
+    label: "Plumbing",
+    color: "#3F51B5", // new color
+  },
+  ElectricalMaintenance: {
+    label: "Electrical Maintenance",
+    color: "#FF9800", // new color
+  },
+  PestControl: {
+    label: "Pest Control",
+    color: "#9E9E9E", // new color
+  },
+  FireSafety: {
+    label: "Fire Safety",
+    color: "#F44336", // new color
+  },
+  LiftMaintenance: {
+    label: "Lift Maintenance",
+    color: "#03A9F4", // new color
+  },
+  BuildingMaintenance: {
+    label: "Building Maintenance",
+    color: "#673AB7", // new color
   },
 };
 
@@ -46,19 +105,19 @@ const Expenseandcomp = () => {
 
 
   // Render the expense items dynamically
-  const expenseItems = expense?.map((item) => {
+  const expenseItems = expense?.slice(0,4).map((item) => {
     const color = chartConfig[item.name]?.color || "#ccc";
     return (
 
-      <>
-     <div className="flex flex-col justify-start items-start" key={item.name}>
-        <p className="flex gap-1 items-center text-xs">
-          <FaCircle className="text-[color]" style={{ color: color }} /> {item.name}
+      <div className="w-full" key={item.name}>
+     <div className="flex flex-col justify-start items-start w-full" >
+        <p className="flex gap-1 items-center text-tiny">
+          <FaCircle className="text-[color] text-tiny" style={{ color: color }} /> {item.name}
         </p>
-        <p className="text-[color]" style={{ color: color }}>{`Rs/- ${item.totalAmount}`}</p>
+        <p className="text-[color] text-tiny" style={{ color: color }}>{`Rs/- ${item.totalAmount}`}</p>
       </div>
 
-      </>
+      </div>
     );
   });
 
@@ -76,7 +135,7 @@ const Expenseandcomp = () => {
             </div>
            { !expense || expense?.length === 0?  <div  className="w-full h-full grid  py-2 grid-cols-1 justify-center place-content-center items-center mx-auto rounded-md ring-1 ring-gray-200">
         <p className="text-xs font-semibold w-full h-16 text-center flex justify-center items-center">No data available</p>
-      </div>:<div className="w-full h-full grid px-4 py-2 grid-cols-2 justify-center place-content-center items-center mx-auto rounded-md ring-1 ring-gray-200">
+      </div>:<div className="w-full h-full grid px-1   py-2 grid-cols-2 justify-center place-content-center items-end mx-auto rounded-md ring-1 ring-gray-200">
               {expenseItems}
             </div>}
           </div>
