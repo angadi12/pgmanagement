@@ -26,6 +26,26 @@ const Personaldetails = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+
+
+  const handleFileChange = (e, fileType) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => { 
+        setFormData({
+          ...formData,
+          [fileType]: file
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+
+
+
+
   const handleNext = () => {
     if (!selectedRoomId) {
       return toast.error("Room not selected");
@@ -45,12 +65,17 @@ const Personaldetails = () => {
     if (!formData.aadharNumber || formData.aadharNumber.length !== 12) {
       return toast.error("Aadhar Number should be 12 digits");
     }
+    if (!formData.profile ) {
+      return toast.error("Profile image is required");
+    }
+    if (!formData.aadhar  ) {
+      return toast.error("aadhar/optinal image is required");
+    }
 
     dispatch(setPersonalDetails(formData));
     dispatch(setCurrentStep("Room & Duration"));
   };
-
-  console.log(formData);
+console.log(formData)
   return (
     <>
       <div className="flex flex-col justify-center items-center gap-4">
@@ -122,11 +147,12 @@ const Personaldetails = () => {
         <div className="w-full grid lg:grid-cols-3 grid-cols-1 gap-4  place-content-center justify-between items-start ">
           <div className="w-full text-start flex flex-col justify-start items-start gap-2 py-2">
             <Button size="lg" radius="sm" variant="bordered" className="w-full" endContent={<FaUserCircle size={24} className="text-[#222C68]"/>}>
-              <label htmlFor="fileInputQRimage" className="flex justify-start items-center gap-1 text-tiny"><MdOutlineCloudUpload size={24} className="text-[#222C68]"/>Upload Tenant Image</label>
+              <label htmlFor="fileInputProfile" className="flex justify-start items-center gap-1 text-tiny"><MdOutlineCloudUpload size={24} className="text-[#222C68]"/>{formData?.profile?.name?formData?.profile?.name: "Upload Tenant Image"}</label>
               <input
                 type="file"
-                id="fileInputQRimage"
+                id="fileInputProfile"
                 style={{ display: "none" }}
+                onChange={(e) => handleFileChange(e, "profile")}
               />
             </Button>
             <span className="text-xs text-gray-400 no-underline">
@@ -136,11 +162,12 @@ const Personaldetails = () => {
          
           <div className="w-full text-start flex flex-col justify-start items-start gap-2 py-2">
             <Button size="lg" radius="sm" variant="bordered" className="w-full" endContent={<HiMiniIdentification size={24} className="text-[#222C68]"/>}>
-              <label htmlFor="fileInputQRimage" className="flex justify-start items-center gap-1 text-xs"><MdOutlineCloudUpload size={24} className="text-[#222C68]"/>Upload Tenant Aadhar</label>
+              <label htmlFor="fileInputAadhar" className="flex justify-start items-center gap-1 text-xs"><MdOutlineCloudUpload size={24} className="text-[#222C68]"/>{formData?.aadhar?.name?formData?.aadhar?.name:"Upload Tenant Aadhar"}</label>
               <input
                 type="file"
-                id="fileInputQRimage"
+                id="fileInputAadhar"
                 style={{ display: "none" }}
+                onChange={(e) => handleFileChange(e, "aadhar")}
               />
             </Button>
             <span className="text-xs text-gray-400 no-underline">
@@ -150,11 +177,12 @@ const Personaldetails = () => {
          
           <div className="w-full text-start flex flex-col justify-start items-start gap-2 py-2">
             <Button size="lg" radius="sm" variant="bordered" className="w-full" endContent={<IoDocumentTextSharp size={24} className="text-[#222C68]"/>}>
-              <label htmlFor="fileInputQRimage" className="flex justify-start items-center gap-1 text-tiny"><MdOutlineCloudUpload size={24} className="text-[#222C68]"/>Upload Other doc</label>
+              <label htmlFor="fileInputOptional" className="flex justify-start items-center gap-1 text-tiny"><MdOutlineCloudUpload size={24} className="text-[#222C68]"/>{formData?.optional?.name?formData?.optional?.name:"Upload Other doc"}</label>
               <input
-                type="file"
-                id="fileInputQRimage"
+              type="file"
+                 id="fileInputOptional"
                 style={{ display: "none" }}
+                onChange={(e) => handleFileChange(e, "optional")}
               />
             </Button>
             <span className="text-xs text-gray-400 no-underline">

@@ -12,38 +12,28 @@ import {
   fetchDashboardEarnings,
 } from "../../lib/DashboardSlice";
 import Getfloor from "./Getfloor";
-import { fetchTicketsByBranch } from "@/lib/SupportSlice";
+import Ticketcard from "./Ticketcard";
+
 
 const Overallstatus = () => {
   const dispatch = useDispatch();
   const { data, earnings, loading, error } = useSelector(
     (state) => state.dashboard
   );
-  const { tickets, status } = useSelector((state) => state.tickets);
+  const { tenants } = useSelector((state) => state.tenants);
 
   const selectedBranchId = useSelector(
     (state) => state.branches.selectedBranchId
   );
 
-  const [resolvedCount, setResolvedCount] = useState(0);
-  const [pendingCount, setPendingCount] = useState(0);
+ 
 
   useEffect(() => {
     dispatch(fetchDashboardData());
     dispatch(fetchDashboardEarnings());
-    dispatch(fetchTicketsByBranch(selectedBranchId));
   }, [dispatch, selectedBranchId]);
 
-  useEffect(() => {
-    if (tickets) {
-      setResolvedCount(
-        tickets?.filter((ticket) => ticket.status === "resolved").length
-      );
-      setPendingCount(
-        tickets?.filter((ticket) => ticket.status === "pending").length
-      );
-    }
-  }, [tickets]);
+  
 
   // if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -92,7 +82,7 @@ const Overallstatus = () => {
                 <IoPeople size={24} />
               </div>
               <div className="flex flex-col justify-center items-center">
-                <p className="font-bold">{data?.totalBeds}</p>
+                <p className="font-bold">{tenants?.length}</p>
                 <p className="text-xs font-semibold text-[#8B8B8B]">
                   Total Tenants
                 </p>
@@ -109,7 +99,7 @@ const Overallstatus = () => {
                 </p>
               </div>
             </div>
-            <div className="boxshadow  rounded-lg flex md:justify-center lg:justify-center justify-between md:items-center lg:items-center items-start gap-2 py-4 px-4 md:px-0 lg:px-0 md:h-36 lg:h-36 md:flex-col lg:flex-col">
+            {/* <div className="boxshadow  rounded-lg flex md:justify-center lg:justify-center justify-between md:items-center lg:items-center items-start gap-2 py-4 px-4 md:px-0 lg:px-0 md:h-36 lg:h-36 md:flex-col lg:flex-col">
               <div className="h-14 w-14 rounded-full bg-[#FFA200] text-white flex justify-center items-center">
                 <IoIosWarning size={24} />
               </div>
@@ -133,7 +123,8 @@ const Overallstatus = () => {
                   Complaints Received
                 </p>
               </div>
-            </div>
+            </div> */}
+            <Ticketcard/>
           </div>
         </div>
       )}

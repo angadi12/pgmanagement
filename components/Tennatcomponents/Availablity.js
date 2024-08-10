@@ -53,7 +53,6 @@ const Availablity = () => {
     dispatch(setSelectedRoomId(selectedArray[0]))
   };
 
-  console.log(selectedRoom);
 
   const filterRooms = async () => {
     setFilterError("");
@@ -76,7 +75,6 @@ const Availablity = () => {
         setAvailableRooms([]);
       } else {
         setAvailableRooms(filteredRooms);
-        console.log(filterRooms);
       }
     } catch (error) {
       setFilterError("An error occurred while fetching rooms.");
@@ -151,6 +149,8 @@ const Availablity = () => {
         <Select
           size="lg"
           radius="sm"
+          isInvalid={floors?.length===0}
+          errorMessage="Rooms Not added"
           color="primary"
           variant="bordered"
           placeholder="Select Floor"

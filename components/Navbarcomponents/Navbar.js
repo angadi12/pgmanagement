@@ -72,6 +72,8 @@ export default function Navbarr() {
     }
   }, [branches, selectedKey, dispatch, user]);
 
+  console.log(selectedBranchId)
+
   useEffect(() => {
     if (selectedBranchId) {
       dispatch(fetchNotificationByBranch(selectedBranchId));

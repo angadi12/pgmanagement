@@ -61,7 +61,6 @@ const Branchlist = () => {
       <p>Error while fetching branch details</p>
     </div>
   }
-
   return (
     <>
       {status === "loading" ? (

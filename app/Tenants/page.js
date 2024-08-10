@@ -53,6 +53,9 @@ import { FaExchangeAlt } from "react-icons/fa";
 import { MdLocalPhone } from "react-icons/md";
 import  Changeroom from "@/components/Tennatcomponents/Changeroom";
 
+
+
+
 const columns = [
   { name: "ID", uid: "_id" },
   { name: "Name", uid: "UserName" },
@@ -90,6 +93,8 @@ const INITIAL_VISIBLE_COLUMNS = [
   "actions",
 ];
 
+
+
 export default function Tennat() {
   const dispatch = useDispatch();
   const { tenants, status, error } = useSelector((state) => state.tenants);
@@ -100,8 +105,12 @@ export default function Tennat() {
     (state) => state.tenants.selectedTenantId
   );
 
+console.log(selectedBranchId)
+
+
+
   useEffect(() => {
-    if (selectedBranchId) {
+    if (isValidObjectId(selectedBranchId)) {
       dispatch(fetchTenantsByBranch(selectedBranchId));
     }
   }, [selectedBranchId, dispatch]);
@@ -588,7 +597,7 @@ export default function Tennat() {
           </TableHeader>
           <TableBody emptyContent={"No Tenants found"} items={sortedItems}>
             {(item) => (
-              <TableRow key={item._id}>
+              <TableRow key={item?._id}>
                 {(columnKey) => (
                   <TableCell>{renderCell(item, columnKey)}</TableCell>
                 )}
@@ -683,16 +692,21 @@ export default function Tennat() {
                   <div className="flex justify-evenly items-center h-60 gap-4 w-full">
                     <div>
                       <Image
-                        src={tennatpic}
+                        src={tenantdata?.files?.profile[0]}
+                        width={200}
+                        height={200}
                         className="object-fill h-full"
                         alt="Roomimage"
                       />
                     </div>
                     <div className="flex flex-col justify-between items-start h-full py-4">
                       <div className="flex flex-col justify-start items-start text-sm font-semibold">
-                        <p>Name : {tenantdata.UserName}</p>
-                        <p className="flex flex-col justify-start items-start text-sm font-bold">
-                          {tenantdata.roomName}
+                        <p>Name : {tenantdata?.UserName}</p>
+                        <p className="flex flex-col justify-start items-start text-xs ">
+                        Address : {tenantdata?.Address}
+                        </p>
+                        <p className="flex flex-col justify-start items-start text-xs ">
+                        Aadhar Number :  {tenantdata?.AadharNumber}
                         </p>
                       </div>
                       <div className="flex flex-col justify-start items-start text-sm font-semibold">
@@ -706,11 +720,11 @@ export default function Tennat() {
                     <div className="flex flex-col justify-between items-start h-full py-4">
                       <div className="flex flex-col flex-wrap gap-2 justify-start items-start text-sm font-semibold">
                         <p>Tenant Details</p>
-                        <p className="flex flex-col justify-start items-start text-xs ">
-                          Name: {tenantdata.UserName}
+                        <p className="flex flex-col justify-start items-start text-xs">
+                        Start Date: {tenantdata?.StartDate}
                         </p>
                         <p className="flex flex-col justify-start items-start text-xs">
-                          phone: {tenantdata?.UserNumber}
+                        Last Date: {tenantdata?.LastDate}
                         </p>
 
                         <p className="flex flex-col justify-start items-start text-xs ">
