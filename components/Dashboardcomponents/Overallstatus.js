@@ -13,6 +13,7 @@ import {
 } from "../../lib/DashboardSlice";
 import Getfloor from "./Getfloor";
 import { fetchTicketsByBranch } from "@/lib/SupportSlice";
+import {fetchTenantsByBranch} from "@/lib/TennatSlice"
 
 const Overallstatus = () => {
   const dispatch = useDispatch();
@@ -20,6 +21,7 @@ const Overallstatus = () => {
     (state) => state.dashboard
   );
   const { tickets, status } = useSelector((state) => state.tickets);
+  const { tenants } = useSelector((state) => state.tenants);
 
   const selectedBranchId = useSelector(
     (state) => state.branches.selectedBranchId
@@ -32,6 +34,7 @@ const Overallstatus = () => {
     dispatch(fetchDashboardData());
     dispatch(fetchDashboardEarnings());
     dispatch(fetchTicketsByBranch(selectedBranchId));
+    dispatch(fetchTenantsByBranch(selectedBranchId));
   }, [dispatch, selectedBranchId]);
 
   useEffect(() => {
@@ -92,7 +95,7 @@ const Overallstatus = () => {
                 <IoPeople size={24} />
               </div>
               <div className="flex flex-col justify-center items-center">
-                <p className="font-bold">{data?.totalBeds}</p>
+                <p className="font-bold">{tenants?.length}</p>
                 <p className="text-xs font-semibold text-[#8B8B8B]">
                   Total Tenants
                 </p>

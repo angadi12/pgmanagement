@@ -468,7 +468,6 @@ useEffect(() => {
 }, [Selectedroomid]);
 
 
-
   return (
     <>
       {status === "loading" ? (
@@ -627,10 +626,12 @@ useEffect(() => {
                     <Image
                       src={Roomimage}
                       className="object-fill h-full"
+                      height={200}
+                      width={200}
                       alt="Roomimage"
                     />
                   </div>
-                  <div className="flex flex-col justify-between items-start h-full py-4">
+                  {/* <div className="flex flex-col justify-between items-start h-full py-4">
                     <div className="flex flex-col justify-start items-start text-sm font-semibold">
                       <p>Floor : {roomdata.floor}</p>
                       <p className="flex flex-col justify-start items-start text-sm font-bold text-gray-500">
@@ -645,7 +646,7 @@ useEffect(() => {
                         ))
                       }
                     </div>
-                  </div>
+                  </div> */}
                   <Divider orientation="vertical" />
                   <div className="flex flex-col justify-between items-start h-full py-4">
                     <div className="flex flex-col flex-wrap gap-2 justify-start items-start text-sm font-semibold">
@@ -659,6 +660,15 @@ useEffect(() => {
                       <p className="flex flex-col justify-start items-start text-xs text-gray-500">
                       Reamining Beds:{roomdata?.reaminingBed}
                       </p>
+                      <div className="flex flex-col justify-start items-start text-sm font-semibold mt-2">
+                      <p>Present Tenant</p>
+                      {
+                        roomdata &&
+                        roomdata?.Users?.map((name,id)=>(
+                          <p key={id} className="text-sm text-gray-500">{name.UserName}</p>
+                        ))
+                      }
+                    </div>
                     </div>
                     <div className="flex flex-col gap-2 justify-start items-start text-xs ">
                       <p className="flex   items-center gap-2 text-sm font-semibold">Rent: <span className="text-green-600">{roomdata?.Price}/-</span></p>

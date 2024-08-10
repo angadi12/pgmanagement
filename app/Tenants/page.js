@@ -683,7 +683,9 @@ export default function Tennat() {
                   <div className="flex justify-evenly items-center h-60 gap-4 w-full">
                     <div>
                       <Image
-                        src={tennatpic}
+                        src={tenantdata?.files?.profile[0]}
+                        width={200}
+                        height={200}
                         className="object-fill h-full"
                         alt="Roomimage"
                       />
@@ -691,8 +693,11 @@ export default function Tennat() {
                     <div className="flex flex-col justify-between items-start h-full py-4">
                       <div className="flex flex-col justify-start items-start text-sm font-semibold">
                         <p>Name : {tenantdata.UserName}</p>
-                        <p className="flex flex-col justify-start items-start text-sm font-bold">
-                          {tenantdata.roomName}
+                        <p className="flex flex-col justify-start items-start text-xs ">
+                        Address : {tenantdata.Address}
+                        </p>
+                        <p className="flex flex-col justify-start items-start text-xs ">
+                        Aadhar Number :  {tenantdata.AadharNumber}
                         </p>
                       </div>
                       <div className="flex flex-col justify-start items-start text-sm font-semibold">
@@ -706,11 +711,11 @@ export default function Tennat() {
                     <div className="flex flex-col justify-between items-start h-full py-4">
                       <div className="flex flex-col flex-wrap gap-2 justify-start items-start text-sm font-semibold">
                         <p>Tenant Details</p>
-                        <p className="flex flex-col justify-start items-start text-xs ">
-                          Name: {tenantdata.UserName}
+                        <p className="flex flex-col justify-start items-start text-xs">
+                        Start Date: {tenantdata?.StartDate}
                         </p>
                         <p className="flex flex-col justify-start items-start text-xs">
-                          phone: {tenantdata?.UserNumber}
+                        Last Date: {tenantdata?.LastDate}
                         </p>
 
                         <p className="flex flex-col justify-start items-start text-xs ">
