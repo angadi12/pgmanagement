@@ -53,6 +53,9 @@ import { FaExchangeAlt } from "react-icons/fa";
 import { MdLocalPhone } from "react-icons/md";
 import  Changeroom from "@/components/Tennatcomponents/Changeroom";
 
+
+
+
 const columns = [
   { name: "ID", uid: "_id" },
   { name: "Name", uid: "UserName" },
@@ -90,6 +93,8 @@ const INITIAL_VISIBLE_COLUMNS = [
   "actions",
 ];
 
+
+
 export default function Tennat() {
   const dispatch = useDispatch();
   const { tenants, status, error } = useSelector((state) => state.tenants);
@@ -100,8 +105,12 @@ export default function Tennat() {
     (state) => state.tenants.selectedTenantId
   );
 
+console.log(selectedBranchId)
+
+
+
   useEffect(() => {
-    if (selectedBranchId) {
+    if (isValidObjectId(selectedBranchId)) {
       dispatch(fetchTenantsByBranch(selectedBranchId));
     }
   }, [selectedBranchId, dispatch]);
@@ -588,7 +597,7 @@ export default function Tennat() {
           </TableHeader>
           <TableBody emptyContent={"No Tenants found"} items={sortedItems}>
             {(item) => (
-              <TableRow key={item._id}>
+              <TableRow key={item?._id}>
                 {(columnKey) => (
                   <TableCell>{renderCell(item, columnKey)}</TableCell>
                 )}
@@ -692,12 +701,12 @@ export default function Tennat() {
                     </div>
                     <div className="flex flex-col justify-between items-start h-full py-4">
                       <div className="flex flex-col justify-start items-start text-sm font-semibold">
-                        <p>Name : {tenantdata.UserName}</p>
+                        <p>Name : {tenantdata?.UserName}</p>
                         <p className="flex flex-col justify-start items-start text-xs ">
-                        Address : {tenantdata.Address}
+                        Address : {tenantdata?.Address}
                         </p>
                         <p className="flex flex-col justify-start items-start text-xs ">
-                        Aadhar Number :  {tenantdata.AadharNumber}
+                        Aadhar Number :  {tenantdata?.AadharNumber}
                         </p>
                       </div>
                       <div className="flex flex-col justify-start items-start text-sm font-semibold">
