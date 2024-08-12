@@ -225,7 +225,7 @@ const Createroom = () => {
               handleSelectChange("floor", selectedKeys)
             }
           >
-            <SelectItem color="primary" variant="flat" key="First">
+            <SelectItem color="primary" variant="flat" key="Ground">
               Ground
             </SelectItem>
             <SelectItem color="primary" variant="flat" key="First">

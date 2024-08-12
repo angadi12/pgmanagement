@@ -255,11 +255,12 @@ const Availablity = () => {
           <p className="font-semibold">Allocate Room</p>
           <p className="font-semibold"></p>
         </div>
-        <div className="grid grid-cols-10 gap-4 w-full items-start mt-4">
-          {filteredRooms?.map((room, index) => (
+        <div className="grid grid-cols-10 gap-4 w-full items-start mt-4 h-28 overflow-hidden">
+         {/* filteredRooms */}
+          {availableRooms?.map((room, index) => (
             <div
               key={index}
-              className="flex flex-col justify-center items-center gap-2"
+              className="flex flex-col justify-center items-center gap-1"
             >
               <Tooltip
                 content={
@@ -288,9 +289,13 @@ const Availablity = () => {
                   >
                     <FaBed size={24} />
                   </div>
-                  <p className="font-semibold text-sm">{room.roomName}</p>
                 </Button>
               </Tooltip>
+              <div className="flex flex-col justify-center items-center">
+
+                  <p className="font-semibold text-sm">{room?.roomName}</p>
+                  <p className="font-medium text-tiny">{room?.RoomNumber}</p>
+              </div>
             </div>
           ))}
         </div>

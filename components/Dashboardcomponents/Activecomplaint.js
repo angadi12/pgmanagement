@@ -1,12 +1,14 @@
 "use client";
 import React, { useEffect } from 'react';
-import electricity2 from '../../public/Loginasset/electricity2.png';
-import water from '../../public/Loginasset/water2.png';
-import internet from '../../public/Loginasset/wifi2.png';
+import electricity2 from '../../public/Loginasset/electricity.png';
+import water from '../../public/Loginasset/water.png';
+import internet from '../../public/Loginasset/wifi.png';
+import Circle from '../../public/Loginasset/Circle.png';
 import Image from 'next/image';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchTicketsByStatus } from '../../lib/SupportSlice';
 import Activecompleintske from './Activecompleintske';
+import {useRouter} from "next/navigation"
 
 const categoryImages = {
   Electricity: electricity2,
@@ -21,15 +23,14 @@ const categoryColors = {
 };
 
 const Activecomplaint = () => {
+  const router=useRouter()
   const dispatch = useDispatch();
   const { tickets, status, error } = useSelector((state) => state.tickets);
   const selectedBranchId = useSelector(
     (state) => state.branches.selectedBranchId
   );
 
-  useEffect(() => {
-    dispatch(fetchTicketsByStatus('pending'));
-  }, [dispatch,selectedBranchId]);
+ 
 
   if (status === 'loading') {
     return <Activecompleintske/>
@@ -51,16 +52,18 @@ const Activecomplaint = () => {
 
         return (
           <div
+          onClick={()=>router.push("/Maintenance")}
             key={ticket._id}
-            className="w-full h-auto py-3 rounded-md ring-1 ring-gray-200 flex justify-around items-center px-4"
+            className="w-full h-auto overflow-hidden py-3 rounded-md ring-1 ring-gray-200 flex justify-around items-center px-4"
             style={{ backgroundColor: categoryColor }}
           >
             <div className="w-14 h-14 rounded-full relative flex justify-center items-center">
-              <Image src={categoryImage} alt={ticket.Categoery} />
+              <Image src={Circle} alt='Circle' />
+              <Image className='absolute' src={categoryImage} alt={ticket.Categoery} />
             </div>
             <div>
               <p className="text-sm font-semibold text-white">Room: {ticket.room}</p>
-              <p className="text-xs font-medium text-white">{ticket.TicketName}</p>
+              <p className="text-xs font-medium text-white text-wrap">Ticket Name:&nbsp;{ticket.TicketName}</p>
             </div>
           </div>
         );
