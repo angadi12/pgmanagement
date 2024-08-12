@@ -51,10 +51,16 @@ import { BaseUrl } from "../../lib/API/Baseurl";
 import Cookies from "js-cookie";
 import { FaExchangeAlt } from "react-icons/fa";
 import { MdLocalPhone } from "react-icons/md";
-import  Changeroom from "@/components/Tennatcomponents/Changeroom";
-
-
-
+import Changeroom from "@/components/Tennatcomponents/Changeroom";
+import { IoDocumentTextSharp } from "react-icons/io5";
+import toast, { Toaster } from "react-hot-toast";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 const columns = [
   { name: "ID", uid: "_id" },
@@ -93,8 +99,6 @@ const INITIAL_VISIBLE_COLUMNS = [
   "actions",
 ];
 
-
-
 export default function Tennat() {
   const dispatch = useDispatch();
   const { tenants, status, error } = useSelector((state) => state.tenants);
@@ -105,9 +109,7 @@ export default function Tennat() {
     (state) => state.tenants.selectedTenantId
   );
 
-console.log(selectedBranchId)
-
-
+  console.log(selectedBranchId);
 
   useEffect(() => {
     if (isValidObjectId(selectedBranchId)) {
@@ -115,11 +117,12 @@ console.log(selectedBranchId)
     }
   }, [selectedBranchId, dispatch]);
 
-  const [openChangeroom,Setchangeroom] =useState(false)
+  const [openChangeroom, Setchangeroom] = useState(false);
   const [openmodal, Setopenmodal] = useState(false);
   const [openview, Setopenview] = useState(false);
   const [opendelete, Setopendelete] = useState(false);
   const [openedit, Setopenedit] = useState(false);
+  const [opendoc, setopendoc] = useState(false);
   const [loadingroomdata, setLoadingData] = useState(true);
   const [tenantdata, Settennatdata] = useState();
   const [loadingtennat, Setloadingtennat] = useState(false);
@@ -208,6 +211,11 @@ console.log(selectedBranchId)
     Setchangeroom(true);
   };
 
+  const handleDocviewClick = (id) => {
+    dispatch(setSelectedTenantId(id));
+    setopendoc(true);
+  };
+
   const Deletetenant = async (id) => {
     Setloadingtennat(true);
     const token = Cookies.get("token");
@@ -221,15 +229,15 @@ console.log(selectedBranchId)
       });
       result = await result.json();
       console.log(result);
-      dispatch(fetchTenantsByBranch(selectedBranchId))
+      dispatch(fetchTenantsByBranch(selectedBranchId));
       Setloadingtennat(false);
-      Setopendelete(false)
+      Setopendelete(false);
     } catch (error) {
       Setloadingtennat(false);
       return error.message;
-    }finally {
-     Setloadingtennat(false);
-       }
+    } finally {
+      Setloadingtennat(false);
+    }
     // Setloadingtennat(true);
     // try {
     //   const result = await Removetenantapi(selectedTenantId);
@@ -260,7 +268,7 @@ console.log(selectedBranchId)
       case "UserNumber":
         return (
           <p className="flex items-center gap-1">
-            <MdLocalPhone  className="text-[#205093]" />
+            <MdLocalPhone className="text-[#205093]" />
             {tenant.UserNumber}
           </p>
         );
@@ -299,7 +307,7 @@ console.log(selectedBranchId)
                 onClick={() => handleViewClick(tenant._id)}
                 className="text-lg text-default-400 cursor-pointer active:opacity-50"
               >
-                <IoEyeSharp className="text-[#205093]"/>
+                <IoEyeSharp className="text-[#205093]" />
               </span>
             </Tooltip>
             <Tooltip content="Edit">
@@ -307,15 +315,15 @@ console.log(selectedBranchId)
                 onClick={() => handleEditClick(tenant._id)}
                 className="text-lg text-default-400 cursor-pointer active:opacity-50"
               >
-                <RiPencilFill className="text-[#205093]"/>
+                <RiPencilFill className="text-[#205093]" />
               </span>
             </Tooltip>
             <Tooltip color="primary" content="Change Room">
               <span
-              onClick={() => handleChangeroomClick(tenant._id)}
+                onClick={() => handleChangeroomClick(tenant._id)}
                 className="text-lg text-red-500 cursor-pointer active:opacity-50"
               >
-                <FaExchangeAlt className="text-[#205093]"/>
+                <FaExchangeAlt className="text-[#205093]" />
               </span>
             </Tooltip>
             <Tooltip color="danger" content="Remove tenant">
@@ -682,7 +690,9 @@ console.log(selectedBranchId)
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col text-center"></ModalHeader>
+              <ModalHeader className="flex flex-col text-center">
+                Tenant Details
+              </ModalHeader>
               <ModalBody>
                 {loadingroomdata ? (
                   <div className="flex justify-center items-center h-60 gap-4 w-full">
@@ -700,14 +710,28 @@ console.log(selectedBranchId)
                       />
                     </div>
                     <div className="flex flex-col justify-between items-start h-full py-4">
-                      <div className="flex flex-col justify-start items-start text-sm font-semibold">
+                      <div className="flex flex-col justify-start gap-1 items-start text-sm font-semibold">
                         <p>Name : {tenantdata?.UserName}</p>
                         <p className="flex flex-col justify-start items-start text-xs ">
-                        Address : {tenantdata?.Address}
+                          Address : {tenantdata?.Address}
                         </p>
                         <p className="flex flex-col justify-start items-start text-xs ">
-                        Aadhar Number :  {tenantdata?.AadharNumber}
+                          Aadhar Number : {tenantdata?.AadharNumber}
                         </p>
+                        <div>
+                          <Button
+                            onPress={handleDocviewClick}
+                            startContent={
+                              <IoDocumentTextSharp className="text-[#205093]" />
+                            }
+                            variant="light"
+                            size="sm"
+                            radius="sm"
+                            className="ring-1 ring-[#205093] text-[#205093] text-xs"
+                          >
+                            View Document
+                          </Button>
+                        </div>
                       </div>
                       <div className="flex flex-col justify-start items-start text-sm font-semibold">
                         <p>Contact Info</p>
@@ -721,10 +745,10 @@ console.log(selectedBranchId)
                       <div className="flex flex-col flex-wrap gap-2 justify-start items-start text-sm font-semibold">
                         <p>Tenant Details</p>
                         <p className="flex flex-col justify-start items-start text-xs">
-                        Start Date: {tenantdata?.StartDate}
+                          Start Date: {tenantdata?.StartDate}
                         </p>
                         <p className="flex flex-col justify-start items-start text-xs">
-                        Last Date: {tenantdata?.LastDate}
+                          Last Date: {tenantdata?.LastDate}
                         </p>
 
                         <p className="flex flex-col justify-start items-start text-xs ">
@@ -777,6 +801,70 @@ console.log(selectedBranchId)
                       </Card>
                     </div>
                   </div>
+                )}
+              </ModalBody>
+              <ModalFooter className="flex justify-center items-center text-center"></ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+
+      {/* View doc */}
+      <Modal
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
+        backdrop="blur"
+        size="5xl"
+        isOpen={opendoc}
+        onOpenChange={setopendoc}
+        motionProps={{
+          variants: {
+            enter: {
+              y: 0,
+              opacity: 1,
+              transition: {
+                duration: 0.3,
+                ease: "easeOut",
+              },
+            },
+            exit: {
+              y: -20,
+              opacity: 0,
+              transition: {
+                duration: 0.2,
+                ease: "easeIn",
+              },
+            },
+          },
+        }}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col text-center">
+                Tenant Document
+              </ModalHeader>
+              <ModalBody className="flex justify-center items-center">
+                {loadingroomdata ? (
+                  <div className="flex justify-center items-center h-60 gap-4 w-full">
+                    <span className="loader3"></span>
+                  </div>
+                ) : (
+                  <Carousel className="w-11/12">
+                    <CarouselContent>
+                      {[...tenantdata?.files.aadhar,...tenantdata?.files.optional].map((value, index) => (
+                        <CarouselItem key={index}>
+                          <div className="p-1">
+                            <Card>
+                             <Image className="w-full h-[70vh] object-fill" height={400} width={400} src={value}/>
+                            </Card>
+                          </div>
+                        </CarouselItem>
+                      ))}
+                    </CarouselContent>
+                    <CarouselPrevious />
+                    <CarouselNext />
+                  </Carousel>
                 )}
               </ModalBody>
               <ModalFooter className="flex justify-center items-center text-center"></ModalFooter>
@@ -920,7 +1008,7 @@ console.log(selectedBranchId)
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col text-center">
-               Change Room
+                Change Room
               </ModalHeader>
               <ModalBody>
                 <Changeroom Setchangeroom={Setchangeroom} />
@@ -930,6 +1018,32 @@ console.log(selectedBranchId)
           )}
         </ModalContent>
       </Modal>
+
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+        gutter={8}
+        containerClassName=""
+        containerStyle={{}}
+        toastOptions={{
+          // Define default options
+          className: "",
+          duration: 1000,
+          style: {
+            background: "linear-gradient(90deg, #222C68 0%, #1D5B9E 100%)",
+            color: "#fff",
+          },
+
+          // Default options for specific types
+          success: {
+            duration: 1000,
+            theme: {
+              primary: "green",
+              secondary: "black",
+            },
+          },
+        }}
+      />
     </>
   );
 }
