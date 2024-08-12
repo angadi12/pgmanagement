@@ -54,7 +54,7 @@ const Activecomplaint = () => {
           <div
           onClick={()=>router.push("/Maintenance")}
             key={ticket._id}
-            className="w-full h-auto overflow-hidden py-3 rounded-md ring-1 ring-gray-200 flex justify-around items-center px-4"
+            className="w-full cursor-pointer h-auto overflow-hidden py-3 rounded-md ring-1 ring-gray-200 flex justify-around items-center px-4"
             style={{ backgroundColor: categoryColor }}
           >
             <div className="w-14 h-14 rounded-full relative flex justify-center items-center">
