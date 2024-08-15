@@ -621,15 +621,15 @@ export default function Rooms() {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col text-center"></ModalHeader>
+              <ModalHeader className="flex flex-col text-center">Room Details</ModalHeader>
               <ModalBody>
                 {loadingroomdata ? (
                   <div className="flex justify-center items-center h-60 gap-4 w-full">
                     <span className="loader3"></span>
                   </div>
                 ) : (
-                  <div className="flex justify-evenly items-center h-60 gap-4 w-full">
-                    <div>
+                  <div className="grid grid-cols-2 justify-start  items-center h-60 gap-8 w-full">
+                    <div className="w-full flex justify-center items-center border-r-1 border-gray-300">
                       <Image
                         src={Roomimage}
                         className="object-fill h-full"
@@ -654,7 +654,7 @@ export default function Rooms() {
                       }
                     </div>
                   </div> */}
-                    <Divider orientation="vertical" />
+                    {/* <Divider orientation="vertical" /> */}
                     <div className="flex flex-col justify-between items-start h-full py-4">
                       <div className="flex flex-col flex-wrap gap-2 justify-start items-start text-sm font-semibold">
                         <p>Room Details</p>
@@ -664,7 +664,7 @@ export default function Rooms() {
                         <p className="flex flex-col text-wrap justify-start items-start text-xs text-gray-500">
                           Specialty: {roomdata?.RoomDetails.join(",")}
                         </p>
-                        <p className="flex flex-col justify-start items-start text-xs text-gray-500">
+                        <p className="flex flex-col justify-start items-start text-xs">
                           Remaining Beds:{roomdata?.reaminingBed}
                         </p>
                         <div className="flex text-wrap  justify-start items-start text-sm font-semibold mt-2">
@@ -704,8 +704,8 @@ export default function Rooms() {
                         </p>
                       </div>
                     </div>
-                    <Divider orientation="vertical" />
-                    <div className=" flex-col  flex justify-center items-center gap-4">
+                    {/* <Divider orientation="vertical" /> */}
+                    {/* <div className=" flex-col  flex justify-center items-center gap-4">
                       <Card className=" border-none shadow-none">
                         <CardBody className="justify-center items-center pb-0">
                           <CircularProgress
@@ -733,7 +733,7 @@ export default function Rooms() {
                           </Chip>
                         </CardFooter>
                       </Card>
-                    </div>
+                    </div> */}
                     {/* <div>
                     <Image
                       src={Roomimage}
