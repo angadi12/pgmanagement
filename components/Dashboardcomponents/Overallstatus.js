@@ -78,7 +78,7 @@ const Overallstatus = () => {
           </div>
           <div className="grid md:grid-cols-3 lg:grid-cols-3 grid-cols-1 md:gap-6 lg:gap-6 gap-2 justify-around items-center mx-auto w-full ">
             <div className="boxshadow  rounded-lg flex md:justify-center lg:justify-center justify-between md:items-center lg:items-center items-start gap-2 py-4 px-4 md:px-0 lg:px-0 md:h-36 lg:h-36 md:flex-col lg:flex-col">
-              <div className="h-14 w-14 rounded-full bg-[#205093] text-white flex justify-center items-center">
+              <div className="h-12 w-12 rounded-full bg-[#205093] text-white flex justify-center items-center">
                 <IoPeople size={24} />
               </div>
               <div className="flex flex-col justify-center items-center">
@@ -88,17 +88,31 @@ const Overallstatus = () => {
                 </p>
               </div>
             </div>
-            <div className="boxshadow  rounded-lg flex md:justify-center lg:justify-center justify-between md:items-center lg:items-center items-start gap-2 py-4 px-4 md:px-0 lg:px-0 md:h-36 lg:h-36 md:flex-col lg:flex-col">
-              <div className="h-14 w-14 rounded-full bg-[#1B9D31] text-white flex justify-center items-center">
-                <FaBed size={24} />
-              </div>
-              <div className="flex flex-col justify-center items-center">
-                <p className="font-bold">{data?.totalRemaining}</p>
-                <p className="text-xs font-semibold text-[#8B8B8B]">
-                  Vacant Beds
-                </p>
-              </div>
-            </div>
+                <div className="boxshadow  rounded-lg flex md:justify-center lg:justify-center justify-between md:items-center lg:items-center items-start gap-2 py-4 px-4 md:px-0 lg:px-0 md:h-36 lg:h-36 md:flex-col lg:flex-col">
+      <div className="h-12 w-12 rounded-full bg-[#00A61C] text-white flex justify-center items-center">
+      <FaBed size={24} />
+      </div>
+      <div className="flex flex-col justify-center gap-1 items-center">
+        <div className="flex gap-2 items-center">
+          <div className="flex flex-col justify-center items-center gap-1">
+            <p className="text-[0.6rem] font-semibold text-[#ED0000]">
+              Occupied
+            </p>
+            <p className="font-bold text-xs">{data?.totalBooked}</p>
+          </div>
+          <Divider className="h-6" orientation="vertical" />
+          <div className="flex flex-col justify-center items-center gap-1">
+            <p className="text-[0.6rem] font-semibold text-[#00A61C]">
+              Available
+            </p>
+            <p className="font-bold text-xs">{data?.totalRemaining}</p>
+          </div>
+        </div>
+        <p className="md:text-xs lg:text-xs text-tiny font-semibold text-[#8B8B8B]">
+         Total Beds / {data?.totalBeds}
+        </p>
+      </div>
+    </div>
             {/* <div className="boxshadow  rounded-lg flex md:justify-center lg:justify-center justify-between md:items-center lg:items-center items-start gap-2 py-4 px-4 md:px-0 lg:px-0 md:h-36 lg:h-36 md:flex-col lg:flex-col">
               <div className="h-14 w-14 rounded-full bg-[#FFA200] text-white flex justify-center items-center">
                 <IoIosWarning size={24} />

@@ -60,7 +60,7 @@ const Allstaff = () => {
             <FaPlus size={40} className="text-[#205093]" />
           </Button> */}
       </div>
-     {(!loading && !error) && <div className="w-2/4 flex-col sticky  top-48  flex justify-center items-center gap-4">
+     {/* {(!loading && !error) && <div className="w-2/4 flex-col sticky  top-48  flex justify-center items-center gap-4">
         <Card className="w-72 h-72 border-none boxshadow">
           <CardBody className="justify-center items-center pb-0">
             <CircularProgress
@@ -90,7 +90,7 @@ const Allstaff = () => {
         <Button className="rounded-md bg-[#205093] text-white font-semibold">
           Send Feedback forms to Staffs
         </Button>
-      </div>}
+      </div>} */}
     </main>
   );
 };
