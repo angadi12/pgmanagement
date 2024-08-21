@@ -65,8 +65,8 @@ import {
 const columns = [
   { name: "ID", uid: "_id" },
   { name: "Name", uid: "UserName" },
-  { name: "Contact No.", uid: "UserNumber" },
-  { name: "Room No.", uid: "RoomNumber" },
+  { name: "Contact No", uid: "UserNumber" },
+  { name: "Room No", uid: "RoomNumber" },
   { name: "Start Date", uid: "StartDate" },
   { name: "Last Date", uid: "LastDate" },
   { name: "No. of months", uid: "NumberOfmonth" },

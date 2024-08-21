@@ -41,7 +41,7 @@ const Activecomplaint = () => {
   }
 
   if (!tickets || tickets.length === 0) {
-    return <p className="grid grid-cols-1 gap-5 text-center p-5 mx-auto  w-full h-full rounded-lg boxshadow">No active complaints</p>;
+    return <p className="grid grid-cols-1 gap-5 text-center p-5 mx-auto  w-full h-full rounded-lg ring-1 ring-gray-200">No active complaints</p>;
   }
 
   return (

@@ -9,7 +9,7 @@ import toast, { Toaster } from "react-hot-toast";
 import {fetchExpensesByBranch} from "../../lib/ExpenseSlice"
 
 export const animals = [
-  { key: "Matainence", label: "Matainence" },
+  { key: "Maintenance", label: "Maintenance" },
   { key: "Expense ", label: "Expense " },
 ];
 

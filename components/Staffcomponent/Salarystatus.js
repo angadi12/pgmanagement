@@ -51,7 +51,7 @@ import {GetStaffbyid} from "../../lib/API/Staff"
 const columns = [
   {name: "ID", uid: "id", },
   {name: "Name", uid: "name", },
-  {name: "Contact No.", uid: "Number", },
+  {name: "Contact No", uid: "Number", },
   {name: "Salary", uid: "mothlysalary",},
   {name: "Category", uid: "Category"},
   // {name: "Salary Status", uid: "salary"},

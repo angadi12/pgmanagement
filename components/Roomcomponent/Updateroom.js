@@ -272,8 +272,8 @@ const Updateroom = ({ id, Setopenedit }) => {
               <SelectItem color="primary" variant="flat" key="First">
                 First
               </SelectItem>
-              <SelectItem color="primary" variant="flat" key="Secound">
-                Secound
+              <SelectItem color="primary" variant="flat" key="Second ">
+              Second 
               </SelectItem>
               <SelectItem color="primary" variant="flat" key="Third">
                 Third

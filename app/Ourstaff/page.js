@@ -42,7 +42,7 @@ const categories = [
 
 const Staff = () => {
   const dispatch = useDispatch();
-  const [selected, setSelected] = React.useState("Manage Staffs");
+  const [selected, setSelected] = React.useState("Manage Staff");
   const [selectedtab, setSelectedtab] = React.useState("Personal Details");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -76,7 +76,7 @@ const Staff = () => {
   // };
   const handleSearchChange = (event) => {
     const query = event.target.value;
-    if (selected === "Manage Staffs") {
+    if (selected === "Manage Staff") {
       dispatch(setSearchQuery(query));
     } 
   };
@@ -106,18 +106,18 @@ const Staff = () => {
                 }}
               >
                 <Tab
-                  key="Manage Staffs"
+                  key="Manage Staff"
                   title={
                     <div className="flex items-center space-x-2">
-                      <span>Manage Staffs</span>
+                      <span>Manage Staff</span>
                     </div>
                   }
                 />
                 <Tab
-                  key="All Staffs"
+                  key="All Staff"
                   title={
                     <div className="flex items-center space-x-2">
-                      <span>All Staffs</span>
+                      <span>All Staff</span>
                     </div>
                   }
                 />
@@ -140,7 +140,7 @@ const Staff = () => {
               </Tabs>
             </div>
             <div className="flex gap-3 justify-end items-center pb-2">
-             {selected === "Manage Staffs" && <Input
+             {selected === "Manage Staff" && <Input
                 isClearable
                 radius="sm"
                 color="primary"
@@ -157,7 +157,7 @@ const Staff = () => {
                 onChange={handleSearchChange}
               />}
               <div className="flex justify-center items-center gap-3">
-                {selected === "Manage Staffs" ? (
+                {selected === "Manage Staff" ? (
                   <>
                     <Autocomplete
                       size="md"
@@ -192,11 +192,11 @@ const Staff = () => {
                   </>
                 ) : (
                   <Button
-                    radius="sm"
+                   
                     onPress={onOpen}
                     className="bg-[#205093] text-background"
                     endContent={<FaPlus />}
-                    size="sm"
+                    size="md"
                   ></Button>
                 )}
               </div>
@@ -206,8 +206,8 @@ const Staff = () => {
         </div>
 
         <div className="w-full flex flex-col gap-4 justify-start items-start  mx-auto  h-auto mt-4 rounded-sm">
-          {selected === "Manage Staffs" && <Allstaff />}
-          {selected === "All Staffs" && <Salarystatus />}
+          {selected === "Manage Staff" && <Allstaff />}
+          {selected === "All Staff" && <Salarystatus />}
           {/* { selected ==="Staff Complaints" && <Staffcomplaint/>} */}
         </div>
       </section>

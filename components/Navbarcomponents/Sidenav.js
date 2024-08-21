@@ -158,7 +158,7 @@ const Sidenav = () => {
       { key: "Rooms", title: "Rooms", icon: <MdMeetingRoom size={24} /> },
       { key: "Tenants", title: "Tenants", icon: <IoPeople size={24} /> },
       { key: "Payments", title: "Payments", icon: <FaIndianRupeeSign size={24} /> },
-      { key: "Expense", title: "Expense", icon: <GiExpense size={24} /> },
+      { key: "Expense", title: "Expenses ", icon: <GiExpense size={24} /> },
       { key: "Staff", title: "Our staff", icon: <IoIosPeople size={24} /> },
       { key: "Maintenance", title: "Support", icon: <RiHeartAddFill size={24} /> },
       { key: "Notifications", title: "Notifications", icon: <FaBell size={24} /> },

@@ -181,8 +181,8 @@ const Changeroom = ({Setchangeroom}) => {
     const floorsCopy = Array.isArray(floors) ? [...floors] : [];
 
     return floorsCopy.sort((a, b) => {
-      const aLower = a.toLowerCase().replace("secound", "second");
-      const bLower = b.toLowerCase().replace("secound", "second");
+      const aLower = a.toLowerCase().replace("Second", "second");
+      const bLower = b.toLowerCase().replace("second", "second");
       return (orderMap[aLower] ?? Infinity) - (orderMap[bLower] ?? Infinity);
     });
   };
