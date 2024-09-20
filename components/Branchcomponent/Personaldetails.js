@@ -103,6 +103,7 @@ const Personaldetails = () => {
           value={formData.name}
           onChange={handleInputChange}
           variant="bordered"
+          color="primary"
           radius="sm"
           className="w-full rounded-none"
           size="lg"
@@ -114,6 +115,7 @@ const Personaldetails = () => {
           maxLength={10}
           max={10}
           name="Number"
+          color="primary"
           value={formData.Number}
           onChange={handleInputChange}
           variant="bordered"
@@ -127,6 +129,7 @@ const Personaldetails = () => {
       <Input
           type="text"
           name="Email"
+          color="primary"
           value={formData.Email}
           onChange={handleInputChange}
           variant="bordered"
@@ -143,6 +146,7 @@ const Personaldetails = () => {
           onSelectionChange={(selectedKeys) => handleSelectChange("permission", selectedKeys)}
           size="lg"
           radius="sm"
+          color="primary"
           selectionMode="multiple"
           variant="bordered"
           placeholder="Permission"
@@ -163,6 +167,7 @@ const Personaldetails = () => {
           radius="sm"
           variant="bordered"
           placeholder="Assign Branch"
+          color="primary"
           className="w-full"
         >
           {branches?.map((branch) => (
@@ -176,6 +181,7 @@ const Personaldetails = () => {
         <Input
           type="password"
           name="Password"
+          color="primary"
           value={formData.Password}
           onChange={handleInputChange}
           variant="bordered"
@@ -190,6 +196,7 @@ const Personaldetails = () => {
           value={formData.confirmPassword}
           onChange={handleInputChange}
           variant="bordered"
+          color="primary"
           radius="sm"
           className="w-full rounded-none"
           size="lg"
