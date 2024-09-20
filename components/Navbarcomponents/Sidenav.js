@@ -169,7 +169,7 @@ const Sidenav = () => {
       { key: "Staff", title: "Our staff", icon: <IoIosPeople size={24} /> },
       { key: "Maintenance", title: "Support", icon: <RiHeartAddFill size={24} /> },
       { key: "Guest Management", title: "Guest Management", icon: <HiUserGroup size={24} /> },
-      { key: "Notifications", title: "Notifications", icon: <FaBell size={24} /> },
+      { key: "Notifications", title: "Notifications", icon: <FaBell size={20} /> },
     ];
 
     if (user?.role === "owner") {

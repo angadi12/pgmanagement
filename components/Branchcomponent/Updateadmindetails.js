@@ -149,6 +149,7 @@ const Updateadmindetails = () => {
               onChange={handleInputChange}
               variant="bordered"
               radius="sm"
+              color="primary"
               className="w-full rounded-none"
               size="lg"
               placeholder="Full Name"
@@ -156,6 +157,7 @@ const Updateadmindetails = () => {
 
             <Input
               type="text"
+              color="primary"
               name="Number"
               value={formData.Number}
               onChange={handleInputChange}
@@ -170,6 +172,7 @@ const Updateadmindetails = () => {
             <Input
               type="text"
               name="Email"
+              color="primary"
               value={formData.Email}
               onChange={handleInputChange}
               variant="bordered"
@@ -190,6 +193,7 @@ const Updateadmindetails = () => {
               radius="sm"
               selectionMode="multiple"
               variant="bordered"
+              color="primary"
               placeholder="Permission"
               className="w-full"
               multiple
@@ -207,6 +211,7 @@ const Updateadmindetails = () => {
               size="lg"
               radius="sm"
               variant="bordered"
+              color="primary"
               placeholder="Assign Branch"
               className="w-full"
             >
@@ -224,6 +229,7 @@ const Updateadmindetails = () => {
               value={formData.Password}
               onChange={handleInputChange}
               variant="bordered"
+              color="primary"
               radius="sm"
               className="w-full rounded-none"
               size="lg"
@@ -232,6 +238,7 @@ const Updateadmindetails = () => {
             <Input
               type="password"
               name="confirmPassword"
+              color="primary"
               value={formData.confirmPassword}
               onChange={handleInputChange}
               variant="bordered"

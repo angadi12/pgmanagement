@@ -24,7 +24,7 @@ const Personaldetails = () => {
     Number: "",
     Password: "",
     branch: "",
-    permission: ["Notifications"]
+    permission: ["Notifications","Guest Management"]
   });
 
   const setopenmodeladmin = () => {
