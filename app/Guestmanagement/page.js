@@ -13,7 +13,7 @@ import Personaldetails from "@/components/Staffcomponent/Personaldetails";
 import { Addcategory } from "../../lib/API/Staff";
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllCategories ,setSearchQuery } from "@/lib/StaffSlice";
+import { fetchAllCategories, setSearchQuery } from "@/lib/StaffSlice";
 
 import {
   Modal,
@@ -24,23 +24,17 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
+import Allguest from "@/components/Guestcomponent/Allguest";
 
 const categories = [
-  { label: "Security", value: "security" },
-  { label: "Housekeeping", value: "housekeeping" },
-  { label: "Maintenance", value: "maintenance" },
-  { label: "Cook", value: "cook" },
-  { label: "Manager", value: "manager" },
-  { label: "Receptionist", value: "receptionist" },
-  { label: "Cleaner", value: "cleaner" },
-  { label: "Electrician", value: "electrician" },
-  { label: "Plumber", value: "plumber" },
-  { label: "Gardener", value: "gardener" },
-  { label: "Warden", value: "warden" }
+  { label: "Floor 1", value: "Floor 1" },
+  { label: "Floor 2", value: "Floor 2" },
+  { label: "Floor 3", value: "Floor 3" },
+  { label: "Floor 4", value: "Floor 4" },
+ 
 ];
 
-
-const Staff = () => {
+const Guest = () => {
   const dispatch = useDispatch();
   const [selected, setSelected] = React.useState("Manage Staff");
   const [selectedtab, setSelectedtab] = React.useState("Personal Details");
@@ -49,7 +43,6 @@ const Staff = () => {
   const [loadingadd, Setloadingadd] = useState(false);
   const [isOpendropdown, setIsOpendropdown] = React.useState(false);
   const searchQuery = useSelector((state) => state.staff.searchQuery);
-
 
   const handleAddCategory = async () => {
     if (!selectedCategory) return toast.error("Select Category");
@@ -78,69 +71,45 @@ const Staff = () => {
     const query = event.target.value;
     if (selected === "Manage Staff") {
       dispatch(setSearchQuery(query));
-    } 
+    }
   };
-
 
   return (
     <>
       <section className="flex justify-center items-center w-full h-auto flex-col mx-auto ">
         <div className="w-full justify-start items-start gap-4 sticky top-16 bg-white z-20">
           <div className="w-full px-4 py-2 text-start">
-            <p className="text-lg font-semibold">Manage Staff</p>
+            <p className="text-lg font-semibold">Guest Management</p>
           </div>
           <div className="w-full flex justify-between items-center px-4 mt-4 ">
-            <div>
-              <Tabs
-                selectedKey={selected}
-                onSelectionChange={setSelected}
-                aria-label="Options"
-                color="primary"
-                variant="underlined"
-                classNames={{
-                  tabList: "gap-6 w-full relative rounded-none p-0 ",
-                  cursor: "w-full bg-[#205093]",
-                  tab: "w-auto px-0 h-10",
-                  tabContent:
-                    "group-data-[selected=true]:text-[#205093] font-semibold",
-                }}
-              >
-                <Tab
-                  key="Manage Staff"
-                  title={
-                    <div className="flex items-center space-x-2">
-                      <span>Manage Staff</span>
-                    </div>
-                  }
-                />
-                <Tab
-                  key="All Staff"
-                  title={
-                    <div className="flex items-center space-x-2">
-                      <span>All Staff</span>
-                    </div>
-                  }
-                />
-                {/* <Tab
-              key="Staff Complaints"
-              title={
-                <div className="flex items-center space-x-2">
-                  <span>Staff Complaints</span>
-                </div>
-              }
-            /> */}
-                {/* <Tab
-              key="Security"
-              title={
-                <div className="flex items-center space-x-2">
-                  <span>Security</span>
-                </div>
-              }
-            /> */}
-              </Tabs>
+            <div className="flex justify-center items-center gap-3">
+              <>
+                <Autocomplete
+                  size="md"
+                  color="primary"
+                  variant="bordered"
+                  radius="sm"
+                  placeholder="Select Floor"
+                  className="w-60 rounded-sm "
+                //   selectedKey={selectedCategory}
+                //   onSelectionChange={setSelectedCategory}
+                >
+                  {categories.map((Category) => (
+                    <AutocompleteItem
+                      color="primary"
+                      variant="flat"
+                      key={Category.value}
+                      value={Category.value}
+                    >
+                      {Category.label}
+                    </AutocompleteItem>
+                  ))}
+                </Autocomplete>
+              </>
             </div>
+
             <div className="flex gap-3 justify-end items-center pb-2">
-             {selected === "Manage Staff" && <Input
+              <Input
                 isClearable
                 radius="sm"
                 color="primary"
@@ -148,72 +117,32 @@ const Staff = () => {
                   base: "w-full sm:max-w-[60%]",
                   inputWrapper: "border-1",
                 }}
-                placeholder="Search by name..."
+                placeholder="Search by Room..."
                 size="md"
                 startContent={""}
                 variant="bordered"
                 value={searchQuery}
-                onClear={() => dispatch(setSearchQuery(''))}
-                onChange={handleSearchChange}
-              />}
-              <div className="flex justify-center items-center gap-3">
-                {selected === "Manage Staff" ? (
-                  <>
-                    <Autocomplete
-                      size="md"
-                      color="primary"
-                      variant="bordered"
-                      radius="sm"
-                      placeholder="Add Category"
-                      className="w-60 rounded-sm "
-                      selectedKey={selectedCategory}
-                      onSelectionChange={setSelectedCategory}
-                    >
-                      {categories.map((Category) => (
-                        <AutocompleteItem
-                          key={Category.value}
-                          value={Category.value}
-                        >
-                          {Category.label}
-                        </AutocompleteItem>
-                      ))}
-                    </Autocomplete>
-                    <Button
-                      className="bg-[#205093] text-background"
-                      onPress={handleAddCategory}
-                      size="md"
-                    >
-                      {loadingadd ? (
-                        <span className="loader2"></span>
-                      ) : (
-                        <FaPlus />
-                      )}
-                    </Button>
-                  </>
-                ) : (
-                  <Button
-                   
-                    onPress={onOpen}
-                    className="bg-[#205093] text-background"
-                    endContent={<FaPlus />}
-                    size="md"
-                  ></Button>
-                )}
-              </div>
+                // onClear={() => dispatch(setSearchQuery(""))}
+                // onChange={handleSearchChange}
+              />
+            <Button
+              className="bg-[#205093] text-background"
+            //   onPress={handleAddCategory}
+              size="md"
+            >
+              {loadingadd ? <span className="loader2"></span> : <FaPlus />}
+            </Button>
             </div>
           </div>
           <Divider />
         </div>
 
         <div className="w-full flex flex-col gap-4 justify-start items-start  mx-auto  h-auto mt-4 rounded-sm">
-          {selected === "Manage Staff" && <Allstaff />}
-          {selected === "All Staff" && <Salarystatus />}
-          {/* { selected ==="Staff Complaints" && <Staffcomplaint/>} */}
+         <Allguest/>
         </div>
       </section>
 
-
-{/* Create */}
+      {/* Create */}
       <Modal
         isDismissable={false}
         isKeyboardDismissDisabled={true}
@@ -281,18 +210,16 @@ const Staff = () => {
                   /> */}
                 </Tabs>
                 <div className="w-full h-auto">
-                  {selectedtab === "Personal Details" && <Personaldetails onOpenChange={onOpenChange} />}
+                  {selectedtab === "Personal Details" && (
+                    <Personaldetails onOpenChange={onOpenChange} />
+                  )}
                 </div>
               </ModalBody>
-              <ModalFooter className="flex justify-center items-center text-center">
-              </ModalFooter>
+              <ModalFooter className="flex justify-center items-center text-center"></ModalFooter>
             </>
           )}
         </ModalContent>
       </Modal>
-
-
-
 
       <Toaster
         position="top-center"
@@ -323,4 +250,4 @@ const Staff = () => {
   );
 };
 
-export default Staff;
+export default Guest;

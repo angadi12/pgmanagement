@@ -37,13 +37,9 @@ import {
   Card,
 } from "@nextui-org/react";
 
-import fillter from "../../public/Loginasset/fillter.png"
 import Image from "next/image";
 import { useSelector, useDispatch } from "react-redux";
-import {fetchStaffByBranch} from "../../lib/StaffSlice"
-import tennatpic from "../../public/Loginasset/tennatpic.png"
-import Updatestaff from "./Updatestaff";
-import {GetStaffbyid} from "../../lib/API/Staff"
+import Guesthistory from "./Guesthistory";
 
 
 
@@ -54,7 +50,6 @@ const columns = [
   {name: "Contact No", uid: "Number", },
   {name: "Salary", uid: "mothlysalary",},
   {name: "Category", uid: "Category"},
-  // {name: "Salary Status", uid: "salary"},
   { name: "ACTIONS", uid: "actions" },
 
 ];
@@ -78,24 +73,24 @@ const statusColorMap = {
 
 const INITIAL_VISIBLE_COLUMNS = ["name", "Number","mothlysalary","Category","actions"];
 
-export default function Salarystatus() {
+
+export const Guest=[]
+
+export default function Allguest() {
   const dispatch = useDispatch();
   const selectedBranchId = useSelector(
     (state) => state.branches.selectedBranchId
   );
-  const staffByBranch = useSelector((state) => state.staff.staffByBranch);
-  const loadingStaff = useSelector((state) => state.staff.loadingStaff);
+ 
+  const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
 
 
-  useEffect(() => {
-    if (selectedBranchId) {
-      dispatch(fetchStaffByBranch(selectedBranchId));
-    }
-  }, [selectedBranchId, dispatch]);
+
 
 
   const [filterValue, setFilterValue] = React.useState("");
+  const [loadingGuest, SetloadingGuest] = React.useState(false);
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
     new Set(INITIAL_VISIBLE_COLUMNS)
@@ -106,12 +101,7 @@ export default function Salarystatus() {
     column: "age",
     direction: "ascending",
   });
-  const [openview,Setopenview]=useState(false)
-  const [opendelete,Setopendelete]=useState(false)
-  const [openedit,Setopenedit]=useState(false)
-  const[loadingstaffdata,Setloadingstaffdata]=useState(true)
-  const[selectedstaffid,Setselectedstaffid]=useState("")
-  const [staffdata,Setstaffdata]=useState()
+ 
 
 
 
@@ -119,7 +109,7 @@ export default function Salarystatus() {
 
   const [page, setPage] = React.useState(1);
 
-  const pages = Math.ceil(staffByBranch?.length / rowsPerPage);
+  const pages = Math.ceil(Guest?.length / rowsPerPage);
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -132,25 +122,25 @@ export default function Salarystatus() {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredUsers = Array.isArray(staffByBranch) ? [...staffByBranch] : [];
+    let filteredUsers = Array.isArray(Guest) ? [...Guest] : [];
 
 
     if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((staff) =>
-        staff.name.toLowerCase().includes(filterValue.toLowerCase())
+      filteredUsers = filteredUsers.filter((guest) =>
+        guest.name.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
     if (
       statusFilter !== "all" &&
       Array.from(statusFilter).length !== statusOptions.length
     ) {
-      filteredUsers = filteredUsers.filter((user) =>
-        Array.from(statusFilter).includes(user.status)
+      filteredUsers = filteredUsers.filter((guest) =>
+        Array.from(statusFilter).includes(guest.status)
       );
     }
 
     return filteredUsers;
-  }, [staffByBranch, filterValue, statusFilter]);
+  }, [Guest, filterValue, statusFilter]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -272,9 +262,9 @@ export default function Salarystatus() {
 
   const  topContent = React.useMemo(() => {
     return (
-      <div className="flex flex-col  gap-4 mt-2 px-2">
+      <div className="flex flex-col  gap-4  px-2">
       
-        <div className="flex gap-3 justify-start items-start">
+        {/* <div className="flex gap-3 justify-start items-start">
           <Input
             isClearable
             classNames={{
@@ -291,7 +281,7 @@ export default function Salarystatus() {
             onValueChange={onSearchChange}
           />
         
-        </div>
+        </div> */}
         
       </div>
     );
@@ -301,7 +291,7 @@ export default function Salarystatus() {
     visibleColumns,
     onSearchChange,
     onRowsPerPageChange,
-    staffByBranch?.length,
+    Guest?.length,
     hasSearchFilter,
   ]);
 
@@ -323,6 +313,9 @@ export default function Salarystatus() {
           onChange={setPage}
         />
         <div className="hidden sm:flex w-[30%] justify-end gap-2">
+          <Button className="bg-white ring-1 ring-[#205093] text-[#205093]" isDisabled={pages === 1} size="sm" variant="flat" onPress={onOpen}>
+          Guest History
+          </Button>
           <Button className="bg-[#205093] text-white" isDisabled={pages === 1} size="sm" variant="flat" onPress={onPreviousPage}>
             Previous
           </Button>
@@ -353,34 +346,7 @@ export default function Salarystatus() {
     []
   );
 
-  const fetchStaffDetails = async () => {
-    Setloadingstaffdata(true);
-
-    try {
-      const result = await GetStaffbyid(selectedstaffid);
-      if (result.status) {
-        Setstaffdata(result.data)
-        Setloadingstaffdata(false);
-      } else {
-        Setloadingstaffdata(false);
-      }
-    } catch (error) {
-      console.error(
-        "An error occurred while fetching the staff details",
-        error
-      );
-      Setloadingstaffdata(false);
-    } finally {
-      Setloadingstaffdata(false);
-    }
-  };
-
-  useEffect(() => {
-    if(selectedstaffid){
-      fetchStaffDetails()
-
-    }
-  }, [selectedstaffid])
+ 
 
 
 
@@ -389,11 +355,12 @@ export default function Salarystatus() {
 
     <>
 
-   {loadingStaff?
+   {loadingGuest?
     <div className="w-full h-[60vh] col-span-3 flex justify-center items-center">
           <span className="loader3 "></span>
         </div>: <Table
       isCompact
+      hideHeader 
       className="px-4"
       removeWrapper
       aria-label="Example table with custom cells, pagination and sorting"
@@ -420,7 +387,7 @@ export default function Salarystatus() {
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody emptyContent={"No Staff found"} items={sortedItems}>
+      <TableBody emptyContent={"No Guest found"} items={sortedItems}>
         {(item) => (
           <TableRow key={item._id}>
             {(columnKey) => (
@@ -432,14 +399,13 @@ export default function Salarystatus() {
     </Table>}
 
 
-    {/* view */}
-<Modal
-        isDismissable={false}
-        isKeyboardDismissDisabled={true}
-        backdrop="blur"
+  {/* history */}
+    <Modal 
+    isDismissable={false} isKeyboardDismissDisabled={true}
+        backdrop="opaque" 
+        isOpen={isOpen} 
         size="5xl"
-        isOpen={openview}
-        onOpenChange={Setopenview}
+        onOpenChange={onOpenChange}
         motionProps={{
           variants: {
             enter: {
@@ -458,202 +424,26 @@ export default function Salarystatus() {
                 ease: "easeIn",
               },
             },
-          },
+          }
         }}
       >
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col text-center">
-              </ModalHeader>
+              <ModalHeader className="flex flex-col gap-1 text-center">Guest History</ModalHeader>
               <ModalBody>
-              {loadingstaffdata ?
-                <div className="flex justify-center items-center h-60 gap-4 w-full">
-                  <span className="loader3"></span>
-                </div> :  <div className="flex justify-evenly items-center h-60 gap-4 w-full">
-                  <div>
-                    <Image
-                      src={tennatpic}
-                      className="object-fill h-full"
-                      alt="Roomimage"
-                    />
-                  </div>
-                  <div className="flex flex-col justify-between items-start h-full py-4">
-                    <div className="flex flex-col justify-start items-start text-sm font-semibold">
-                      <p>Name : {staffdata.name}</p>
-                      <p className="flex flex-col justify-start items-start text-sm font-bold text-gray-500">
-                      {/* {roomdata.roomName} */}
-                      </p>
-                    </div>
-                    <div className="flex flex-col justify-start items-start text-sm font-semibold">
-                      <p>Last 3 months payment</p>
-                      {/* {
-                        roomdata.Users.map((name,id)=>(
-                          <p key={id} className="text-sm text-gray-500">{name.UserName}</p>
-                        ))
-                      } */}
-                    </div>
-                  </div>
-                  <Divider orientation="vertical" />
-                  <div className="flex flex-col justify-between items-start h-full py-4">
-                    <div className="flex flex-col flex-wrap gap-2 justify-start items-start text-sm font-semibold">
-                      <p>Staff Details</p>
-                      <p className="flex flex-col justify-start items-start text-xs text-gray-500 ">
-                      <p>Name : {staffdata.name}</p>
-                      </p>
-                      <p className="flex flex-col justify-start items-start text-xs text-gray-500">
-                      Mob.: {staffdata?.Number}
-                      </p>
-                      <p className="flex flex-col justify-start items-start text-xs text-gray-500">
-                      Salary:{staffdata?.mothlysalary}
-                      </p>
-                    </div>
-                    <div className="flex flex-col gap-2 justify-start items-start text-xs ">
-                      <p className="flex   items-center gap-2 text-sm font-semibold">last payament <span className="text-green-600">12000/-</span></p>
-                      <p className="flex  items-center gap-2 text-sm font-semibold">Salary Status:  <span className={"text-green-600"}>Paid</span></p>
-                    </div>
-                  </div>
-                  <Divider orientation="vertical" />
-                  <div className=" flex-col  flex justify-center items-center gap-4">
-                    <Card className=" border-none shadow-none">
-                      <CardBody className="justify-center items-center pb-0">
-                        <CircularProgress
-                          classNames={{
-                            svg: "w-40 h-40 drop-shadow-md",
-                            indicator: "stroke-[#205093]",
-                            track: "stroke-[#205093]/10",
-                            value: "text-3xl font-semibold text-[#205093]",
-                          }}
-                          value={70}
-                          strokeWidth={4}
-                          showValueLabel={true}
-                        />
-                      </CardBody>
-                      <CardFooter className="justify-center items-center pt-0 mt-4">
-                        <Chip
-                          classNames={{
-                            base: "border-1 border-[#205093]/30",
-                            content:
-                              "text-[#205093]/90 text-small font-semibold",
-                          }}
-                          variant="bordered"
-                        >
-                         Staff Attendance
-                        </Chip>
-                      </CardFooter>
-                    </Card>
-                  </div>
-                  {/* <div>
-                    <Image
-                      src={Roomimage}
-                      className="object-fill h-full"
-                      alt="Roomimage"
-                    />
-                  </div> */}
-                </div>}
+              <Guesthistory/>
               </ModalBody>
-              <ModalFooter className="flex justify-center items-center text-center"></ModalFooter>
+             
             </>
           )}
         </ModalContent>
       </Modal>
-
-{/* Delete */}
-      <Modal
-        isDismissable={false}
-        isKeyboardDismissDisabled={true}
-        backdrop="blur"
-        size="xl"
-        isOpen={opendelete}
-        onOpenChange={Setopendelete}
-        motionProps={{
-          variants: {
-            enter: {
-              y: 0,
-              opacity: 1,
-              transition: {
-                duration: 0.3,
-                ease: "easeOut",
-              },
-            },
-            exit: {
-              y: -20,
-              opacity: 0,
-              transition: {
-                duration: 0.2,
-                ease: "easeIn",
-              },
-            },
-          },
-        }}
-      >
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col text-center">
-                Confirm Delete
-              </ModalHeader>
-              <ModalBody>
-                <div className="flex w-full justify-start items-start">
-                  <p>Do you want to delete Room ?</p>
-                </div>
-              </ModalBody>
-              <ModalFooter className="flex justify-end items-end ">
-                <Button onPress={onClose} color="primary" variant="solid">Cancel</Button>
-                <Button color="danger" variant="solid">Delete</Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
-
-   {/* edit    */}
-
-   <Modal
-        isDismissable={false}
-        isKeyboardDismissDisabled={true}
-        backdrop="blur"
-        size="4xl"
-        isOpen={openedit}
-        onOpenChange={Setopenedit}
-        motionProps={{
-          variants: {
-            enter: {
-              y: 0,
-              opacity: 1,
-              transition: {
-                duration: 0.3,
-                ease: "easeOut",
-              },
-            },
-            exit: {
-              y: -20,
-              opacity: 0,
-              transition: {
-                duration: 0.2,
-                ease: "easeIn",
-              },
-            },
-          },
-        }}
-      >
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col text-center">
-                Upadte Staff Details
-              </ModalHeader>
-              <ModalBody>
-                <Updatestaff id={selectedstaffid} Setopenedit={Setopenedit}/>
-              </ModalBody>
-              <ModalFooter className="flex justify-center items-center text-center"></ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
+  
 
     </>
   );
 }
+
 
 

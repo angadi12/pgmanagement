@@ -201,12 +201,12 @@ const Updateexpense = ({id,Setopenupdate}) => {
             onChange={handleChange}
           />
         </div>
-        <div className="w-full text-start flex justify-start items-center gap-2 py-2">
+        {/* <div className="w-full text-start flex justify-start items-center gap-2 py-2">
           <p className="text-[#205093] text-sm font-bold underline cursor-pointer">
             +Add Bill
           </p>
           <span className="text-xs text-gray-400 no-underline">(Optional)</span>
-        </div>
+        </div> */}
         <Button
           className="buttongradient text-white rounded-md w-60 uppercase"
           onPress={handleSubmit}

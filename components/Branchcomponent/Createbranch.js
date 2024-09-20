@@ -85,6 +85,7 @@ const Createbranch = () => {
             radius="sm"
             className="w-full rounded-none"
             size="lg"
+            color="primary"
             placeholder="Branch Name"
             value={formData.Branchname}
             onChange={handleChange}
@@ -94,6 +95,7 @@ const Createbranch = () => {
             name="Address"
             variant="bordered"
             radius="sm"
+            color="primary"
             className="w-full rounded-none"
             size="lg"
             placeholder="Location"
@@ -104,6 +106,7 @@ const Createbranch = () => {
             type="tel"
             name="Number"
             variant="bordered"
+            color="primary"
             radius="sm"
             className="w-full rounded-none"
             size="lg"
@@ -115,6 +118,7 @@ const Createbranch = () => {
             type="text"
             name="code"
             variant="bordered"
+            color="primary"
             radius="sm"
             className="w-full rounded-none"
             size="lg"

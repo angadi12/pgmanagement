@@ -30,6 +30,7 @@ import {GetAdminbyid,GetSuperAdminbyid} from "../../lib/API/Auth"
 import { useSelector,useDispatch } from 'react-redux';
 import { jwtDecode } from "jwt-decode";
 import {  setUser} from "@/lib/AuthSlice";
+import { HiUserGroup } from "react-icons/hi";
 
 const Sidenav = () => {
   const router = useRouter();
@@ -97,6 +98,9 @@ const Sidenav = () => {
       case "/Notifications":
         setSelected("Notifications");
         break;
+      case "/Guestmanagement":
+        setSelected("Guest Management");
+        break;
 
       case "/Branches":
         setSelected("Branches");
@@ -133,6 +137,9 @@ const Sidenav = () => {
       case "Notifications":
         router.push("/Notifications");
         break;
+      case "Guest Management":
+        router.push("/Guestmanagement");
+        break;
 
       case "Branches":
         router.push("/Branches");
@@ -158,10 +165,11 @@ const Sidenav = () => {
       { key: "Rooms", title: "Rooms", icon: <MdMeetingRoom size={24} /> },
       { key: "Tenants", title: "Tenants", icon: <IoPeople size={24} /> },
       { key: "Payments", title: "Payments", icon: <FaIndianRupeeSign size={24} /> },
-      { key: "Expense", title: "Expense", icon: <GiExpense size={24} /> },
+      { key: "Expense", title: "Expenses ", icon: <GiExpense size={24} /> },
       { key: "Staff", title: "Our staff", icon: <IoIosPeople size={24} /> },
       { key: "Maintenance", title: "Support", icon: <RiHeartAddFill size={24} /> },
-      { key: "Notifications", title: "Notifications", icon: <FaBell size={24} /> },
+      { key: "Guest Management", title: "Guest Management", icon: <HiUserGroup size={24} /> },
+      { key: "Notifications", title: "Notifications", icon: <FaBell size={20} /> },
     ];
 
     if (user?.role === "owner") {
@@ -198,9 +206,9 @@ const Sidenav = () => {
               isVertical={true}
               classNames={{
                 tabList:
-                  "gap-2 w-52 relative rounded-none p-0 bg-transparent text-white gap-2 ",
+                  " w-52 relative rounded-none p-0 bg-transparent text-white  ",
                 cursor: "w-full bg-[#2a3e60] border-l-4 ",
-                tab: "w-full px-0 h-10 ",
+                tab: "w-full px-0 lg:h-9 md:h-8 sm:h-6 h-4  ",
                 tabContent:
                   "group-data-[selected=true]:text-white font-bold text-white",
               }}

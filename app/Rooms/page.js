@@ -50,7 +50,7 @@ import { fetchTenantsByBranch } from "@/lib/TennatSlice";
 
 const columns = [
   { name: "ID", uid: "_id" },
-  { name: "Room No.", uid: "RoomNumber" },
+  { name: "Room No", uid: "RoomNumber" },
   { name: "Room Name", uid: "roomName" },
   { name: "Room Type", uid: "RoomType" },
   { name: "No. of Sharing", uid: "SharingType" },
@@ -837,7 +837,7 @@ export default function Rooms() {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col text-center">
-                Upadte Room Details
+                Update Room Details
               </ModalHeader>
               <ModalBody>
                 <Updateroom id={Selectedroomid} Setopenedit={Setopenedit} />
