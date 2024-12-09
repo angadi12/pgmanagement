@@ -58,9 +58,9 @@ const Getfloor = () => {
     );
   }, [selectedFloor, rooms]);
 
-  const availableRooms = filteredRooms.filter((room) => room.reaminingBed > 0);
+  const availableRooms = filteredRooms?.filter((room) => room.reaminingBed > 0);
   // const onHoldRooms = filteredRooms.filter((room) => room.remainingBed > 0 && room.SharingType <= room.remainingBed);
-  const occupiedRooms = filteredRooms.filter((room) => room.reaminingBed === 0);
+  const occupiedRooms = filteredRooms?.filter((room) => room.reaminingBed === 0);
 
   return (
     <>

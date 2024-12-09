@@ -113,7 +113,7 @@ const Notifications = () => {
             </div>
           ) : (
             <>
-              {notifications.length > 0 ? (
+              {notifications?.length > 0 ? (
                 <>
 
                 {

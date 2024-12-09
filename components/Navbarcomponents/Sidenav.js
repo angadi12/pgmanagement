@@ -287,6 +287,15 @@ const Sidenav = () => {
                     <span>Support</span>
                   </div>
                 }
+              ></Tab>
+              <Tab
+                key="Notifications"
+                title={
+                  <div className="flex items-center  w-44  gap-4">
+                    <FaBell size={24} />
+                    <span>Notifications</span>
+                  </div>
+                }
               ></Tab> */}
 
               {renderTabs().map((tab) => (
